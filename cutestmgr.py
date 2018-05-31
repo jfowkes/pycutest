@@ -1373,3 +1373,76 @@ def params_to_string(params):
         param_str += '%s%g_' % (k, params[k])
     param_str = param_str.rstrip('_')
     return param_str
+
+
+def print_available_sif_params(problemName):
+    """
+    Call sifdecode on given problem to print out available parameters
+    This function is OS dependent. Currently works only for Linux and MacOS.
+
+    Keyword arguments:
+
+    * *problemName* -- CUTEst problem name
+    """
+
+    # Call sifdecode
+    spawnOK=True
+    try:
+        # Start sifdecode
+        if sys.platform == "linux" or sys.platform == "linux2":
+            p=subprocess.Popen(
+                [os.environ['SIFDECODE']+'/bin/sifdecoder']+['-show']+[problemName],
+                universal_newlines=True,
+                stdout=subprocess.PIPE, stderr=subprocess.STDOUT
+            )
+        elif sys.platform == "darwin":
+            p = subprocess.Popen(
+                ['/usr/local/opt/sifdecode/bin/sifdecoder']+['-show']+[problemName],
+                universal_newlines=True,
+                stdout=subprocess.PIPE, stderr=subprocess.STDOUT
+            )
+
+        # Collect output
+        messages=p.stdout.read()
+
+        # Now wait for the process to finish. If we don't wait p might get garbage-collected before the
+        # actual process finishes which can result in a crash of the interpreter.
+        retcode=p.wait()
+
+        # Check return code. Nonzero return code means that something has gone bad.
+        # if retcode!=0:
+        #     spawnOK=False
+    except:
+        spawnOK=False
+
+    if not spawnOK:
+        print(messages)
+        print("Unable to show available parameters (SIFDecode error)")
+        return
+
+    # Parse the output and show it in a useful way
+    print("Parameters available for problem %s:" % problemName)
+    for line in messages.split('\n'):
+        if '=' in line:
+            if 'uncommented' in line:
+                comment = None
+            else:
+                comment = line[line.find('comment:') + len('comment:'):].strip()
+            default = 'default value' in line
+            vals = line.split()
+            var_name, value = vals[0].split('=')
+            if vals[1] == '(IE)':
+                dtype = 'int'
+                value = int(value)
+            elif vals[1] == '(RE)':
+                dtype = 'float'
+                value = float(value)
+            else:
+                dtype = 'unknown type'
+                value = None
+            if comment is not None:
+                print("%s = %g (%s, %s) %s" % (var_name, value, dtype, comment, '[default]' if default else ''))
+            else:
+                print("%s = %g (%s) %s" % (var_name, value, dtype, '[default]' if default else ''))
+    print("End of parameters for problem %s" % problemName)
+    return
