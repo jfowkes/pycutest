@@ -418,7 +418,7 @@ else:
 setupScript="""#!/usr/bin/env python
 # (C)2011 Arpad Buermen
 # (C)2018 Jaroslav Fowkes, Lindon Roberts
-# Licensed under LGPL V2.1
+# Licensed under GNU GPL V3
 
 #
 # Do not edit. This is a computer-generated file. 
@@ -464,7 +464,7 @@ setup(name='PyCUTEst automatic test function interface builder',
     author_email='arpadb@fides.fe.uni-lj.si, fowkes@maths.ox.ac.uk, robertsl@maths.ox.ac.uk',
     url='',
     platforms='Linux', 
-    license='LGPL V2.1', 
+    license='GNU GPL',
     packages=[],
     ext_modules=[module1]
 )
@@ -504,7 +504,7 @@ extra_link_args=['-Wl,-no_compact_unwind']
 initScript="""# PyCutest problem interface module intialization file
 # (C)2011 Arpad Buermen
 # (C)2018 Jaroslav Fowkes, Lindon Roberts
-# Licensed under LGPL V2.1
+# Licensed under GNU GPL V3
 
 \"\"\"Interface module for CUTEst problem %s with ordering 
   efirst=%s, lfirst=%s, nvfirst=%s
@@ -807,7 +807,7 @@ def _cachePath():
     else:
         return os.getcwd()
 
-def isCached(cachedName):
+def isCached(cachedName, sifParams=None, saved_with_param_name=True):
     """
     Return ``True`` if a problem is in cache.
 
@@ -817,7 +817,10 @@ def isCached(cachedName):
     """
 
     # The problem's cache entry
-    problemDir=os.path.join(cachePath, 'pycutest', cachedName)
+    if saved_with_param_name and sifParams is not None:
+        problemDir = os.path.join(cachePath, 'pycutest', '%s_%s' % (cachedName, params_to_string(sifParams)))
+    else:
+        problemDir = os.path.join(cachePath, 'pycutest', cachedName)
 
     # See if a directory with problem's name exists
     return os.path.isdir(problemDir)
@@ -916,15 +919,15 @@ def decodeAndCompileProblem(problemName, destination=None, sifParams=None, sifOp
 
     # Handle params
     if sifParams is not None:
-        for (key, value) in sifParams.iteritems():
-            if type(key) is not str:
+        for (key, value) in sifParams.items():
+            if type(key) is not str and type(key) is not unicode:
                 raise Exception("sifParams keys must be strings")
             args+=['-param', key+"="+str(value)]
 
     # Handle options
     if sifOptions is not None:
         for opt in sifOptions:
-            if type(opt) is not str:
+            if type(opt) is not str and type(key) is not unicode:
                 raise Exception("sifOptions must consist of strings")
             args+=[str(opt)]
 
@@ -1038,7 +1041,7 @@ def compileAndInstallInterface(problemName, objFileList, destination=None, sifPa
     # Convert sifParams to a string
     sifParamsStr=""
     if sifParams is not None:
-        for (key, value) in sifParams.iteritems():
+        for (key, value) in sifParams.items():
             sifParamsStr+="%s=%s " % (str(key), str(value))
 
     # Convert sifOptions to a string
@@ -1077,7 +1080,7 @@ def compileAndInstallInterface(problemName, objFileList, destination=None, sifPa
     os.chdir(fromDir)
 
 def prepareProblem(problemName, destination=None, sifParams=None, sifOptions=None, 
-                    efirst=False, lfirst=False, nvfirst=False, quiet=True):
+                    efirst=False, lfirst=False, nvfirst=False, quiet=True, save_with_param_name=True):
     """
     Prepares a problem interface module, imports and initializes it,
     and returns a reference to the imported module.
@@ -1103,6 +1106,8 @@ def prepareProblem(problemName, destination=None, sifParams=None, sifOptions=Non
     # Default destination
     if destination is None:
         destination=problemName
+        if save_with_param_name and sifParams is not None:
+            destination = '%s_%s' % (problemName, params_to_string(sifParams))
 
     # Build it
     prepareCache(destination)
@@ -1112,7 +1117,7 @@ def prepareProblem(problemName, destination=None, sifParams=None, sifOptions=Non
     # Import interface module. Initialization is done by __init__.py.
     return importProblem(destination)
 
-def importProblem(cachedName):
+def importProblem(cachedName, sifParams=None, saved_with_param_name=True):
     """
     Imports and initializes a problem module with CUTEst interface functions.
     The module must be available in cache (see :func:`prepareProblem`).
@@ -1123,7 +1128,10 @@ def importProblem(cachedName):
     """
 
     # Import interface module. Initialization is done by __init__.py.
-    return __import__('pycutest.'+cachedName, globals(), locals(), [str(cachedName)])
+    if saved_with_param_name and sifParams is not None:
+        return __import__('pycutest.%s_%s' % (cachedName, params_to_string(sifParams)), globals(), locals(), [str(cachedName)])
+    else:
+        return __import__('pycutest.' + cachedName, globals(), locals(), [str(cachedName)])
 
 
 #
@@ -1357,39 +1365,11 @@ def findProblems(objective=None, constraints=None, regular=None,
 # Save full path to PyCUTEst cache in cachePath. 
 cachePath=_cachePath()
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+def params_to_string(params):
+    # Convert a dictionary of SIF parameters to a sensible string representation (used for folder names)
+    keys = sorted(list(params.keys()))
+    param_str = ''
+    for k in keys:
+        param_str += '%s%g_' % (k, params[k])
+    param_str = param_str.rstrip('_')
+    return param_str

@@ -9,7 +9,7 @@ itf_c_source=r"""
 /* CUTEst interface to Python and NumPy */
 /* (c)2011 Arpad Buermen */
 /* (c)2018 Jaroslav Fowkes, Lindon Roberts */
-/* Licensed under GPL V3 */
+/* Licensed under GNU GPL V3 */
 
 /* Note that in Windows we do not use Debug compile because we don't have the debug version
    of Python libraries and interpreter. We use Release version instead where optimizations
