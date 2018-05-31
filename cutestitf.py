@@ -2100,15 +2100,46 @@ static PyMethodDef _methods[] = {
     {NULL, NULL}     /* Marks the end of this structure */
 };
 
-/* Module initialization 
-   Module name must be _rawfile in compile and link */
-__declspec(dllexport) void init_pycutestitf(void)  {
-    (void) Py_InitModule("_pycutestitf", _methods);
-    import_array();  /* Must be present for NumPy.  Called first after above line. */
-}
+/* MODULE INIT CODE HERE */
 
 #ifdef __cplusplus
 }
 #endif
 """
+
+module_init_py2 = r"""
+/* Module initialization
+   Module name must be _rawfile in compile and link */
+__declspec(dllexport) void init_pycutestitf(void)  {
+    (void) Py_InitModule("_pycutestitf", _methods);
+    import_array();  /* Must be present for NumPy.  Called first after above line. */
+}
+"""
+
+module_init_py3 = r"""
+/* Module initialization (Python3) */
+static struct PyModuleDef module = {
+   PyModuleDef_HEAD_INIT,
+   "_pycutestitf",   /* name of module */
+   0, /* module documentation, may be NULL */
+   -1,       /* size of per-interpreter state of the module,
+                or -1 if the module keeps state in global variables. */
+   _methods
+};
+
+PyMODINIT_FUNC PyInit__pycutestitf(void) {
+    import_array();  // for NumPy
+    return PyModule_Create(&module);
+}
+"""
+
+import sys
+if sys.version_info[0] >= 3:
+    # The above is written for Python 2, there are a couple of methods which need replacing
+    itf_c_source = itf_c_source.replace('PyInt_FromLong', 'PyLong_FromLong')
+    itf_c_source = itf_c_source.replace('PyString_FromString', 'PyUnicode_FromString')
+    itf_c_source = itf_c_source.replace('/* MODULE INIT CODE HERE */', module_init_py3)
+else:
+    itf_c_source = itf_c_source.replace('/* MODULE INIT CODE HERE */', module_init_py2)
+
 "CUTEst problem binary iterface source code."

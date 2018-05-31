@@ -385,6 +385,9 @@ accessible. If the interface module is imported as ``rb`` then the :func:`_scons
 interface function can be accessed as ``rb._pycutestitf._scons``. 
 """
 
+# Ensure compatibility with Python 2
+from __future__ import absolute_import, division, print_function, unicode_literals
+
 import os, shutil, sys, re
 import subprocess
 from glob import glob
@@ -402,12 +405,12 @@ __all__ = [ 'clearCache', 'prepareProblem', 'importProblem', 'isCached',
 
 if sys.platform == "linux" or sys.platform == "linux2":
     if not os.path.isfile(os.environ['CUTEST']+'/objects/'+os.environ['MYARCH']+'/double/libcutest.a'):
-        raise Exception, "libcutest.a is not available. Is CUTEst installed and are the necessary environment variables set?"
+        raise Exception("libcutest.a is not available. Is CUTEst installed and are the necessary environment variables set?")
 elif sys.platform == "darwin":
     if not os.path.isfile('/usr/local/opt/cutest/lib/libcutest.a'):
-        raise Exception, "libcutest.a is not available. Is CUTEst installed?"
+        raise Exception("libcutest.a is not available. Is CUTEst installed?")
 else:
-    raise Exception, "Unsupported platform " + sys.platform
+    raise Exception("Unsupported platform " + sys.platform)
 
 #
 # The setup.py script with a placeholder for platform-dependent part.
@@ -420,6 +423,9 @@ setupScript="""#!/usr/bin/env python
 #
 # Do not edit. This is a computer-generated file. 
 #
+
+# Ensure compatibility with Python 2
+from __future__ import absolute_import, division, print_function, unicode_literals
 
 from distutils.core import setup, Extension
 import os
@@ -439,8 +445,8 @@ from glob import glob
 
 # Module
 module1 = Extension(
-      '_pycutestitf', 
-      ['cutestitf.c'], 
+      str('_pycutestitf'),
+      [str('cutestitf.c')],
       include_dirs=include_dirs, 
       define_macros=define_macros, 
       extra_objects=objFileList, 
@@ -530,8 +536,11 @@ gradsphess -- gradient and sparse Hessian of objective (unconstrained probl.)
 report     -- get usage statistics
 \"\"\"
 
-from _pycutestitf import *
-import _pycutestitf
+# Ensure compatibility with Python 2
+from __future__ import absolute_import, division, print_function, unicode_literals
+
+from ._pycutestitf import *
+from . import _pycutestitf
 import os
 from scipy.sparse import coo_matrix
 from numpy import zeros
@@ -909,14 +918,14 @@ def decodeAndCompileProblem(problemName, destination=None, sifParams=None, sifOp
     if sifParams is not None:
         for (key, value) in sifParams.iteritems():
             if type(key) is not str:
-                raise Exception, "sifParams keys must be strings"
+                raise Exception("sifParams keys must be strings")
             args+=['-param', key+"="+str(value)]
 
     # Handle options
     if sifOptions is not None:
         for opt in sifOptions:
             if type(opt) is not str:
-                raise Exception, "sifOptions must consist of strings"
+                raise Exception("sifOptions must consist of strings")
             args+=[str(opt)]
 
     # Call sifdecode
@@ -950,7 +959,7 @@ def decodeAndCompileProblem(problemName, destination=None, sifParams=None, sifOp
         spawnOK=False
 
     if not spawnOK or not quiet:
-        print messages
+        print(messages)
 
     # Collect all .f files
     filelist=glob('*.f')
@@ -960,10 +969,10 @@ def decodeAndCompileProblem(problemName, destination=None, sifParams=None, sifOp
         cmd=['gfortran', '-fPIC', '-c', filename]
         if not quiet:
             for s in cmd:
-                print s,
-            print
+                print(s,)
+            print()
         if subprocess.call(cmd)!=0:
-            raise Exception, "gfortran call failed for "+filename
+            raise Exception("gfortran call failed for "+filename)
 
     # Collect list of all object files (.o)
     objFileList=glob('*.o')
@@ -1046,11 +1055,11 @@ def compileAndInstallInterface(problemName, objFileList, destination=None, sifPa
 
     # Call 'python setup.py build'
     if subprocess.call([sys.executable, 'setup.py']+quietopt+['build'])!=0:
-        raise Exception, "Failed to build the Python interface module"
+        raise Exception("Failed to build the Python interface module")
 
     # Call 'python setup.py install --install-lib .'
     if subprocess.call([sys.executable, 'setup.py']+quietopt+['install', '--install-lib', '.'])!=0:
-        raise Exception, "Failed to install the Python interface module"
+        raise Exception("Failed to install the Python interface module")
 
     # Create __init__.py
     f=open('__init__.py', 'w+')
@@ -1114,7 +1123,7 @@ def importProblem(cachedName):
     """
 
     # Import interface module. Initialization is done by __init__.py.
-    return __import__('pycutest.'+cachedName, globals(), locals(), [cachedName])
+    return __import__('pycutest.'+cachedName, globals(), locals(), [str(cachedName)])
 
 
 #
