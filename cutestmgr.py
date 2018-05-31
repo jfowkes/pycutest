@@ -383,9 +383,6 @@ binary interface module and converts its return values to a
 of a NumPy array object. The problem's ``_pycutestitf`` binary module is also 
 accessible. If the interface module is imported as ``rb`` then the :func:`_scons` 
 interface function can be accessed as ``rb._pycutestitf._scons``. 
-
-This module does not depend on PyOPUS. It depends only on the 
-:mod:`~pyopus.problems.cutestitf` module. 
 """
 
 import os, shutil, sys, re
