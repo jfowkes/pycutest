@@ -417,7 +417,7 @@ else:
 #
 setupScript="""#!/usr/bin/env python
 # (C)2011 Arpad Buermen
-# (C)2018 Jaroslav Fowkes
+# (C)2018 Jaroslav Fowkes, Lindon Roberts
 # Licensed under LGPL V2.1
 
 #
@@ -460,8 +460,8 @@ setup(name='PyCUTEst automatic test function interface builder',
     version='1.0',
     description='Builds a CUTEst test function interface for Python.',
     long_description='Builds a CUTEst test function interface for Python.', 
-    author='Arpad Buermen, Jaroslav Fowkes',
-    author_email='arpadb@fides.fe.uni-lj.si, fowkes@maths.ox.ac.uk',
+    author='Arpad Buermen, Jaroslav Fowkes, Lindon Roberts',
+    author_email='arpadb@fides.fe.uni-lj.si, fowkes@maths.ox.ac.uk, robertsl@maths.ox.ac.uk',
     url='',
     platforms='Linux', 
     license='LGPL V2.1', 
@@ -503,7 +503,7 @@ extra_link_args=['-Wl,-no_compact_unwind']
 #
 initScript="""# PyCutest problem interface module intialization file
 # (C)2011 Arpad Buermen
-# (C)2018 Jaroslav Fowkes
+# (C)2018 Jaroslav Fowkes, Lindon Roberts
 # Licensed under LGPL V2.1
 
 \"\"\"Interface module for CUTEst problem %s with ordering 

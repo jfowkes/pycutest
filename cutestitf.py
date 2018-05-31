@@ -8,7 +8,7 @@ __all__ = [ 'itf_c_source' ]
 itf_c_source=r"""
 /* CUTEst interface to Python and NumPy */
 /* (c)2011 Arpad Buermen */
-/* (c)2018 Jaroslav Fowkes */
+/* (c)2018 Jaroslav Fowkes, Lindon Roberts */
 /* Licensed under GPL V3 */
 
 /* Note that in Windows we do not use Debug compile because we don't have the debug version
