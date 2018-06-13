@@ -400,8 +400,8 @@ __all__ = [ 'clearCache', 'prepareProblem', 'importProblem', 'isCached',
 # 
 # Verify if the CUTEst setup is sane
 #
-#if not 'PYCUTEST_CACHE' in os.environ:
-#	print("Warning: the PYCUTEST_CACHE environment variable is not set.\nCurrent folder will be used for caching.")
+if not 'PYCUTEST_CACHE' in os.environ:
+	print("Warning: the PYCUTEST_CACHE environment variable is not set.\nCurrent folder will be used for caching.")
 
 if sys.platform == "linux" or sys.platform == "linux2":
     if not os.path.isfile(os.environ['CUTEST']+'/objects/'+os.environ['MYARCH']+'/double/libcutest.a'):
