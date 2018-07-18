@@ -1186,10 +1186,6 @@ static char cutest_ihess_doc[]=
 "H=ihess(x)    -- Hessian of the objective\n"
 "H=ihess(x, i) -- Hessian of i-th constraint\n"
 "\n"
-"The first form can only be used for unconstrained problems. The second one\n"
-"can only be used for constrained problems. For obtaining the Hessian of the\n"
-"objective in case of a constrained problem use ihess().\n"
-"\n"
 "The Hessian is meant with respect to problem variables (has dimension n).\n"
 "\n"
 "Input\n"
@@ -1357,7 +1353,7 @@ static PyObject *cutest_hprod(PyObject *self, PyObject *args) {
 
 static char cutest_gradhess_doc[]=
 "Returns the Hessian of the Lagrangian, the Jacobian of constraints, and the\n"
-"gradient of the objective or the gradient of the Lagrangian at.\n" 
+"gradient of the objective or the gradient of the Lagrangian at x.\n" 
 "\n"
 "(g, H)=gradhess(x)       -- for unconstrained problems\n"
 "(g, J, H)=gradhess(x, v, gradl) -- for constrained problems\n"

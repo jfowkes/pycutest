@@ -1,3 +1,4 @@
+""" Test CUTEst for Least-Squares Problems """
 # Ensure compatibility with Python 2
 from __future__ import absolute_import, division, print_function, unicode_literals
 
@@ -17,23 +18,23 @@ info = rb.getinfo()
 print(info['name'])
 
 x0 = info['x']
-print('x0 = ', x0)
+print('x0 =', x0)
 
 n = info['n']
-print('n = ', n)
+print('n =', n)
 
 m = info['m']
-print('m = ', m)
+print('m =', m)
 
 lb = rb.getinfo()['bl']
 ub = rb.getinfo()['bu']
-print('lb = ', lb)
-print('ub = ', ub)
+print('lb =', lb)
+print('ub =', ub)
 
 r_x0, J_x0 = rb.cons(x0, True)
-print('r(x0) = ', r_x0)
-print('J(x0) = ', J_x0)
+print('r(x0) =', r_x0)
+print('J(x0) =', J_x0)
 
 gradf_x0 = rb.jprod(True, r_x0)
-print('g(x0) = ', gradf_x0)
-print('g(x0) = ', J_x0.T.dot(r_x0))
+print('g(x0) =', gradf_x0)
+print('g(x0) =', J_x0.T.dot(r_x0))
