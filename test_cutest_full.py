@@ -2,25 +2,22 @@
 # Ensure compatibility with Python 2
 from __future__ import absolute_import, division, print_function, unicode_literals
 import numpy as np
-
 import cutestmgr
 import sys
 
 # Nick's "all in it" test problem (intended to verify that changes to LANCELOT are safe).
+import allinitc as ac
 probname = 'ALLINITC'
 
+# Load CUTEst problem
 if not cutestmgr.isCached(probname):
     cutestmgr.prepareProblem(probname)
-rb = cutestmgr.importProblem(probname)
+ct = cutestmgr.importProblem(probname)
 
 # Return problem info
-info = rb.getinfo()
+info = ct.getinfo()
 print(info['name'])
 print('info =', info)
-
-# Set x to x0
-x = info['x']
-print('x0 =', x)
 
 # No. variables and constraints
 n = info['n']
@@ -29,118 +26,149 @@ m = info['m']
 print('m =', m)
 
 # Lower and upper bounds
-lb = rb.getinfo()['bl']
-ub = rb.getinfo()['bu']
+lb = ct.getinfo()['bl']
+ub = ct.getinfo()['bu']
 print('lb =', lb)
 print('ub =', ub)
 
 # Return the names of problem's variables.
-varnames = rb.varnames()
+varnames = ct.varnames()
 print('varnames:', varnames)
 
 # Return the names of problem's constraints.
-connames = rb.connames()
+connames = ct.connames()
 print('connames:', connames)
 
+# Set x
+x = np.ones(n)
+print('x =', x)
+
+# Define approximate equality
+def equal(a,b):
+	assert np.all(a-b <= 1e-10)
+
 # Return the value of objective and constraints at x
-(f, c) = rb.objcons(x)
+(f, c) = ct.objcons(x)
 print('f(x) =', f)
 print('c(x) =', c)
+equal(f, ac.f(x))
+equal(c, ac.c(x))
 
 # Return the value of objective and its gradient at x
 gradFlag = True # return gradient
-(f, g) = rb.obj(x, gradFlag)
+(f, g) = ct.obj(x, gradFlag)
 print('f(x) =', f)
 print('g(x) =', g)
+equal(f, ac.f(x))
+equal(g, ac.g(x))
 
 # Return the value of constraints and the Jacobian of constraints at x
 # constraints
-c = rb.cons(x)                 
+c = ct.cons(x)                 
 print('c(x) =', c)
+equal(c, ac.c(x))
 # i-th constraint
 i = 0
-ci = rb.cons(x, False, i)      
+ci = ct.cons(x, False, i)      
 print('c_i(x) =', ci)
+equal(ci, ac.c(x)[i])
 # Jacobian of constraints
-(c, J) = rb.cons(x, True)      
+(c, J) = ct.cons(x, True)      
 print('c(x) =', c)
 print('J(x) =', J)
+equal(c, ac.c(x))
+equal(J, ac.J(x))
 # i-th constraint and its gradient
-(ci, Ji) = rb.cons(x, True, i) 
-print('c_i(x) =', ci)
-print('J_i(x) =', Ji)
+(ci, Ji) = ct.cons(x, True, i) 
+equal(ci, ac.c(x)[i])
+equal(Ji, ac.J(x)[i,:])
 
 # Return the gradient of the objective or Lagrangian, and the Jacobian of constraints at x. 
 # The gradient is the gradient with respect to the problem's variables (has n components)
 # objective gradient and the Jacobian of constraints
-(g, J) = rb.lagjac(x)
+(g, J) = ct.lagjac(x)
 print('g(x) =', g)
 print('J(x) =', J)
+equal(g, ac.g(x))
+equal(J, ac.J(x))
 # Lagrangian gradient and the Jacobian of constraints
 v = np.ones(m)
-(Lg, J) = rb.lagjac(x, v)
-print('Lg(x) =', Lg)
+(gL, J) = ct.lagjac(x, v)
+print('gL(x) =', gL)
 print('J(x) =', J)
+equal(gL, ac.gL(x,v))
+equal(J, ac.J(x))
 
 # Return the product of constraints Jacobian at x with vector p
 # computes Jacobian at x before product calculation
 p = np.ones(m)
 transpose = True # transpose Jacobian
-r = rb.jprod(transpose, p, x)
+r = ct.jprod(transpose, p, x)
 print('J(x)^Tp =', r)
+equal(r, ac.J(x).T.dot(p))
 # uses last computed Jacobian
-r = rb.jprod(transpose, p)
+r = ct.jprod(transpose, p)
 print('J(x)^Tp =', r)
+equal(r, ac.J(x).T.dot(p))
 
 # Return the Hessian of the objective (for unconstrained problems) or the
 # Hessian of the Lagrangian (for constrained problems) at x
 # Hessian of objective at x for unconstrained problems
-#H = rb.hess(x)
+#H = ct.hess(x)
 #print('H(x) =', H)
+#equal(H, ac.H(x))
 # Hessian of Lagrangian at (x, v) for constrained problems
 v = np.ones(m)
-H = rb.hess(x, v)
-print('H(x) =', H)
+HL = ct.hess(x, v)
+print('HL(x) =', HL)
+equal(HL, ac.HL(x,v))
 
 # Return the Hessian of the objective or the Hessian of i-th constraint at x
 # Hessian of the objective 
-H = rb.ihess(x)
+H = ct.ihess(x)
 print('H(x) =', H)
+equal(H, ac.H(x))
 # Hessian of i-th constraint
 i = 0
-Hi = rb.ihess(x, i)
+Hi = ct.ihess(x, i)
 print('H_i(x) =', Hi)
+equal(Hi, ac.T(x)[i,:,:])
 
 # Return the product of Hessian at x and vector p.
 # The Hessian is either the Hessian of objective or the Hessian of Lagrangian
 # use Hessian of Lagrangian at x (constrained problem)
 p = np.ones(n)
 v = np.ones(m)
-r = rb.hprod(p, x, v)
-print('H(x)p =', r)
+r = ct.hprod(p, x, v)
+print('HL(x)p =', r)
+equal(r, ac.HL(x,v).dot(p))
 # use Hessian of objective at x (unconstrained problem)
 #p = np.ones(n)
-#r = rb.hprod(p, x)
+#r = ct.hprod(p, x)
 #print('H(x)p =', r)
+#equal(r, ac.H(x).dot(p))
 # use last computed Hessian
-r = rb.hprod(p)
-print('H(x)p =', r)
+r = ct.hprod(p)
+print('HL(x)p =', r)
+equal(r, ac.HL(x,v).dot(p))
 
 # Return the Hessian of the Lagrangian, the Jacobian of constraints, and the
 # gradient of the objective or the gradient of the Lagrangian at x
 # for unconstrained problems
-#(g, H) = rb.gradhess(x)
-#print('g(x) =', g)
-#print('H(x) =', H)
+#(g, H) = ct.gradhess(x)
+#print('g(x) =', ac.g(x))
+#print('H(x) =', ac.H(x))
 # for constrained problems
 v = np.ones(m)
 gradl = True # return gradient of the Lagrangian
-(g, J, H) = rb.gradhess(x, v, gradl)
-print('g(x) =', g)
+(gL, J, HL) = ct.gradhess(x, v, gradl)
+print('gL(x) =', g)
 print('J(x) =', J)
-print('H(x) =', H)
+print('HL(x) =', H)
+equal(gL, ac.gL(x,v))
+equal(J, ac.J(x))
+equal(HL, ac.HL(x,v))
 
 # Report usage statistics
-stats = rb.report()
+stats = ct.report()
 print('stats =', stats)
-
