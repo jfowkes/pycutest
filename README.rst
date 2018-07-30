@@ -89,19 +89,19 @@ Then you can easily install CUTEst:
 
 Installation using pip
 ----------------------
-For easy installation, use `pip <http://www.pip-installer.org/>`_ as root::
+For easy installation, use `pip <http://www.pip-installer.org/>`_ as root:
 
  .. code-block:: bash
  
     $ [sudo] pip install pycutest
 
-or alternatively *easy_install*::
+or alternatively *easy_install*:
 
  .. code-block:: bash
  
     $ [sudo] easy_install pycutest
 
-If you do not have root privileges or you want to install PyCUTEst for your private use, you can use::
+If you do not have root privileges or you want to install PyCUTEst for your private use, you can use:
 
  .. code-block:: bash
  
@@ -109,10 +109,10 @@ If you do not have root privileges or you want to install PyCUTEst for your priv
 
 which will install PyCUTEst in your home directory.
 
-Note that if an older install of PyCUTEst is present on your system you can use::
+Note that if an older install of PyCUTEst is present on your system you can use:
 
  .. code-block:: bash
- 
+
     $ [sudo] pip install --upgrade pycutest
 
 to upgrade PyCUTEst to the latest version.
@@ -137,8 +137,8 @@ Alternatively, you can download the source code from `Github <https://github.com
 
  .. code-block:: bash
 
-    $ git clone https://github.com/numericalalgorithmsgroup/dfols
-    $ cd dfols
+    $ git clone https://github.com/jfowkes/pycutest
+    $ cd pycutest
 
 PyCUTEst is written in pure Python and requires no compilation. It can be installed using:
 
