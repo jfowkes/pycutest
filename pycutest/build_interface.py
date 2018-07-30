@@ -282,7 +282,7 @@ def compile_and_install_interface(problemName, destination=None, sifParams=None,
 
 
 def import_problem(problemName, destination=None, sifParams=None, sifOptions=None,
-                   efirst=False, lfirst=False, nvfirst=False, quiet=True):
+                   efirst=False, lfirst=False, nvfirst=False, quiet=True, drop_fixed_variables=True):
     """
     Prepares a problem interface module, imports and initializes it.
 
@@ -294,7 +294,8 @@ def import_problem(problemName, destination=None, sifParams=None, sifOptions=Non
     :param lfirst: order linear constraints first (default ``True``)
     :param nvfirst: order nonlinear variables before linear variables (default ``False``)
     :param quiet: suppress output (default ``True``)
-    :return: a reference to the Python interace module for this problem
+    :param drop_fixed_variables: in the resulting problem object, are fixed variables hidden from the user (default=True)
+    :return: a reference to the Python interface class for this problem
     """
 
     # Default destination
@@ -312,7 +313,8 @@ def import_problem(problemName, destination=None, sifParams=None, sifOptions=Non
     else:
         problemDir = destination
     # Import the module CACHE_SUBFOLDER.problemDir, and return a wrapper
-    return CUTEstProblem(__import__('%s.%s' % (CACHE_SUBFOLDER, problemDir), globals(), locals(), [str(problemDir)]))
+    return CUTEstProblem(__import__('%s.%s' % (CACHE_SUBFOLDER, problemDir), globals(), locals(), [str(problemDir)]),
+                         drop_fixed_variables=drop_fixed_variables)
 
 
 def all_cached_problems():
