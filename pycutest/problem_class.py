@@ -448,7 +448,6 @@ class CUTEstProblem(object):
             H = self._module.isphess(self.free_to_all(x), cons_index)
         return sparse_mat_extract_rows_and_columns(H, self.idx_free, self.idx_free)
 
-
     def gradsphess(self, x, v=None, gradient_of_lagrangian=True):
         """
         Evaluate the gradient of objective or Lagrangian, Jacobian of constraints and Hessian of objective/Lagrangian.
