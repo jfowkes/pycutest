@@ -61,7 +61,11 @@ def clear_cache(cachedName, sifParams=None):
 
     * *cachedName* -- cache entry name
     """
+    if not is_cached(cachedName, sifParams=sifParams):
+        return  # nothing to do
+
     problemDir = get_problem_directory(cachedName, sifParams=sifParams)
+    print('Problem dir = %s' % problemDir)
 
     # See if a directory with problem's name exists
     if os.path.isdir(problemDir):
@@ -322,17 +326,29 @@ def all_cached_problems():
     all_probs = []
     problem_loc = os.path.join(get_cache_path(), CACHE_SUBFOLDER)
     for dir in [name for name in os.listdir(problem_loc) if os.path.isdir(os.path.join(problem_loc, name))]:
+        if '__pycache__' in dir:
+            continue  # skip
         # Parse folder name (assumes no underscore in problem name)
         if '_' in dir:
             vals = dir.split('_')
             problemName = vals[0]
             sifParams = {}
-            for i in range((len(vals)-1)//2):
-                # If value of param is integer, show that, otherwise show the float
-                try:
-                    sifParams[vals[2 * i + 1]] = int(vals[2 * i + 2])
-                except ValueError:
-                    sifParams[vals[2 * i + 1]] = float(vals[2 * i + 2])
+            for i in range(len(vals)):
+                found_value = False
+                for split_idx in range(len(vals)):
+                    if found_value:
+                        break  # end this search
+                    var = vals[i][:split_idx]
+                    val = vals[i][split_idx:]
+                    try:
+                        try:
+                            val = int(val)
+                        except ValueError:
+                            val = float(val)
+                        sifParams[var] = val
+                        found_value = True
+                    except ValueError:
+                        continue  # next split_idx
             all_probs.append((problemName, sifParams))
         else:
             all_probs.append((dir, None))  # no sifParams

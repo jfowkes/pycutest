@@ -143,7 +143,7 @@ def update_classifications(verbose=False):
 
     classification={}
     # Get a list of files in the MASTSIF folder
-    it = iglob(os.path.join(get_mastsif_path(), '*.sif'))
+    it = iglob(os.path.join(get_mastsif_path(), '*.SIF'))
 
     p=re.compile('\\s*\\*\\s*classification\\s*', re.IGNORECASE)
     for fileName in it:
@@ -181,19 +181,26 @@ def problem_properties(problemName):
     """
     Returns problem properties (uses the CUTEst problem classification string).
 
-    *problemName* -- problem name
+    See
+        http://www.cuter.rl.ac.uk/Problems/classification.shtml
+    for details on the properties.
 
-    Returns a dictionary with the following members:
+    The output is a dictionary with the following members
+    - objective -- objective type code
+    - constraints -- constraints type code
+    - regular -- True if problem is regular
+    - degree -- highest degree of analytically available derivative
+    - origin -- problem origin code
+    - internal -- True if problem has internal variables
+    - n -- number of variables (None = can be set by the user)
+    - m -- number of constraints (None = can be set by the user)
 
-    * ``objective`` -- objective type code
-    * ``constraints`` -- constraints type code
-    * ``regular`` -- ``True`` if problem is regular
-    * ``degree`` -- highest degree of analytically available derivative
-    * ``origin`` -- problem origin code
-    * ``internal`` -- ``True`` if problem has internal variables
-    * ``n`` -- number of variables (``None`` = can be set by the user)
-    * ``m`` -- number of constraints (``None`` = can be set by the user)
+    :param problemName: problem name
+    :return: dict
     """
+
+    if classification is None:
+        update_classifications()
     cfString=classification[problemName]
 
     data={
@@ -212,10 +219,15 @@ def problem_properties(problemName):
     else:
         data['n']=int(parts[2])
 
-    if parts[3] in "Vv":
-        data['m']=None
-    else:
-        data['m']=int(parts[3])
+    try:
+        if parts[3] in "Vv":
+            data['m']=None
+        else:
+            data['m']=int(parts[3])
+    except IndexError:
+        # Some CUTEst problems are missing this entry
+        data['m'] = None
+        # print("Error finding constraint properties for %s" % problemName)
 
     return data
 
@@ -227,37 +239,29 @@ def find_problems(objective=None, constraints=None, regular=None,
     Returns the problem names of problems that match the given requirements.
     The search is based on the CUTEst problem classification string.
 
-    * *objective* -- a string containg one or more letters (NCLQSO) specifying
-      the type of the objective function
-    * *constraints* -- a string containg one or more letters (UXBNLQO)
-      the type of the constraints
-    * *regular* -- a boolean, ``True`` if the problem must be regular,
-      ``False`` if it must be irregular
-    * *degree* -- list of the form [min, max] specifying the minimum and the
-      maximum number of analytically available derivatives
-    * *origin* -- a string containg one or more letters (AMR) specifying
-      the origin of the problem
-    * *internal* -- a boolean, ``True`` if the problem must have internal
-      variables, ``False`` if internal variables are not allowed
-    * *n* -- a list of the form [min, max] specifying the lowest and
-      the highest allowed number of variables
-    * *userN* -- ``True`` of the problems must have user settable number
-          of variables, ``False`` if the number must be hardcoded
-    * *m* -- a list of the form [min, max] specifying the lowest and
-      the highest allowed number of constraints
-    * *userM* -- ``True`` of the problems must have user settable number
-          of variables, ``False`` if the number must be hardcoded
-
-    Problems with a user-settable number of variables/constraints match any
-    given *n* / *m*.
+    Problems with a user-settable number of variables/constraints match any given n / m.
 
     Returns the problem names of problems that matched the given requirements.
 
     If a requirement is not given, it is not applied.
 
-    See :func:`updateClassifications` for details on the letters used in the
-    requirements.
+    See
+        http://www.cuter.rl.ac.uk/Problems/classification.shtml
+    for details on the letters used in the requirements.
+
+    :param objective: a string containg one or more letters (NCLQSO) specifying the type of the objective function
+    :param constraints: a string containg one or more letters (UXBNLQO) the type of the constraints
+    :param regular: a boolean, True if the problem must be regular, False if it must be irregular
+    :param degree: list of the form [min, max] specifying the minimum and the maximum number of analytically available derivatives
+    :param origin: a string containg one or more letters (AMR) specifying the origin of the problem
+    :param internal: a boolean, True if the problem must have internal variables, False if internal variables are not allowed
+    :param n: a list of the form [min, max] specifying the lowest and the highest allowed number of variables
+    :param userN: True of the problems must have user settable number of variables, False if the number must be hardcoded
+    :param m: a list of the form [min, max] specifying the lowest and the highest allowed number of constraints
+    :param userM: True of the problems must have user settable number of variables, False if the number must be hardcoded
+    :return: list of strings with problem names which satisfy the given requirements
     """
+
     # Prepare classifications
     if classification is None:
         update_classifications()

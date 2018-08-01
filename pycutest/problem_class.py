@@ -20,7 +20,7 @@ def pad_vector(x, idx_free, idx_eq, val_eq):
 
 def sparse_vec_extract_indices(v, idx):
     # Return v[idx] where v is scipy.sparse.coo_matrix; want to return a coo_matrix too
-    return (v.tocsc()[idx]).tocoo()
+    return (v.tocsc()[0, idx]).tocoo()
 
 
 def sparse_mat_extract_columns(A, idx):
@@ -59,7 +59,7 @@ class CUTEstProblem(object):
         self.nnzh = self._module.info['nnzh']  # number of nonzeros in upper triangular part of (sparse) Hessian, in all variables
         self.eq_cons_first = self._module.info['efirst'] if self.m > 0 else None  # if True, equality constraints are listed before inequality constraints
         self.linear_cons_first = self._module.info['lfirst'] if self.m > 0 else None  # if True, linear constraints are listed befor nonlinear constraints
-        self.nonlinear_vars_first = self._module.info['nvfirst']  # if True, nonlinear variables listed before nonlinear variables
+        self.nonlinear_vars_first = self._module.info['nvfirst']  # if True, nonlinear variables listed before linear variables
         self.bl = self._module.info['bl']  # lower bounds on x (-1e20 -> unconstrained)
         self.bu = self._module.info['bu']  # upper bounds on x (+1e20 -> unconstrained)
         self.nnzj = self._module.info['nnzj'] if self.m > 0 else None  # number of nonzeros in sparse Jacobian of constraints, in all variables
@@ -85,6 +85,18 @@ class CUTEstProblem(object):
             self.n = self.n_free
             self.vartype = self.all_to_free(self.vartype)
             # Not updating self.nnzh and self.nnzj, because this would require 2 evaluations (messes up statistics)
+        else:  # Doesn't matter whether they are actually fixed or free, they all look free to us
+            self.idx_eq = np.array([], dtype=np.int)
+            self.idx_free = np.arange(self.n, dtype=np.int)
+            self.n_fixed = 0
+            self.n_free = self.n_full
+            self.n = self.n_full
+
+    def __str__(self):
+        if self.sifParams is None:
+            return "CUTEst problem %s (default params) with %g variables and %g constraints" % (self.name, self.n, self.m)
+        else:
+            return "CUTEst problem %s (params %s) with %g variables and %g constraints" % (self.name, str(self.sifParams), self.n, self.m)
 
     def all_to_free(self, x):
         """
@@ -132,6 +144,8 @@ class CUTEstProblem(object):
         Evaluate objective and constraints.
             f, c = problem.objcons(x)  -- objective and constraints
 
+        For unconstrained problems, c is None.
+
         This calls CUTEst routine CUTEst_cfn.
 
         :param x: input vector
@@ -139,13 +153,15 @@ class CUTEstProblem(object):
         """
         f, c = self._module.objcons(self.free_to_all(x))
         f = float(f)  # convert from 1x1 NumPy array to float
+        if len(c) == 0:  # unconstrained problems
+            c = None
         return f, c
 
     def obj(self, x, gradient=False):
         """
         Evaluate the objective (and optionally its gradient).
             f    = problem.obj(x)                  -- objective
-            f, g = problem.obj(x, gradient=True)  -- objective and gradient
+            f, g = problem.obj(x, gradient=True)   -- objective and gradient
 
         This calls CUTEst routine CUTEST_uofg or CUTEST_cofg.
 
@@ -154,7 +170,7 @@ class CUTEstProblem(object):
         :return: objective value f, or tuple (f,g) of objective and gradient at x
         """
         if gradient:
-            f, g = self._module.obj(self.free_to_all(x), gradFlag=1)
+            f, g = self._module.obj(self.free_to_all(x), 1)
             f = float(f)  # convert from 1x1 NumPy array to float
             return f, self.all_to_free(g)
         else:
@@ -170,6 +186,8 @@ class CUTEstProblem(object):
             c, J   = problem.cons(x, gradient=True)          -- constraints and Jacobian
             ci, Ji = problem.cons(x, index=i, gradient=True) -- i-th constraint and its gradient
 
+        For unconstrained problems, this returns None.
+
         This calls CUTEst routine CUTEST_ccfg or CUTEST_ccifg.
 
         For large problems, problem.scons returns sparse matrices.
@@ -179,6 +197,8 @@ class CUTEstProblem(object):
         :param gradient: whether to return constraint(s) and gradient/Jacobian, or just constraint (default=False; i.e. constraint only)
         :return: value of constraint(s) and Jacobian/gradient of constraint(s) at x
         """
+        if self.m <= 0:
+            return None
         if gradient:
             if index is None:
                 c, J = self._module.cons(self.free_to_all(x), True)
@@ -190,7 +210,7 @@ class CUTEstProblem(object):
                 return ci, self.all_to_free(Ji)
         else:
             if index is None:
-                c = self._module.cons(x)
+                c = self._module.cons(self.free_to_all(x))
                 return c
             else:
                 assert 0 <= index <= self.m - 1, "Invalid constraint index %g (must be in 0..%g)" % (index, self.m - 1)
@@ -204,9 +224,13 @@ class CUTEstProblem(object):
             g, J = problem.lagjac(x)      -- objective gradient and the Jacobian of constraints\n"
             g, J = problem.lagjac(x, v=v) -- Lagrangian gradient and the Jacobian of constraints\n"
 
+        For unconstrained problems, J is None.
+
         For large problems, problem.slagjac returns sparse matrices.
 
         This calls CUTEst routine CUTEST_cgr.
+
+        Note: in CUTEst, the sign convention is such that the Lagrangian = objective + lagrange_multipliers * constraints
 
         :param x: input vector
         :param v: input vector of Lagrange multipliers
@@ -216,7 +240,10 @@ class CUTEstProblem(object):
             g, J = self._module.lagjac(self.free_to_all(x))
         else:
             g, J = self._module.lagjac(self.free_to_all(x), v)
-        return self.all_to_free(g), J[:, self.idx_free]
+        if self.m > 0:
+            return self.all_to_free(g), J[:, self.idx_free]
+        else:
+            return self.all_to_free(g), None
 
     def jprod(self, p, transpose=False, x=None):
         """
@@ -226,6 +253,8 @@ class CUTEstProblem(object):
             r = problem.jprod(p, x=x)                 -- evaluate Jacobian at x, and return J(x)*p
             r = problem.jprod(p, transpose=True, x=x) -- evaluate Jacobian at x, and return J(x).T*p
 
+        For unconstrained problems, r is None.
+
         This calls CUTEst routine CUTEST_cjprod.
 
         :param p: vector to be multiplied by the Jacobian of constraints
@@ -233,6 +262,8 @@ class CUTEstProblem(object):
         :param x: input vector for Jacobian (default=None -> use last computed Jacobian)
         :return: Jacobian-vector product J(x)*p or J(x).T * p if transpose=True
         """
+        if self.m <= 0:
+            return None
         if x is None:
             r = self._module.jprod(transpose, p if transpose else self.free_to_all(p, use_zeros=True))
         else:
@@ -254,6 +285,8 @@ class CUTEstProblem(object):
 
         This calls CUTEst routine CUTEST_cdh or CUTEST_udh.
 
+        Note: in CUTEst, the sign convention is such that the Lagrangian = objective + lagrange_multipliers * constraints
+
         :param x: input vector
         :param v: Lagrange multiplies (needed for constrained problems)
         :return: Hessian of objective (unconstrained) or Lagrangian (constrained) at x
@@ -264,7 +297,9 @@ class CUTEstProblem(object):
         else:
             assert v is None, "Unconstrained problem - Lagrange multipliers cannot be specified"
             H = self._module.hess(self.free_to_all(x))
-        return H[self.idx_free, self.idx_free]
+        # 2d indexing with lists is a bit strange in Python
+        # https://stackoverflow.com/questions/4257394/slicing-of-a-numpy-2d-array-or-how-do-i-extract-an-mxm-submatrix-from-an-nxn-ar
+        return H[self.idx_free][:, self.idx_free]
 
     def ihess(self, x, cons_index=None):
         """
@@ -285,7 +320,7 @@ class CUTEstProblem(object):
         else:
             assert 0 <= cons_index <= self.m - 1, "Invalid constraint index %g (must be in 0..%g)" % (cons_index, self.m - 1)
             H = self._module.ihess(self.free_to_all(x), cons_index)
-        return H[self.idx_free, self.idx_free]
+        return H[self.idx_free][:, self.idx_free]
 
     def hprod(self, p, x=None, v=None):
         """
@@ -300,6 +335,8 @@ class CUTEstProblem(object):
 
         This calls CUTEst routine CUTEST_chprod or CUTEST_uhprod
 
+        Note: in CUTEst, the sign convention is such that the Lagrangian = objective + lagrange_multipliers * constraints
+
         :param p: vector to be multiplied by the Hessian
         :param x: input vector for the Hessian
         :param v: Lagrange multipliers for the Lagrangian. Required for constrained problems.
@@ -308,16 +345,16 @@ class CUTEstProblem(object):
         if self.m > 0:
             if x is not None:
                 assert v is not None, "Lagrange multipliers must be specified for constrained problems"
-                H = self._module.hprod(self.free_to_all(p, use_zeros=True), self.free_to_all(x), v)
+                r = self._module.hprod(self.free_to_all(p, use_zeros=True), self.free_to_all(x), v)
             else:
-                H = self._module.hprod(self.free_to_all(p, use_zeros=True))
+                r = self._module.hprod(self.free_to_all(p, use_zeros=True))
         else:
             assert v is None, "Unconstrained problem - Lagrange multipliers cannot be specified"
             if x is not None:
-                H = self._module.hprod(self.free_to_all(p, use_zeros=True), self.free_to_all(x))
+                r = self._module.hprod(self.free_to_all(p, use_zeros=True), self.free_to_all(x))
             else:
-                H = self._module.hprod(self.free_to_all(p, use_zeros=True))
-        return H[self.idx_free, self.idx_free]
+                r = self._module.hprod(self.free_to_all(p, use_zeros=True))
+        return r[self.idx_free]
 
     def gradhess(self, x, v=None, gradient_of_lagrangian=True):
         """
@@ -334,6 +371,8 @@ class CUTEstProblem(object):
 
         This calls CUTEst routine CUTEST_cgrdh or CUTEST_ugrdh.
 
+        Note: in CUTEst, the sign convention is such that the Lagrangian = objective + lagrange_multipliers * constraints
+
         :param x: input vector
         :param v: vector of Lagrange multipliers. Required for constrained problems.
         :param gradient_of_lagrangian: for constrained problems, return gradient of objective or Lagrangian?
@@ -342,19 +381,23 @@ class CUTEstProblem(object):
         if self.m > 0:
             assert v is not None, "Lagrange multipliers must be specified for constrained problems"
             g, J, H = self._module.gradhess(self.free_to_all(x), v, gradient_of_lagrangian)
-            return self.all_to_free(g), J[:, self.idx_free], H[self.idx_free, self.idx_free]
+            return self.all_to_free(g), J[:, self.idx_free], H[self.idx_free][:, self.idx_free]
         else:
             assert v is None, "Unconstrained problem - Lagrange multipliers cannot be specified"
             g, H = self._module.gradhess(self.free_to_all(x))
-            return self.all_to_free(g), H[self.idx_free, self.idx_free]
+            return self.all_to_free(g), H[self.idx_free][:, self.idx_free]
 
-    def scons(self, x, index=None):
+    def scons(self, x, index=None, gradient=False):
         """
         Evaluate the constraints and optionally their sparse Jacobian/gradient.
-            c, J   = problem.scons(x)          -- constraints and sparse Jacobian
-            ci, Ji = problem.scons(x, index=i) -- i-th constraint and its sparse gradient
+            c      = problem.scons(x)                         -- sparse constraints
+            ci     = problem.scons(x, index=i)                -- i-th constraint
+            c, J   = problem.scons(x, gradient=True)          -- constraints and sparse Jacobian
+            ci, Ji = problem.scons(x, index=i, gradient=True) -- i-th constraint and its sparse gradient
 
-        The matrix J or vector Ji is of type scipy.sparse.coo_matrix.
+        The matrix J or vectors and Ji is of type scipy.sparse.coo_matrix.
+
+        For unconstrained problems, this returns is None.
 
         For small problems, problem.cons returns dense matrices.
 
@@ -364,14 +407,22 @@ class CUTEstProblem(object):
         :param index: which constraint to evaluate (default=None -> all constraints). Must be in 0..self.m-1.
         :return: value of constraint(s) and sparse Jacobian/gradient of constraint(s) at x, type scipy.sparse.coo_matrix
         """
+        if self.m <= 0:
+            return None
         if index is None:
             c, J = self._module.scons(self.free_to_all(x))
-            return c, sparse_mat_extract_columns(J, self.idx_free)
+            if gradient:
+                return c, sparse_mat_extract_columns(J, self.idx_free)
+            else:
+                return c
         else:
             assert 0 <= index <= self.m - 1, "Invalid constraint index %g (must be in 0..%g)" % (index, self.m - 1)
             ci, Ji = self._module.scons(self.free_to_all(x), index)
             ci = float(ci)  # convert from 1x1 NumPy array to float
-            return ci, sparse_vec_extract_indices(Ji, self.idx_free)
+            if gradient:
+                return ci, sparse_vec_extract_indices(Ji, self.idx_free)
+            else:
+                return ci
 
     def slagjac(self, x, v=None):
         """
@@ -381,9 +432,13 @@ class CUTEstProblem(object):
 
         The vector g and matrix J are of type scipy.sparse.coo_matrix.
 
+        For unconstrained problems, J is None.
+
         For small problems, problem.lagjac returns dense matrices.
 
         This calls CUTEst routine CUTEST_csgr.
+
+        Note: in CUTEst, the sign convention is such that the Lagrangian = objective + lagrange_multipliers * constraints
 
         :param x: input vector
         :param v: vector of Lagrange multipliers
@@ -393,7 +448,10 @@ class CUTEstProblem(object):
             g, J = self._module.slagjac(self.free_to_all(x))
         else:
             g, J = self._module.slagac(self.free_to_all(x), v)
-        return sparse_vec_extract_indices(g, self.idx_free), sparse_mat_extract_columns(J, self.idx_free)
+        if self.m > 0:
+            return sparse_vec_extract_indices(g, self.idx_free), sparse_mat_extract_columns(J, self.idx_free)
+        else:
+            return sparse_vec_extract_indices(g, self.idx_free), None
 
     def sphess(self, x, v=None):
         """
@@ -411,6 +469,8 @@ class CUTEstProblem(object):
         For small problems, problem.hess returns dense matrices.
 
         This calls CUTEst routine CUTEST_csh or CUTEST_ush.
+
+        Note: in CUTEst, the sign convention is such that the Lagrangian = objective + lagrange_multipliers * constraints
 
         :param x: input vector
         :param v: vector of Lagrange multipliers. Must be specified for constrained problems.
@@ -464,6 +524,8 @@ class CUTEstProblem(object):
         For small problems, problem.gradhess returns dense matrices.
 
         This calls CUTEst routine CUTEST_csgrsh or CUTEST_ugrsh.
+
+        Note: in CUTEst, the sign convention is such that the Lagrangian = objective + lagrange_multipliers * constraints
 
         :param x: input vector
         :param v: vector of Lagrange multipliers. Required for constrained problems.

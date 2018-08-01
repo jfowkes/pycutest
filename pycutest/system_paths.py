@@ -81,7 +81,7 @@ def get_mastsif_path():
     else:  # Linux
         check_environment_vars_exist(['MASTSIF'])
         mastsif_path = os.environ['MASTSIF']
-        if os.path.isfile(mastsif_path):
+        if os.path.isdir(mastsif_path):
             return mastsif_path
         else:
             raise RuntimeError('Could not find MASTSIF folder - has MASTSIF environment variable been set correctly?')

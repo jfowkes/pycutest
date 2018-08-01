@@ -8,6 +8,7 @@ p = pycutest.import_problem('ARGLALE', sifParams={'N':10, 'M':20})
 # p = pycutest.import_problem('ALLINITC')
 
 # Return problem info
+print(p)
 print("Name =", p.name)
 print("# variables =", p.n)
 print("# constraints =", p.m)
