@@ -7,7 +7,7 @@ Test interface for parameter-dependent problems
 # Ensure compatibility with Python 2
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-import cutestmgr
+import pycutest
 import numpy as np
 
 # name = 'ARGLALE'
@@ -18,9 +18,7 @@ name = 'SEMICON2'
 # params = {'N':10, 'LN':9}
 params = {'N':100, 'LN':90}
 
-if not cutestmgr.isCached(name, sifParams=params):
-    cutestmgr.prepareProblem(name, sifParams=params)
-rb = cutestmgr.importProblem(name, sifParams=params)
+rb = pycutest.import_problem(name, sifParams=params)
 
 info = rb.getinfo()
 print(info['name'], info['sifparams'])

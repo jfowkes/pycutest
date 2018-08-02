@@ -2,7 +2,7 @@
 # Ensure compatibility with Python 2
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-import cutestmgr
+import pycutest
 import sys
 
 if len(sys.argv) > 1:
@@ -10,9 +10,7 @@ if len(sys.argv) > 1:
 else:
     name = 'COOLHANS'
 
-if not cutestmgr.isCached(name):
-    cutestmgr.prepareProblem(name)
-rb = cutestmgr.importProblem(name)
+rb = pycutest.import_problem(name)
 
 info = rb.getinfo()
 print(info['name'])

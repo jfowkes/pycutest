@@ -8,6 +8,9 @@ Nick's "all in it" test problem (constrained version)
 
    classification OUR2-AY-4-0
 """
+# Ensure compatibility with Python 2
+from __future__ import absolute_import, division, print_function, unicode_literals
+
 import numpy as np
 import math as ma
 
@@ -84,12 +87,12 @@ def L(x,v):
 
 # gradient Lagrangian (v - lagrange multipliers)
 def gL(x,v): 
-	print v.shape
-	print J(x).shape
+	print(v.shape)
+	print(J(x).shape)
 	return g(x) + np.dot(v,J(x))
 
 # Hessian Lagrangian (v - lagrange multipliers)
 def HL(x,v): 
-	print v.shape
-	print T(x).shape
+	print(v.shape)
+	print(T(x).shape)
 	return H(x) + np.tensordot(v,T(x),axes=1)
