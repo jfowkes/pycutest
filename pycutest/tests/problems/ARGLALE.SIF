@@ -1,0 +1,82 @@
+***************************
+* SET UP THE INITIAL DATA *
+***************************
+
+NAME          ARGLALE
+
+*   Problem :
+*   *********
+*   Variable dimension full rank linear problem, a linear equation version.
+
+*   Source: Problem 32 in
+*   J.J. More', B.S. Garbow and K.E. Hillstrom,
+*   "Testing Unconstrained Optimization Software",
+*   ACM Transactions on Mathematical Software, vol. 7(1), pp. 17-41, 1981.
+
+*   See also Buckley#80 (with different N and M)
+*   SIF input: Ph. Toint, Dec 1989.
+
+*   classification NLR2-AN-V-V
+
+*   This is a(n infeasible) linear feasibility problem 
+
+*   N is the number of free variables
+*   M is the number of equations ( M.ge.N)
+
+*IE N                   10             $-PARAMETER
+*IE N                   50             $-PARAMETER 
+*IE N                   100            $-PARAMETER
+ IE N                   200            $-PARAMETER
+
+*IE M                   20             $-PARAMETER .ge. N
+*IE M                   100            $-PARAMETER .ge. N
+*IE M                   200            $-PARAMETER .ge. N
+ IE M                   400            $-PARAMETER .ge. N
+
+*   Define useful parameters
+
+ IE 1                   1
+ RE -2.0                -2.0
+
+ IA N+1       N         1
+ RI RM        M
+ R/ -2/M      -2.0                     RM
+ RA 1-2/M     -2/M      1.0
+
+VARIABLES
+
+ DO I         1                        N
+ X  X(I)
+ ND
+
+GROUPS
+
+ DO I         1                        N
+ IA I-1       I         -1
+ IA I+1       I         1
+ DO J         1                        I-1
+ ZE G(I)      X(J)                     -2/M
+ OD J
+ ZE G(I)      X(I)                     1-2/M
+ DO J         I+1                      N
+ ZE G(I)      X(J)                     -2/M
+ ND
+
+ DO I         N+1                      M
+ DO J         1                        N
+ ZE G(I)      X(J)                     -2/M
+ ND
+
+CONSTANTS
+
+ X  ARGLALE   'DEFAULT' 1.0
+
+BOUNDS
+
+ FR ARGLALE   'DEFAULT'
+
+START POINT
+
+ XV ARGLALE   'DEFAULT' 1.0
+
+ENDATA

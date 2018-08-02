@@ -1,0 +1,144 @@
+***************************
+* SET UP THE INITIAL DATA *
+***************************
+
+NAME          BRATU2D
+
+*   Problem :
+*   *********
+
+*   The 2D Bratu problem on the unit square, using finite differences.
+
+*   Source: problem 3 in
+*   J.J. More',
+*   "A collection of nonlinear model problems"
+*   Proceedings of the AMS-SIAM Summer seminar on the Computational
+*   Solution of Nonlinear Systems of Equations, Colorado, 1988.
+*   Argonne National Laboratory MCS-P60-0289, 1989.
+
+*   SIF input: Ph. Toint, Dec 1989.
+
+*   classification NOR2-MN-V-V
+
+*   P is the number of points in one side of the unit square.
+*   There are P*P variables.
+
+*IE P                   7              $-PARAMETER  n=P**2   original value
+*IE P                   10             $-PARAMETER  n=P**2
+*IE P                   22             $-PARAMETER  n=P**2
+*IE P                   32             $-PARAMETER  n=P**2
+ IE P                   72             $-PARAMETER  n=P**2
+
+*   LAMBDA is the Bratu problem parameter.  It should be positive.
+
+ RE LAMBDA              4.0            $-PARAMETER > 0
+
+*   Define a few helpful parameters
+
+ RE 1.0                 1.0
+ IE 1                   1
+ IE 2                   2
+
+ IA P-1       P         -1
+ RI RP-1      P-1
+ R/ H         1.0                      RP-1
+ R* H2        H                        H
+ R* C         H2                       LAMBDA
+ RM -C        C         -1.0
+
+VARIABLES
+
+*   Define one variable per discretized point in the unit square
+
+ DO J         1                        P
+ DO I         1                        P
+ X  U(I,J)
+ ND
+
+GROUPS
+
+*   Define a group per inner discretized point.
+*   The linear term shows the Laplace operator.
+
+ DO I         2                        P-1
+ IA I+1       I         1
+ IA I-1       I         -1
+ DO J         2                        P-1
+ IA J+1       J         1
+ IA J-1       J         -1
+ XE G(I,J)    U(I,J)    4.0
+ XE G(I,J)    U(I+1,J)  -1.0           U(I-1,J)  -1.0
+ XE G(I,J)    U(I,J+1)  -1.0           U(I,J-1)  -1.0
+ ND
+
+BOUNDS
+
+ FR BRATU2D   'DEFAULT'
+
+*   Fix the variables on the lower and upper edges of the unit square
+
+ DO J         1                        P
+ XX BRATU2D   U(1,J)    0.0
+ XX BRATU2D   U(P,J)    0.0
+ ND
+
+*   Fix the variables on the left and right edges of the unit square
+
+ DO I         2                        P-1
+ XX BRATU2D   U(I,P)    0.0
+ XX BRATU2D   U(I,1)    0.0
+ ND
+
+ELEMENT TYPE
+
+ EV EXP       U
+
+ELEMENT USES
+
+ T  'DEFAULT' EXP
+
+ DO I         2                        P-1
+ DO J         2                        P-1
+ ZV A(I,J)    U                        U(I,J)
+ ND
+
+GROUP USES
+
+ DO I         2                        P-1
+ DO J         2                        P-1
+ ZE G(I,J)    A(I,J)                   -C
+ ND
+
+OBJECT BOUND
+
+ LO BRATU2D             0.0
+
+*   Solution
+
+*LO SOLTN               0.0
+
+ENDATA
+
+***********************
+* SET UP THE FUNCTION *
+* AND RANGE ROUTINES  *
+***********************
+
+ELEMENTS      BRATU2D
+
+TEMPORARIES
+
+ M  EXP
+ R  EXPU
+
+INDIVIDUALS
+
+*   Parametric exponential
+
+ T  EXP
+ A  EXPU                EXP( U )
+ F                      EXPU
+ G  U                   EXPU
+ H  U         U         EXPU
+
+ENDATA

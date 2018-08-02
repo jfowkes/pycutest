@@ -1,0 +1,143 @@
+***************************
+* SET UP THE INITIAL DATA *
+***************************
+
+NAME          ARWHEAD
+
+*   Problem :
+*   *********
+*   A quartic problem whose Hessian is an arrow-head (downwards) with
+*   diagonal central part and border-width of 1.
+
+*   Source: Problem 55 in
+*   A.R. Conn, N.I.M. Gould, M. Lescrenier and Ph.L. Toint,
+*   "Performance of a multifrontal scheme for partially separable
+*   optimization",
+*   Report 88/4, Dept of Mathematics, FUNDP (Namur, B), 1988.
+
+*   SIF input: Ph. Toint, Dec 1989.
+
+*   classification OUR2-AN-V-0
+
+*   N is the number of variables
+
+*IE N                   100            $-PARAMETER
+*IE N                   500            $-PARAMETER
+*IE N                   1000           $-PARAMETER
+ IE N                   5000           $-PARAMETER
+
+*   Number of groups sets: each set has a linear and a nonlinear group
+
+ IA NGS       N         -1
+
+*   Define useful parameters
+
+ IE 1                   1
+
+VARIABLES
+
+ DO I         1                        N
+ X  X(I)
+ ND
+
+GROUPS
+
+ DO I         1                        NGS
+
+*   The linear group of the set
+
+ XN L(I)      X(I)      -4.0
+
+*   The nonlinear group of the set (square)
+
+ XN G(I)
+
+ ND
+
+CONSTANTS
+
+*   Linear groups only
+
+ DO I         1                        NGS
+ X  ARWHEAD   L(I)      -3.0
+ ND
+
+BOUNDS
+
+ FR ARWHEAD   'DEFAULT'
+
+START POINT
+
+ XV ARWHEAD   'DEFAULT' 1.0
+
+ELEMENT TYPE
+
+ EV SQ        V
+
+ELEMENT USES
+
+ T  'DEFAULT' SQ
+
+ DO I         1                        NGS
+ ZV A(I)      V                        X(I)
+ ZV B(I)      V                        X(N)
+ ND
+
+GROUP TYPE
+
+ GV L2        GVAR
+
+GROUP USES
+
+*   Include both squared terms in the nonlinear groups
+
+ DO I         1                        NGS
+
+ XT G(I)      L2
+ XE G(I)      A(I)                     B(I)
+
+ ND
+
+OBJECT BOUND
+
+*   Solution
+
+*LO SOLTN               0.0
+
+ENDATA
+
+***********************
+* SET UP THE FUNCTION *
+* AND RANGE ROUTINES  *
+***********************
+
+ELEMENTS      ARWHEAD
+
+INDIVIDUALS
+
+*   Square type element
+
+ T  SQ
+ F                      V * V
+ G  V                   V + V
+ H  V         V         2.0
+
+ENDATA
+
+*********************
+* SET UP THE GROUPS *
+* ROUTINE           *
+*********************
+
+GROUPS        ARWHEAD
+
+INDIVIDUALS
+
+*   Least-square root groups
+
+ T  L2
+ F                      GVAR * GVAR
+ G                      GVAR + GVAR
+ H                      2.0
+
+ENDATA
