@@ -19,11 +19,9 @@ def print_available_sif_params(problemName):
     Call sifdecode on given problem to print out available parameters
     This function is OS dependent. Currently works only for Linux and MacOS.
 
-    Keyword arguments:
-
-    * *problemName* -- CUTEst problem name
+    :param problemName: CUTEst problem name
+    :return: Nothing
     """
-
     # Call sifdecode
     spawnOK=True
     try:

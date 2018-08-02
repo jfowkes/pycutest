@@ -55,11 +55,11 @@ def is_cached(cachedName, sifParams=None):
 
 def clear_cache(cachedName, sifParams=None):
     """
-    Removes a cache entry from cache.
+    Deletes a saved problem.
 
-    Keyword arguments:
-
-    * *cachedName* -- cache entry name
+    :param cachedName: problem name
+    :param sifParams: sif parameters used for compilation
+    :return:
     """
     if not is_cached(cachedName, sifParams=sifParams):
         return  # nothing to do
@@ -322,7 +322,11 @@ def import_problem(problemName, destination=None, sifParams=None, sifOptions=Non
 
 
 def all_cached_problems():
-    # Return list of all cached problems as (problemName, sifParams) tuples
+    """
+    Return a list of all cached problems.
+
+    :return: list of (problemName, sifParams) tuples
+    """
     all_probs = []
     problem_loc = os.path.join(get_cache_path(), CACHE_SUBFOLDER)
     for dir in [name for name in os.listdir(problem_loc) if os.path.isdir(os.path.join(problem_loc, name))]:
