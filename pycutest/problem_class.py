@@ -84,13 +84,17 @@ class CUTEstProblem(object):
             self.bu = self.all_to_free(self.bu)
             self.n = self.n_free
             self.vartype = self.all_to_free(self.vartype)
-            # Not updating self.nnzh and self.nnzj, because this would require 2 evaluations (messes up statistics)
+            # Not updating self.nnzh and self.nnzj, because even isphess doesn't give right results
         else:  # Doesn't matter whether they are actually fixed or free, they all look free to us
             self.idx_eq = np.array([], dtype=np.int)
             self.idx_free = np.arange(self.n, dtype=np.int)
             self.n_fixed = 0
             self.n_free = self.n_full
             self.n = self.n_full
+            self.remove_one_isphess_and_scons = False
+
+        # Save the initial stats, so we can make sure they don't get counted in the final tally
+        self.init_stats = self._module.report()
 
     def __str__(self):
         if self.sifParams is None:
@@ -122,6 +126,31 @@ class CUTEstProblem(object):
             return pad_vector(x, self.idx_free, self.idx_eq, np.zeros((self.n_full,)) if use_zeros else self.bl_full)
         else:
             return x
+    
+    def check_input_x(self, x):
+        """
+        Check x has correct dimensions
+        
+        :param x: input vector 
+        :return: raises RuntimeError if x has wrong dimension
+        """
+        if x.shape != (self.n,):
+            raise RuntimeError("x has wrong shape (got %s, expect (%g,))" % (x.shape, self.n))
+        return
+
+    def check_input_v(self, v):
+        """
+        Check v (Lagrange multiplier) has correct dimensions (or None for unconstrained problems)
+
+        :param v: input vector
+        :return: raises RuntimeError if v has wrong dimension
+        """
+        if self.m <= 0:
+            if v is not None:
+                raise RuntimeError("Lagrange multipliers should not be specified for unconstrained problems")
+        elif v.shape != (self.m,):
+            raise RuntimeError("v has wrong shape (got %s, expect (%g,))" % (v.shape, self.m))
+        return
 
     def varnames(self):
         """
@@ -151,6 +180,7 @@ class CUTEstProblem(object):
         :param x: input vector
         :return: tuple (f, c) of objective and constraint values at x for constrained problems.
         """
+        self.check_input_x(x)
         f, c = self._module.objcons(self.free_to_all(x))
         f = float(f)  # convert from 1x1 NumPy array to float
         if len(c) == 0:  # unconstrained problems
@@ -169,6 +199,7 @@ class CUTEstProblem(object):
         :param gradient: whether to return objective and gradient, or just objective (default=False; i.e. objective only)
         :return: objective value f, or tuple (f,g) of objective and gradient at x
         """
+        self.check_input_x(x)
         if gradient:
             f, g = self._module.obj(self.free_to_all(x), 1)
             f = float(f)  # convert from 1x1 NumPy array to float
@@ -199,6 +230,7 @@ class CUTEstProblem(object):
         """
         if self.m <= 0:
             return None
+        self.check_input_x(x)
         if gradient:
             if index is None:
                 c, J = self._module.cons(self.free_to_all(x), True)
@@ -221,8 +253,8 @@ class CUTEstProblem(object):
     def lagjac(self, x, v=None):
         """
         Evaluate gradient of objective/Lagrangian, and Jacobian of constraints.
-            g, J = problem.lagjac(x)      -- objective gradient and the Jacobian of constraints\n"
-            g, J = problem.lagjac(x, v=v) -- Lagrangian gradient and the Jacobian of constraints\n"
+            g, J = problem.lagjac(x)      -- objective gradient and the Jacobian of constraints
+            g, J = problem.lagjac(x, v=v) -- Lagrangian gradient and the Jacobian of constraints
 
         For unconstrained problems, J is None.
 
@@ -236,9 +268,11 @@ class CUTEstProblem(object):
         :param v: input vector of Lagrange multipliers
         :return: gradient of objective/Lagrangian, and Jacobian of constraints
         """
+        self.check_input_x(x)
         if v is None:
             g, J = self._module.lagjac(self.free_to_all(x))
         else:
+            self.check_input_v(v)
             g, J = self._module.lagjac(self.free_to_all(x), v)
         if self.m > 0:
             return self.all_to_free(g), J[:, self.idx_free]
@@ -264,9 +298,14 @@ class CUTEstProblem(object):
         """
         if self.m <= 0:
             return None
+        if transpose:
+            self.check_input_v(p)
+        else:
+            self.check_input_x(p)
         if x is None:
             r = self._module.jprod(transpose, p if transpose else self.free_to_all(p, use_zeros=True))
         else:
+            self.check_input_x(x)
             r = self._module.jprod(transpose, p if transpose else self.free_to_all(p, use_zeros=True), self.free_to_all(x))
         return self.all_to_free(r) if transpose else r
 
@@ -291,11 +330,11 @@ class CUTEstProblem(object):
         :param v: Lagrange multiplies (needed for constrained problems)
         :return: Hessian of objective (unconstrained) or Lagrangian (constrained) at x
         """
+        self.check_input_x(x)
+        self.check_input_v(v)
         if self.m > 0:
-            assert v is not None, "Lagrange multipliers must be specified for constrained problems"
             H = self._module.hess(self.free_to_all(x), v)
         else:
-            assert v is None, "Unconstrained problem - Lagrange multipliers cannot be specified"
             H = self._module.hess(self.free_to_all(x))
         # 2d indexing with lists is a bit strange in Python
         # https://stackoverflow.com/questions/4257394/slicing-of-a-numpy-2d-array-or-how-do-i-extract-an-mxm-submatrix-from-an-nxn-ar
@@ -315,6 +354,7 @@ class CUTEstProblem(object):
         :param cons_index: index of constraint (default is None -> use objective). Must be in 0..self.m-1.
         :return: Hessian of objective or a single constraint at x
         """
+        self.check_input_x(x)
         if cons_index is None:
             H = self._module.ihess(self.free_to_all(x))
         else:
@@ -342,15 +382,18 @@ class CUTEstProblem(object):
         :param v: Lagrange multipliers for the Lagrangian. Required for constrained problems.
         :return: Hessian-vector product H*p
         """
+        self.check_input_x(p)
         if self.m > 0:
             if x is not None:
-                assert v is not None, "Lagrange multipliers must be specified for constrained problems"
+                self.check_input_x(x)
+                self.check_input_v(v)
                 r = self._module.hprod(self.free_to_all(p, use_zeros=True), self.free_to_all(x), v)
             else:
                 r = self._module.hprod(self.free_to_all(p, use_zeros=True))
         else:
-            assert v is None, "Unconstrained problem - Lagrange multipliers cannot be specified"
+            self.check_input_v(v)
             if x is not None:
+                self.check_input_x(x)
                 r = self._module.hprod(self.free_to_all(p, use_zeros=True), self.free_to_all(x))
             else:
                 r = self._module.hprod(self.free_to_all(p, use_zeros=True))
@@ -378,12 +421,12 @@ class CUTEstProblem(object):
         :param gradient_of_lagrangian: for constrained problems, return gradient of objective or Lagrangian?
         :return: gradient of objective or Lagrangian, (Jacobian of constraints) and Hessian of objective/Lagrangian at x
         """
+        self.check_input_x(x)
+        self.check_input_v(v)
         if self.m > 0:
-            assert v is not None, "Lagrange multipliers must be specified for constrained problems"
             g, J, H = self._module.gradhess(self.free_to_all(x), v, gradient_of_lagrangian)
             return self.all_to_free(g), J[:, self.idx_free], H[self.idx_free][:, self.idx_free]
         else:
-            assert v is None, "Unconstrained problem - Lagrange multipliers cannot be specified"
             g, H = self._module.gradhess(self.free_to_all(x))
             return self.all_to_free(g), H[self.idx_free][:, self.idx_free]
 
@@ -409,6 +452,7 @@ class CUTEstProblem(object):
         """
         if self.m <= 0:
             return None
+        self.check_input_x(x)
         if index is None:
             c, J = self._module.scons(self.free_to_all(x))
             if gradient:
@@ -444,10 +488,12 @@ class CUTEstProblem(object):
         :param v: vector of Lagrange multipliers
         :return: gradient of objective/Lagrangian, and Jacobian, type scipy.sparse.coo_matrix
         """
+        self.check_input_x(x)
         if v is None:
             g, J = self._module.slagjac(self.free_to_all(x))
         else:
-            g, J = self._module.slagac(self.free_to_all(x), v)
+            self.check_input_v(v)
+            g, J = self._module.slagjac(self.free_to_all(x), v)
         if self.m > 0:
             return sparse_vec_extract_indices(g, self.idx_free), sparse_mat_extract_columns(J, self.idx_free)
         else:
@@ -476,11 +522,11 @@ class CUTEstProblem(object):
         :param v: vector of Lagrange multipliers. Must be specified for constrained problems.
         :return: Hessian of objective or Lagrangian, type scipy.sparse.coo_matrix
         """
+        self.check_input_x(x)
+        self.check_input_v(v)
         if self.m > 0:
-            assert v is not None, "Lagrange multipliers must be specified for constrained problems"
             H = self._module.sphess(self.free_to_all(x), v)
         else:
-            assert v is None, "Unconstrained problem - Lagrange multipliers cannot be specified"
             H = self._module.sphess(self.free_to_all(x), v)
         return sparse_mat_extract_rows_and_columns(H, self.idx_free, self.idx_free)
 
@@ -500,6 +546,7 @@ class CUTEstProblem(object):
         :param cons_index: index of constraint (default is None -> use objective). Must be in 0..self.m-1.
         :return: Hessian of objective or a single constraint at x, type scipy.sparse.coo_matrix
         """
+        self.check_input_x(x)
         if cons_index is None:
             H = self._module.isphess(self.free_to_all(x))
         else:
@@ -532,14 +579,14 @@ class CUTEstProblem(object):
         :param gradient_of_lagrangian: for constrained problems, return gradient of objective or Lagrangian?
         :return: gradient of objective or Lagrangian, (Jacobian of constraints) and Hessian of objective/Lagrangian at x, type scipy.sparse.coo_matrix
         """
+        self.check_input_x(x)
+        self.check_input_v(v)
         if self.m > 0:
-            assert v is not None, "Lagrange multipliers must be specified for constrained problems"
             g, J, H = self._module.gradsphess(self.free_to_all(x), v, gradient_of_lagrangian)
             return sparse_vec_extract_indices(g, self.idx_free), \
                    sparse_mat_extract_columns(J, self.idx_free), \
                    sparse_mat_extract_rows_and_columns(H, self.idx_free, self.idx_free)
         else:
-            assert v is None, "Unconstrained problem - Lagrange multipliers cannot be specified"
             g, H = self._module.gradsphess(self.free_to_all(x))
             return sparse_vec_extract_indices(g, self.idx_free), sparse_mat_extract_rows_and_columns(H, self.idx_free, self.idx_free)
 
@@ -556,13 +603,24 @@ class CUTEstProblem(object):
         - tsetup = CPU time for setup
         - trun = CPU time for run
         and for constrained problems, also
-        - c = number of constraint evaluations
-        - cg = number of constraint gradient evaluations
-        - cH = number of constraint Hessian evaluations
+        - c = number of constraint evaluations (None for unconstrained)
+        - cg = number of constraint gradient evaluations (None for unconstrained)
+        - cH = number of constraint Hessian evaluations (None for unconstrained)
 
         This calls CUTEst routine CUTEST_creport or CUTEST_ureport.
 
         :return: dict of usage statistics
         """
-        # TODO keep track of own stats using this module to report more detailed info?
-        return self._module.report()
+        stats = self._module.report()
+        # Remove any counts that were there when we initialised the object
+        for s in ['f', 'g', 'H', 'Hprod']:
+            stats[s] = stats[s] - self.init_stats[s]
+        if self.m <= 0:
+            stats['c'] = None
+            stats['cg'] = None
+            stats['cH'] = None
+        else:
+            for s in ['c', 'cg', 'cH']:
+                stats[s] = stats[s] - self.init_stats[s]
+
+        return stats

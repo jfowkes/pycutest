@@ -65,7 +65,7 @@ def clear_cache(cachedName, sifParams=None):
         return  # nothing to do
 
     problemDir = get_problem_directory(cachedName, sifParams=sifParams)
-    print('Problem dir = %s' % problemDir)
+    # print('Problem dir = %s' % problemDir)
 
     # See if a directory with problem's name exists
     if os.path.isdir(problemDir):

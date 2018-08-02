@@ -180,7 +180,7 @@ def scons(x, i=None):
         return (c, coo_matrix((Jv, (Jif, Ji)), shape=(m, n)))
     else:
         (c, gi, gv)=_pycutestitf._scons(x, i)
-        return (c, coo_matrix((gv, (zeros(n), gi)), shape=(1, n)))
+        return (c, coo_matrix((gv, (zeros(len(gv)), gi)), shape=(1, n)))
 
 # _slagjac() wrapper
 def slagjac(x, v=None):
@@ -208,7 +208,7 @@ def slagjac(x, v=None):
     else:
         (gi, gv, Ji, Jfi, Jv)=_pycutestitf._slagjac(x, v)
     return (
-        coo_matrix((gv, (zeros(n), gi)), shape=(1, n)),
+        coo_matrix((gv, (zeros(len(gv)), gi)), shape=(1, n)),
         coo_matrix((Jv, (Jfi, Ji)), shape=(m, n))
     )
 
@@ -294,7 +294,7 @@ def gradsphess(x, v=None, lagrFlag=False):
     else:
         (gi, gv, Ji, Jfi, Jv, Hi, Hj, Hv)=_pycutestitf._gradsphess(x, v, lagrFlag)
         return (
-            coo_matrix((gv, (zeros(n), gi)), shape=(1, n)),
+            coo_matrix((gv, (zeros(len(gv)), gi)), shape=(1, n)),
             coo_matrix((Jv, (Jfi, Ji)), shape=(m, n)),
             coo_matrix((Hv, (Hi, Hj)), shape=(n, n))
         )
