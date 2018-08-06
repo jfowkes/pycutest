@@ -1,0 +1,22 @@
+language: python
+
+os: 
+    - osx
+
+python:
+    - 2.7
+    - 3.6
+
+before_install:
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install numpy scipy; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then (brew tap optimizers/cutest && brew install cutest --without-single); fi
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then pip install -r requirements.txt; fi
+
+install:
+    - python setup.py install
+
+script:
+    - python -m unittest pycutest.tests.test_sifdecode_extras
+    - python -m unittest pycutest.tests.test_basic_functionality
+    - python -m unittest pycutest.tests.test_sparse_functionality
