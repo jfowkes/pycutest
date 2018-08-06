@@ -9,8 +9,6 @@ import unittest
 # All problems used here: ALLINITU (unconstrained), ALLINITC (constrained)
 # ALLINITC has fixed variables
 
-# TODO cl wrong for ALLINITC?
-
 def array_compare(x, y, thresh=1e-8):
     return np.max(np.abs(x - y)) < thresh
 
@@ -182,9 +180,9 @@ class TestALLINITC_with_fixed(unittest.TestCase):
         self.assertTrue(array_compare(p.bu, np.array([1e20, 1e20, 1.0, 2.0])), msg="Wrong upper bounds")
         self.assertEqual(p.nnzj, 2, msg="Wrong nnzj")
         self.assertTrue(array_compare(p.v0, np.array([0.0])), msg="Wrong v0")
-        # self.assertTrue(array_compare(p.cl, np.array([0.0])), msg="Wrong cl")  # TODO shouldn't be zero?
+        self.assertTrue(array_compare(p.cl, np.array([0.0])), msg="Wrong cl") 
         self.assertTrue(array_compare(p.cu, np.array([0.0])), msg="Wrong cu")
-        self.assertEqual(p.is_eq_cons, np.array([False], dtype=np.bool), msg="Wrong is_eq_cons")
+        self.assertEqual(p.is_eq_cons, np.array([True], dtype=np.bool), msg="Wrong is_eq_cons")
         self.assertEqual(p.is_linear_cons, np.array([False], dtype=np.bool), msg="Wrong is_linear_cons")
 
         # If we need to multiply against another vector, use these
@@ -320,9 +318,9 @@ class TestALLINITC_with_free(unittest.TestCase):
         self.assertTrue(array_compare(p.bu, np.array([1e20, 1e20, 1.0])), msg="Wrong upper bounds")
         self.assertEqual(p.nnzj, 2, msg="Wrong nnzj")
         self.assertTrue(array_compare(p.v0, np.array([0.0])), msg="Wrong v0")
-        # self.assertTrue(array_compare(p.cl, np.array([0.0])), msg="Wrong cl")  # TODO shouldn't be zero?
+        self.assertTrue(array_compare(p.cl, np.array([0.0])), msg="Wrong cl") 
         self.assertTrue(array_compare(p.cu, np.array([0.0])), msg="Wrong cu")
-        self.assertEqual(p.is_eq_cons, np.array([False], dtype=np.bool), msg="Wrong is_eq_cons")
+        self.assertEqual(p.is_eq_cons, np.array([True], dtype=np.bool), msg="Wrong is_eq_cons")
         self.assertEqual(p.is_linear_cons, np.array([False], dtype=np.bool), msg="Wrong is_linear_cons")
 
         # If we need to multiply against another vector, use these
