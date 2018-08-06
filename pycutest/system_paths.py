@@ -71,10 +71,10 @@ def get_mastsif_path():
         # First try environment variables, otherwise use default homebrew location
         if 'MASTSIF' in os.environ:
             mastsif_path = os.environ['MASTSIF']
-            if os.path.isfile(mastsif_path):
+            if os.path.isdir(mastsif_path):
                 return mastsif_path
         homebrew_path = os.path.join('usr', 'local', 'opt', 'mastsif', 'share', 'mastsif')  # /usr/local/opt/mastsif/share/mastsif
-        if os.path.isfile(homebrew_path):
+        if os.path.isdir(homebrew_path):
             return homebrew_path
         else:
             raise RuntimeError('Could not find MASTSIF folder - has MASTSIF environment variable been set correctly?')
