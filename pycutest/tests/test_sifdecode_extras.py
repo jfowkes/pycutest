@@ -14,7 +14,7 @@ class TestAvailableParamsARGLALE(unittest.TestCase):
         # Catch stdout
         # https://stackoverflow.com/questions/1218933/can-i-redirect-the-stdout-in-python-into-some-sort-of-string-buffer
         real_stdout = sys.stdout
-        fake_stdout = io.StringIO() if sys.version_info[0] >= 3 else io.BytesIO()
+        fake_stdout = io.StringIO()
         try:
             sys.stdout = fake_stdout
             # Now do the work
@@ -54,7 +54,7 @@ class TestAvailableParamsBRATU(unittest.TestCase):
         # Catch stdout
         # https://stackoverflow.com/questions/1218933/can-i-redirect-the-stdout-in-python-into-some-sort-of-string-buffer
         real_stdout = sys.stdout
-        fake_stdout = io.StringIO() if sys.version_info[0] >= 3 else io.BytesIO()
+        fake_stdout = io.StringIO()
         try:
             sys.stdout = fake_stdout
             # Now do the work
@@ -92,7 +92,7 @@ class TestAvailableParamsROSENBR(unittest.TestCase):
         # Catch stdout
         # https://stackoverflow.com/questions/1218933/can-i-redirect-the-stdout-in-python-into-some-sort-of-string-buffer
         real_stdout = sys.stdout
-        fake_stdout = io.StringIO() if sys.version_info[0] >= 3 else io.BytesIO()
+        fake_stdout = io.StringIO()
         try:
             sys.stdout = fake_stdout
             # Now do the work
