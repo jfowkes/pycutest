@@ -1,19 +1,37 @@
 language: python
 
 os: 
-    - osx
+    #- osx not officially supported yet: https://github.com/travis-ci/travis-ci/issues/2312
+    - linux
 
 python:
     - 2.7
     - 3.6
-
+    
 before_install:
-    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; fi
-    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install numpy scipy; fi
-    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then (brew tap optimizers/cutest && brew install cutest --without-single); fi
-    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then pip install -r requirements.txt; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then 
+        brew update &&
+        brew install numpy scipy &&
+        brew tap optimizers/cutest && 
+        brew install cutest --without-single;
+      fi
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then 
+        sudo apt-get install -qq python-numpy python-scipy gfortran;
+      fi
 
 install:
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then 
+        ln -s $TRAVIS_BUILD_DIR/pycutest/tests/problems /usr/local/opt/mastsif/share/mastsif;
+      fi
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+        mkdir cutest &&
+        git clone https://github.com/ralna/ARCHDefs ./cutest/archdefs &&
+        git clone https://github.com/ralna/SIFDecode ./cutest/sifdecode &&
+        git clone https://github.com/ralna/CUTEst ./cutest/cutest &&
+        ln -s $TRAVIS_BUILD_DIR/pycutest/tests/problems ./cutest/mastsif &&
+        source ./.travis_cutest.env &&
+        ./.travis_install_cutest.sh; 
+      fi
     - python setup.py install
 
 script:
