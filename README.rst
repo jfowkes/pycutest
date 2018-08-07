@@ -47,7 +47,7 @@ Now we are ready to install CUTEst in double precision (requires :code:`gfortran
  .. code-block:: bash
 
     $ cd ./cutest
-    $ ${ARCHDEFS}/install_optsuite	
+    $ ${ARCHDEFS}/install_optrove	
     Do you wish to install CUTEst (Y/n)? Y
     Do you require the CUTEst-Matlab interface (y/N)? N
     Select platform: 6 # PC with generic 64-bit processor
