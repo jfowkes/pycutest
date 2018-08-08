@@ -12,7 +12,7 @@ PyCUTEst: Python interface to the CUTEst optimization test environment
 
 **Author:** `Jaroslav Fowkes <jaroslav.fowkes@maths.ox.ac.uk@maths.ox.ac.uk>`_ and `Lindon Roberts <lindon.roberts@maths.ox.ac.uk>`_
 
-PyCUTEst is a Python interface to `CUTEst <https://github.com/ralna/CUTEst>`_, a Fortran package for testing optimization software (N. I. M. Gould, D. Orban and P. L. Toint, Comput. Optim. Appl. 60:3 (2015), `link <https://doi.org/10.1007/s10589-014-9687-3>`_). It is based on the interface originally developed for CUTEr by `Arpad Buermen <http://fides.fe.uni-lj.si/~arpadb/software-pycuter.html>`_. Currently it supports Mac and Linux only.
+PyCUTEst is a Python interface to `CUTEst <https://github.com/ralna/CUTEst>`_, a Fortran package for testing optimization software [1]_. It is based on the interface originally developed for CUTEr by `Prof. Arpad Buermen <http://www.fe.uni-lj.si/en/the_faculty/staff/alphabetically/55/>`_ [2]_. Currently it supports Mac and  Linux only.
 
 In essence, this package gives convenient access to a large collection of nonlinear optimization test problems.
 
@@ -28,10 +28,16 @@ PyCUTEst is released under the GNU General Public License.
    example
    history
 
-
-Indices and tables
-------------------
-
 * :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+
+.. * :ref:`modindex`
+   * :ref:`search`      
+   
+References
+----------
+
+.. [1]  
+   Gould, N. I. M., Orban, D. and Toint, P. L. (2015) CUTEst: a Constrained and Unconstrained Testing Environment with safe threads for mathematical optimization, *Computational Optimization and Applications*, vol. 60, no. 3, pp. 545-557. https://doi.org/10.1007/s10589-014-9687-3
+   
+.. [2]
+   Buermen, A. Python interface to CUTEr test problems for optimization. http://fides.fe.uni-lj.si/~arpadb/software-pycuter.html
