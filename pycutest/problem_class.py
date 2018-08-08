@@ -43,31 +43,102 @@ class CUTEstProblem(object):
         """
         Build a wrapper for a Python module containing the compiled CUTEst problem.
 
+        The resulting object has the following fields:
+
+        * problem.name: CUTEst problem name (string)
+        * problem.n: number of variables (equal to problem.n_free if drop_fixed_variables=True, otherwise problem.n_full)
+        * problem.m: number of constraints
+        * problem.x0: starting point for optimization routine (NumPy array of shape (problem.n,))
+        * problem.sifParams: dict of parameters passed to sifdecode
+        * problem.sifOptions: list of extra options passed to sifdecode
+        * problem.vartype: array of variable types (NumPy array size n, entry vartype[i] indicates that x[i] is real(0), boolean(1), or integer(2))
+        * problem.nnzh: number of nonzero entries in upper triangular part of objective Hessian (for all variables, including fixed)
+        * problem.nonlinear_vars_first: flag if all nonlinear variables are listed before linear variables
+        * problem.bl: array of lower bounds on input (unconstrained -> -1e20), as NumPy array of shape (problem.n,)
+        * problem.bu: array of upper bounds on input (unconstrained -> 1e20), as NumPy array of shape (problem.n,)
+        * problem.n_full: total number of variables in CUTEst problem (n_free + n_fixed)
+        * problem.n_free: number of free variables
+        * problem.n_fixed: number of fixed variables
+
+        For constrained problems, we also have (these are all set to None for unconstrained problems):
+
+        * problem.eq_cons_first: flag if equality constraints are listed before inequality constraints
+        * problem.linear_cons_first: flag if linear constraints are listed before nonlinear constraints
+        * problem.nnzj: number of nonzero entries in constraint Jacobian (for all variables, including fixed)
+        * problem.v0: starting point for Lagrange multipliers (NumPy array of shape (problem.m,))
+        * problem.cl: lower bounds on constraints, as NumPy array of shape (problem.m,)
+        * problem.cu: upper bounds on constraints, as NumPy array of shape (problem.m,)
+        * problem.is_eq_cons: NumPy array of Boolean flags indicating if i-th constraint is equality or not (i.e. inequality)
+        * problem.is_linear_cons: NumPy array of Boolean flags indicating if i-th constraint is linear or not (i.e. nonlinear)
+
         :param module: the module containing the Python interface
+        :param drop_fixed_variables: a flag for whether to ignore fixed variables (i.e. n is smaller, etc.) [default=True]
         """
         self._module = module
         self.drop_fixed_vars = drop_fixed_variables
 
         # Extract useful problem info
+
         self.name = self._module.info['name']
-        self.n = self._module.info['n']  # number of variables
-        self.m = self._module.info['m']  # number of constraints
-        self.x0 = self._module.info['x']  # starting point
-        self.sifParams = self._module.info['sifparams']  # SIF problem parameters
-        self.sifOptions = self._module.info['sifoptions']  # sifdecoder options
-        self.vartype = self._module.info['vartype']  # array of variable types (0=real, 1=boolean, 2=integer)
-        self.nnzh = self._module.info['nnzh']  # number of nonzeros in upper triangular part of (sparse) Hessian, in all variables
-        self.eq_cons_first = self._module.info['efirst'] if self.m > 0 else None  # if True, equality constraints are listed before inequality constraints
-        self.linear_cons_first = self._module.info['lfirst'] if self.m > 0 else None  # if True, linear constraints are listed befor nonlinear constraints
-        self.nonlinear_vars_first = self._module.info['nvfirst']  # if True, nonlinear variables listed before linear variables
-        self.bl = self._module.info['bl']  # lower bounds on x (-1e20 -> unconstrained)
-        self.bu = self._module.info['bu']  # upper bounds on x (+1e20 -> unconstrained)
-        self.nnzj = self._module.info['nnzj'] if self.m > 0 else None  # number of nonzeros in sparse Jacobian of constraints, in all variables
-        self.v0 = self._module.info['v'] if self.m > 0 else None  # init vector of Lagrange multipliers
-        self.cl = self._module.info['cl'] if self.m > 0 else None  # vector of lower bounds on constraint functions
-        self.cu = self._module.info['cu'] if self.m > 0 else None  # vector of upper bounds on constraint functions
-        self.is_eq_cons = self._module.info['equatn'] if self.m > 0 else None  # vector of Booleans if constraint i is equality
-        self.is_linear_cons = self._module.info['linear'] if self.m > 0 else None  # vector of Booleans if constraint i is linear
+        """ CUTEst problem name (string) """
+
+        self.n = self._module.info['n']
+        """ number of variables (equal to self.n_free if drop_fixed_variables=True, otherwise self.n_full) """
+
+        self.m = self._module.info['m']
+        """ number of constraints """
+
+        self.x0 = self._module.info['x']
+        """ starting point for optimization routine (NumPy array of shape (self.n,)) """
+
+        self.sifParams = self._module.info['sifparams']
+        """ dict of parameters passed to sifdecode """
+
+        self.sifOptions = self._module.info['sifoptions']
+        """ list of extra options passed to sifdecode """
+
+        self.vartype = self._module.info['vartype']
+        """ array of variable types (NumPy array size n, entry vartype[i] indicates that x[i] is real(0), boolean(1), or integer(2)) """
+
+        self.nnzh = self._module.info['nnzh']
+        """ number of nonzero entries in upper triangular part of objective Hessian (for all variables, including fixed) """
+
+        self.eq_cons_first = self._module.info['efirst'] if self.m > 0 else None
+        """ flag if equality constraints are listed before inequality constraints, None for unconstrained problems """
+
+        self.linear_cons_first = self._module.info['lfirst'] if self.m > 0 else None
+        """ flag if linear constraints are listed before nonlinear constraints, None for unconstrained problems """
+
+        self.nonlinear_vars_first = self._module.info['nvfirst']
+        """ flag if all nonlinear variables are listed before linear variables """
+
+        self.bl = self._module.info['bl']
+        """ array of lower bounds on input (unconstrained -> -1e20), as NumPy array of shape (self.n,) """
+
+        self.bu = self._module.info['bu']
+        """ array of upper bounds on input (unconstrained -> 1e20), as NumPy array of shape (self.n,) """
+
+        self.nnzj = self._module.info['nnzj'] if self.m > 0 else None
+        """ number of nonzero entries in constraint Jacobian (for all variables, including fixed), None for unconstrained problems """
+
+        self.v0 = self._module.info['v'] if self.m > 0 else None
+        """ starting point for Lagrange multipliers (NumPy array of shape (self.m,)), None for unconstrained problems """
+
+        self.cl = self._module.info['cl'] if self.m > 0 else None
+        """ lower bounds on constraints, as NumPy array of shape (self.m,), None for unconstrained problems """
+
+        self.cu = self._module.info['cu'] if self.m > 0 else None
+        """ upper bounds on constraints, as NumPy array of shape (self.m,), None for unconstrained problems """
+
+        self.is_eq_cons = self._module.info['equatn'] if self.m > 0 else None
+        """ NumPy array of Boolean flags indicating if i-th constraint is equality or not (i.e. inequality), None for unconstrained problems """
+
+        self.is_linear_cons = self._module.info['linear'] if self.m > 0 else None
+        """ NumPy array of Boolean flags indicating if i-th constraint is linear or not (i.e. nonlinear), None for unconstrained problems """
+
+        # Bug fix: if cl=cu, force is_eq_cons to be True
+        if self.m > 0:
+            self.is_eq_cons[self.cu - self.cl <= 1e-15] = True
 
         # Extract fixed/free variables
         self.idx_eq = np.where(self.bu - self.bl <= 1e-15)[0]  # indices of fixed variables
@@ -75,9 +146,16 @@ class CUTEstProblem(object):
 
         # Remove fixed variables from parameter info
         self.bl_full = self.bl.copy()  # for fixed values in self.free_to_all()
+
         self.n_full = self.n
+        """ total number of variables in CUTEst problem (n_free + n_fixed) """
+
         self.n_fixed = len(self.idx_eq)
+        """ number of fixed variables """
+
         self.n_free = len(self.idx_free)
+        """ number of free variables """
+
         if self.drop_fixed_vars:
             self.x0 = self.all_to_free(self.x0)
             self.bl = self.all_to_free(self.bl)
@@ -171,7 +249,11 @@ class CUTEstProblem(object):
     def objcons(self, x):
         """
         Evaluate objective and constraints.
-            f, c = problem.objcons(x)  -- objective and constraints
+
+        .. code-block:: python
+
+            # objective and constraints
+            f, c = problem.objcons(x)
 
         For unconstrained problems, c is None.
 
@@ -190,8 +272,13 @@ class CUTEstProblem(object):
     def obj(self, x, gradient=False):
         """
         Evaluate the objective (and optionally its gradient).
-            f    = problem.obj(x)                  -- objective
-            f, g = problem.obj(x, gradient=True)   -- objective and gradient
+
+        .. code-block:: python
+
+            # objective
+            f    = problem.obj(x)
+            # objective and gradient
+            f, g = problem.obj(x, gradient=True)
 
         This calls CUTEst routine CUTEST_uofg or CUTEST_cofg.
 
@@ -212,10 +299,17 @@ class CUTEstProblem(object):
     def cons(self, x, index=None, gradient=False):
         """
         Evaluate the constraints (and optionally their Jacobian).
-            c      = problem.cons(x)                         -- constraints
-            ci     = problem.cons(x, index=i)                -- i-th constraint
-            c, J   = problem.cons(x, gradient=True)          -- constraints and Jacobian
-            ci, Ji = problem.cons(x, index=i, gradient=True) -- i-th constraint and its gradient
+
+        .. code-block:: python
+
+            # constraint vector
+            c      = problem.cons(x)
+            # i-th constraint
+            ci     = problem.cons(x, index=i)
+            # constraints and Jacobian
+            c, J   = problem.cons(x, gradient=True)
+            # i-th constraint and its gradient
+            ci, Ji = problem.cons(x, index=i, gradient=True)
 
         For unconstrained problems, this returns None.
 
@@ -253,8 +347,13 @@ class CUTEstProblem(object):
     def lagjac(self, x, v=None):
         """
         Evaluate gradient of objective/Lagrangian, and Jacobian of constraints.
-            g, J = problem.lagjac(x)      -- objective gradient and the Jacobian of constraints
-            g, J = problem.lagjac(x, v=v) -- Lagrangian gradient and the Jacobian of constraints
+
+        .. code-block:: python
+
+            # objective gradient and the Jacobian of constraints
+            g, J = problem.lagjac(x)
+            # Lagrangian gradient and the Jacobian of constraints
+            g, J = problem.lagjac(x, v=v)
 
         For unconstrained problems, J is None.
 
@@ -282,10 +381,17 @@ class CUTEstProblem(object):
     def jprod(self, p, transpose=False, x=None):
         """
         Evaluate product of constraint Jacobian with a vector p
-            r = problem.jprod(p)                      -- evaluate J*p where J is the last compute Jacobian
-            r = problem.jprod(p, transpose=True)      -- evaluate J.T*p where J is the last compute Jacobian
-            r = problem.jprod(p, x=x)                 -- evaluate Jacobian at x, and return J(x)*p
-            r = problem.jprod(p, transpose=True, x=x) -- evaluate Jacobian at x, and return J(x).T*p
+
+        .. code-block:: python
+
+            # evaluate J*p where J is the last compute Jacobian
+            r = problem.jprod(p)
+            # evaluate J.T*p where J is the last compute Jacobian
+            r = problem.jprod(p, transpose=True)
+            # evaluate Jacobian at x, and return J(x)*p
+            r = problem.jprod(p, x=x)
+            # evaluate Jacobian at x, and return J(x).T*p
+            r = problem.jprod(p, transpose=True, x=x)
 
         For unconstrained problems, r is None.
 
@@ -313,8 +419,13 @@ class CUTEstProblem(object):
         """
         Evaluate the Hessian of the objective or Lagrangian.
         For constrained problems, the Hessian is L_{x,x}(x,v).
-            H = problem.hess(x)      -- Hessian of objective at x for unconstrained problems
-            H = problem.hess(x, v=v) -- Hessian of Lagrangian at (x, v) for constrained problems
+
+        .. code-block:: python
+
+            # Hessian of objective at x for unconstrained problems
+            H = problem.hess(x)
+            # Hessian of Lagrangian at (x, v) for constrained problems
+            H = problem.hess(x, v=v)
 
         For unconstrained problems, v must be None.
         For constrained problems, v must be specified.
@@ -343,8 +454,13 @@ class CUTEstProblem(object):
     def ihess(self, x, cons_index=None):
         """
         Evaluate the Hessian of the objective or the index-th constraint.
-            H = problem.ihess(x)               -- Hessian of the objective
-            H = problem.ihess(x, cons_index=i) -- Hessian of i-th constraint
+
+        .. code-block:: python
+
+            # Hessian of the objective
+            H = problem.ihess(x)
+            # Hessian of i-th constraint
+            H = problem.ihess(x, cons_index=i)
 
         For large problems, problem.isphess returns sparse matrices.
 
@@ -366,9 +482,15 @@ class CUTEstProblem(object):
         """
         Calculate Hessian-vector product H*p, where H is Hessian of objective (unconstrained) or Lagrangian (constrained).
         For constrained problems, the Hessian is L_{x,x}(x,v).
-            r = problem.hprod(p)           -- use last computed Hessian to compute H*p
-            r = problem.hprod(p, x=x, v=v) -- use Hessian of Lagrangian L_{x,x}(x,v) to compute H*p (constrained only)
-            r = problem.hprod(p, x=x)      -- use Hessian of objective at x to compute H*p (unconstrained only)
+
+        .. code-block:: python
+
+            # use last computed Hessian to compute H*p
+            r = problem.hprod(p)
+            # use Hessian of Lagrangian L_{x,x}(x,v) to compute H*p (constrained only)
+            r = problem.hprod(p, x=x, v=v)
+            # use Hessian of objective at x to compute H*p (unconstrained only)
+            r = problem.hprod(p, x=x)
 
         For unconstrained problems, v must be None.
         For constrained problems, v must be specified.
@@ -403,9 +525,15 @@ class CUTEstProblem(object):
         """
         Evaluate the gradient of objective or Lagrangian, Jacobian of constraints and Hessian of objective/Lagrangian.
         For constrained problems, the gradient is L_{x}(x,v) and the Hessian is L_{x,x}(x,v).
-            g, H    = problem.gradhess(x)                                    -- for unconstrained problems
-            g, J, H = problem.gradhess(x, v=v)                               -- for constrained problems (g = grad Lagrangian)
-            g, J, H = problem.gradhess(x, v=v, gradient_of_lagrangian=False) -- for constrained problems (g = grad objective)
+
+        .. code-block:: python
+
+            # for unconstrained problems
+            g, H    = problem.gradhess(x)
+            # for constrained problems (g = grad Lagrangian)
+            g, J, H = problem.gradhess(x, v=v)
+            # for constrained problems (g = grad objective)
+            g, J, H = problem.gradhess(x, v=v, gradient_of_lagrangian=False)
 
         For constrained problems, v must be specified, and the Hessian of the Lagrangian is always returned.
         For Hessian of the objective, use problem.ihess().
@@ -433,12 +561,19 @@ class CUTEstProblem(object):
     def scons(self, x, index=None, gradient=False):
         """
         Evaluate the constraints and optionally their sparse Jacobian/gradient.
-            c      = problem.scons(x)                         -- sparse constraints
-            ci     = problem.scons(x, index=i)                -- i-th constraint
-            c, J   = problem.scons(x, gradient=True)          -- constraints and sparse Jacobian
-            ci, Ji = problem.scons(x, index=i, gradient=True) -- i-th constraint and its sparse gradient
 
-        The matrix J or vectors and Ji is of type scipy.sparse.coo_matrix.
+        .. code-block:: python
+
+            # constraints
+            c      = problem.scons(x)
+            # i-th constraint
+            ci     = problem.scons(x, index=i)
+            # constraints and sparse Jacobian
+            c, J   = problem.scons(x, gradient=True)
+            # i-th constraint and its sparse gradient
+            ci, Ji = problem.scons(x, index=i, gradient=True)
+
+        The matrix J or vector Ji is of type scipy.sparse.coo_matrix.
 
         For unconstrained problems, this returns is None.
 
@@ -471,8 +606,13 @@ class CUTEstProblem(object):
     def slagjac(self, x, v=None):
         """
         Evaluate sparse gradient of objective or Lagrangian, and sparse Jacobian of constraints
-            g, J = problem.slagjac(x)      -- objective gradient and Jacobian
-            g, J = problem.slagjac(x, v=v) -- Lagrangian gradient and Jacobian
+
+        .. code-block:: python
+
+            # objective gradient and Jacobian
+            g, J = problem.slagjac(x)
+            # Lagrangian gradient and Jacobian
+            g, J = problem.slagjac(x, v=v)
 
         The vector g and matrix J are of type scipy.sparse.coo_matrix.
 
@@ -503,8 +643,13 @@ class CUTEstProblem(object):
         """
         Evaluate sparse Hessian of objective or Lagrangian.
         For constrained problems, the Hessian is L_{x,x}(x,v).
-            H = problem.sphess(x)    -- Hessian of objective (unconstrained problems)
-            H = problem.sphess(x, v) -- Hessian of Lagrangian (constrained problems)
+
+        .. code-block:: python
+
+            # Hessian of objective (unconstrained problems)
+            H = problem.sphess(x)
+            # Hessian of Lagrangian (constrained problems)
+            H = problem.sphess(x, v)
 
         For unconstrained problems, v must be None.
         For constrained problems, v must be specified.
@@ -533,8 +678,13 @@ class CUTEstProblem(object):
     def isphess(self, x, cons_index=None):
         """
         Evaluate the sparse Hessian of the objective or the index-th constraint.
-            H = problem.isphess(x)               -- Hessian of the objective
-            H = problem.isphess(x, cons_index=i) -- Hessian of i-th constraint
+
+        .. code-block:: python
+
+            # Hessian of the objective
+            H = problem.isphess(x)
+            # Hessian of the i-th constraint
+            H = problem.isphess(x, cons_index=i)
 
         The matrix H is of type scipy.sparse.coo_matrix.
 
@@ -559,9 +709,15 @@ class CUTEstProblem(object):
         """
         Evaluate the gradient of objective or Lagrangian, Jacobian of constraints and Hessian of objective/Lagrangian.
         For constrained problems, the gradient is L_{x}(x,v) and the Hessian is L_{x,x}(x,v).
-            g, H    = problem.gradsphess(x)                                    -- for unconstrained problems
-            g, J, H = problem.gradsphess(x, v=v)                               -- for constrained problems (g = grad Lagrangian)
-            g, J, H = problem.gradsphess(x, v=v, gradient_of_lagrangian=False) -- for constrained problems (g = grad objective)
+
+        .. code-block:: python
+
+            # For unconstrained problems
+            g, H    = problem.gradsphess(x)
+            # For constrained problem (g = grad Lagrangian)
+            g, J, H = problem.gradsphess(x, v=v)
+            # For constrained problems (g = grad objective)
+            g, J, H = problem.gradsphess(x, v=v, gradient_of_lagrangian=False)
 
         For constrained problems, v must be specified, and the Hessian of the Lagrangian is always returned.
         For Hessian of the objective, use problem.ihess().
@@ -593,19 +749,25 @@ class CUTEstProblem(object):
     def report(self):
         """
         Get CUTEst usage statistics.
+
+        .. code-block:: python
+
             stats = problem.report()
 
         Statistics are:
-        - f = number of objective evaluations
-        - g = number of objective gradient evaluations
-        - H = number of objective Hessian evaluations
-        - Hprod = number of objective Hessian-vector products
-        - tsetup = CPU time for setup
-        - trun = CPU time for run
+
+        * f = number of objective evaluations
+        * g = number of objective gradient evaluations
+        * H = number of objective Hessian evaluations
+        * Hprod = number of objective Hessian-vector products
+        * tsetup = CPU time for setup
+        * trun = CPU time for run
+
         and for constrained problems, also
-        - c = number of constraint evaluations (None for unconstrained)
-        - cg = number of constraint gradient evaluations (None for unconstrained)
-        - cH = number of constraint Hessian evaluations (None for unconstrained)
+
+        * c = number of constraint evaluations (None for unconstrained)
+        * cg = number of constraint gradient evaluations (None for unconstrained)
+        * cH = number of constraint Hessian evaluations (None for unconstrained)
 
         This calls CUTEst routine CUTEST_creport or CUTEST_ureport.
 

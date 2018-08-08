@@ -53,18 +53,17 @@ def is_cached(cachedName, sifParams=None):
     return os.path.isdir(problemDir)
 
 
-def clear_cache(cachedName, sifParams=None):
+def clear_cache(problemName, sifParams=None):
     """
     Deletes a saved problem.
 
-    :param cachedName: problem name
+    :param problemName: problem name
     :param sifParams: sif parameters used for compilation
-    :return:
     """
-    if not is_cached(cachedName, sifParams=sifParams):
+    if not is_cached(problemName, sifParams=sifParams):
         return  # nothing to do
 
-    problemDir = get_problem_directory(cachedName, sifParams=sifParams)
+    problemDir = get_problem_directory(problemName, sifParams=sifParams)
     # print('Problem dir = %s' % problemDir)
 
     # See if a directory with problem's name exists
@@ -291,15 +290,15 @@ def import_problem(problemName, destination=None, sifParams=None, sifOptions=Non
     Prepares a problem interface module, imports and initializes it.
 
     :param problemName: CUTEst problem name
-    :param destination: the name under which the compiled problem interface is stored in the cache (default = problemName)
+    :param destination: the name under which the compiled problem interface is stored in the cache (default = ``problemName``)
     :param sifParams: SIF file parameters to use (as dict, keys must be strings)
     :param sifOptions: additional options passed to sifdecode given in the form of a list of strings.
     :param efirst: order equation constraints first (default ``True``)
     :param lfirst: order linear constraints first (default ``True``)
     :param nvfirst: order nonlinear variables before linear variables (default ``False``)
     :param quiet: suppress output (default ``True``)
-    :param drop_fixed_variables: in the resulting problem object, are fixed variables hidden from the user (default=True)
-    :return: a reference to the Python interface class for this problem
+    :param drop_fixed_variables: in the resulting problem object, are fixed variables hidden from the user (default ``True``)
+    :return: a reference to the Python interface class for this problem (class ``pycutest.CUTEstProblem``)
     """
 
     # Default destination
@@ -325,7 +324,7 @@ def all_cached_problems():
     """
     Return a list of all cached problems.
 
-    :return: list of (problemName, sifParams) tuples
+    :return: list of (problemName, sifParams) tuples, where sifParams is a dict
     """
     all_probs = []
     problem_loc = os.path.join(get_cache_path(), CACHE_SUBFOLDER)

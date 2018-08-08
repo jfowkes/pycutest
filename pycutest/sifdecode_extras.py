@@ -179,19 +179,18 @@ def problem_properties(problemName):
     """
     Returns problem properties (uses the CUTEst problem classification string).
 
-    See
-        http://www.cuter.rl.ac.uk/Problems/classification.shtml
-    for details on the properties.
+    See http://www.cuter.rl.ac.uk/Problems/classification.shtml for details on the properties.
 
-    The output is a dictionary with the following members
-    - objective -- objective type code
-    - constraints -- constraints type code
-    - regular -- True if problem is regular
-    - degree -- highest degree of analytically available derivative
-    - origin -- problem origin code
-    - internal -- True if problem has internal variables
-    - n -- number of variables (None = can be set by the user)
-    - m -- number of constraints (None = can be set by the user)
+    The output is a dictionary with the following members:
+
+    * objective -- objective type code
+    * constraints -- constraints type code
+    * regular -- ``True`` if problem is regular
+    * degree -- highest degree of analytically available derivative
+    * origin -- problem origin code
+    * internal -- ``True`` if problem has internal variables
+    * n -- number of variables (``None`` = can be set by the user)
+    * m -- number of constraints (``None`` = can be set by the user)
 
     :param problemName: problem name
     :return: dict
@@ -243,20 +242,18 @@ def find_problems(objective=None, constraints=None, regular=None,
 
     If a requirement is not given, it is not applied.
 
-    See
-        http://www.cuter.rl.ac.uk/Problems/classification.shtml
-    for details on the letters used in the requirements.
+    See http://www.cuter.rl.ac.uk/Problems/classification.shtml for details on the letters used in the requirements.
 
-    :param objective: a string containg one or more letters (NCLQSO) specifying the type of the objective function
-    :param constraints: a string containg one or more letters (UXBNLQO) the type of the constraints
-    :param regular: a boolean, True if the problem must be regular, False if it must be irregular
-    :param degree: list of the form [min, max] specifying the minimum and the maximum number of analytically available derivatives
-    :param origin: a string containg one or more letters (AMR) specifying the origin of the problem
-    :param internal: a boolean, True if the problem must have internal variables, False if internal variables are not allowed
-    :param n: a list of the form [min, max] specifying the lowest and the highest allowed number of variables
-    :param userN: True of the problems must have user settable number of variables, False if the number must be hardcoded
-    :param m: a list of the form [min, max] specifying the lowest and the highest allowed number of constraints
-    :param userM: True of the problems must have user settable number of variables, False if the number must be hardcoded
+    :param objective: a string containing one or more letters (NCLQSO) specifying the type of the objective function
+    :param constraints: a string containing one or more letters (UXBNLQO) the type of the constraints
+    :param regular: a boolean, ``True`` if the problem must be regular, ``False`` if it must be irregular
+    :param degree: list of the form ``[min, max]`` specifying the minimum and the maximum number of analytically available derivatives
+    :param origin: a string containing one or more letters (AMR) specifying the origin of the problem
+    :param internal: a boolean, ``True`` if the problem must have internal variables, ``False`` if internal variables are not allowed
+    :param n: a list of the form ``[min, max]`` specifying the lowest and the highest allowed number of variables
+    :param userN: ``True`` if the problems must have user settable number of variables, ``False`` if the number must be hardcoded
+    :param m: a list of the form ``[min, max]`` specifying the lowest and the highest allowed number of constraints
+    :param userM: ``True`` of the problems must have user settable number of variables, ``False`` if the number must be hardcoded
     :return: list of strings with problem names which satisfy the given requirements
     """
 

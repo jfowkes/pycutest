@@ -12,6 +12,9 @@ __all__ += ['import_problem', 'clear_cache', 'all_cached_problems']
 from .sifdecode_extras import print_available_sif_params, problem_properties, find_problems
 __all__ += ['print_available_sif_params', 'problem_properties', 'find_problems']
 
+from .problem_class import CUTEstProblem
+__all__ += ['CUTEstProblem']
+
 # When PyCUTEst is imported, run some basic installation checks
 from .system_paths import check_platform, get_cutest_path, get_sifdecoder_path, get_mastsif_path
 
