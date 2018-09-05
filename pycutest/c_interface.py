@@ -1500,7 +1500,7 @@ static PyObject *cutest__scons(PyObject *self, PyObject *args) {
     PyArrayObject *arg1, *Mc, *MJi, *MJfi, *MJv, *Mgi, *Mgv;
     doublereal *c, *Jv, *gv, *x, *sv;
     npy_integer *Ji, *Jfi, *gi, *si;
-    npy_integer index, nnzsgc;
+    npy_integer index, nnzsgc, lj;
     int i;
     npy_intp dims[1];
 
@@ -1542,12 +1542,13 @@ static PyObject *cutest__scons(PyObject *self, PyObject *args) {
         dims[0]=CUTEst_ncon;
         Mc=(PyArrayObject *)PyArray_SimpleNew(1, dims, NPY_DOUBLE);
         c=(npy_double *)PyArray_DATA(Mc);
+        lj=CUTEst_nnzj;
 
 #ifdef PYDEBUG
         fprintf(df, "PyCUTEst: calling CUTEST_ccfsg\n");
 #endif
         CUTEST_ccfsg((integer *)&status, (integer *)&CUTEst_nvar, (integer *)&CUTEst_ncon, x, c, (integer *)&CUTEst_nnzj,
-              (integer *)&CUTEst_nnzj, Jv, (integer *)Ji, (integer *)Jfi, &somethingTrue);
+              (integer *)&lj, Jv, (integer *)Ji, (integer *)Jfi, &somethingTrue);
 
         /* Convert FORTRAN indices to C indices */
         for(i=0;i<CUTEst_nnzj;i++) {
