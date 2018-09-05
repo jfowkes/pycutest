@@ -59,28 +59,6 @@ itf_c_source = r"""
 extern "C" {
 #endif
 
-/* NumPy type for CUTEst integer
-   INTEGER type in FORTRAN is by default 4 bytes wide (tested with gfortran
-   on AMD64 Linux). The C prototypes of FORTRAN-based CUTEst toos use
-   integer C type which is typedefed to long int in cutest.h.
-   On IA32 Linux long int is 4 bytes wide. Unfortunately on AMD64 it is 8
-   bytes wide. This causes problems if we are passing arguments to
-   FORTRAN functions. A serious problem appears when an input or output
-   argument is an array because the elements of the array are twice the size
-   the FORTRAN expects them to be.
-   Until this bug is fixed in CUTEst the solution is to use npy_integer for
-   variables and npy_integer_type_num for creating NumPy arrays. To get rid
-   of warnings integer arguments are explicitly converted to (integer *) when
-   they are passed to FORTRAN functions. This is harmless since FORTRAN
-   arguments are passed by reference (as pointers) and the type conversion does
-   not affect the pointer's value.
-   The same goes for logical typedef of CUTEst. This interface uses npy_logical
-   which is actually int, but type casts npy_logical* pointers to logical*.
-*/
-static int npy_integer_type_num=NPY_INT;
-typedef int npy_integer;
-typedef int npy_logical;
-
 
 /* Prototypes */
 static PyObject *cutest__dims(PyObject *self, PyObject *args);
@@ -105,17 +83,18 @@ static PyObject *cutest_report(PyObject *self, PyObject *args);
 
 /* Persistent data */
 #define STR_LEN 10
-static npy_integer status = 0;    /* output status */
-static npy_integer CUTEst_nvar = 0;		/* number of variables */
-static npy_integer CUTEst_ncon = 0;		/* number of constraints */
-static npy_integer CUTEst_nnzj = 0;		/* nnz in Jacobian */
-static npy_integer CUTEst_nnzh = 0;		/* nnz in upper triangular Hessian */
+static npy_int status = 0;    /* output status */
+static npy_int CUTEst_nvar = 0;		/* number of variables */
+static npy_int CUTEst_ncon = 0;		/* number of constraints */
+static npy_int CUTEst_nnzj = 0;		/* nnz in Jacobian */
+static npy_int CUTEst_nnzh = 0;		/* nnz in upper triangular Hessian */
 static char CUTEst_probName[STR_LEN+1];	/* problem name */
 static char setupCalled = 0;			/* Flag to indicate if setup was called */
-static char dataFileOpen = 0;			/* Flag to indicate if OUTSDIf is open */
+static char dataFileOpen = 0;			/* Flag to indicate if OUTSDIF is open */
 
-static npy_integer funit = 42;			/* FORTRAN unit number for OUTSDIF.d */
-static npy_integer  iout = 6;			/* FORTRAN unit number for error output */
+static npy_int funit = 42;			/* FORTRAN unit number for OUTSDIF.d */
+static npy_int iout = 6;			/* FORTRAN unit number for error output */
+static npy_int io_buffer = 11;		/* FORTRAN unit number for internal input/output */
 static char  fName[] = "OUTSDIF.d"; 	/* Data file name */
 /* Logical constants for FORTRAN calls */
 static logical somethingFalse = FALSE_, somethingTrue = TRUE_;
@@ -125,7 +104,7 @@ static logical somethingFalse = FALSE_, somethingTrue = TRUE_;
 
 /* Open data file, return 0 on error. */
 int open_datafile(void) {
-    npy_integer  ioErr;					/* Exit flag from OPEN and CLOSE */
+    npy_int  ioErr;					/* Exit flag from OPEN and CLOSE */
 #ifdef PYDEBUG
     fprintf(df, "PyCUTEst: opening data file\n");
 #endif
@@ -142,7 +121,7 @@ int open_datafile(void) {
 
 /* Close data file, return 0 on error. */
 int close_datafile(void) {
-    npy_integer ioErr;					/* Exit flag from OPEN and CLOSE */
+    npy_int ioErr;					/* Exit flag from OPEN and CLOSE */
     ioErr = 0;
     FORTRAN_close((integer *)&funit, (integer *)&ioErr);
     if (ioErr) {
@@ -194,10 +173,10 @@ PyObject *decRefTuple(PyObject *tuple) {
 }
 
 /* Extract sparse gradient and Jacobian in form of NumPy arrays */
-void extract_sparse_gradient_jacobian(npy_integer nnzjplusno, npy_integer *sji, npy_integer *sjfi, npy_double *sjv,
+void extract_sparse_gradient_jacobian(npy_int nnzjplusno, npy_int *sji, npy_int *sjfi, npy_double *sjv,
         PyArrayObject **Mgi, PyArrayObject **Mgv, PyArrayObject **MJi, PyArrayObject **MJfi, PyArrayObject **MJv) {
     npy_double *gv, *Jv;
-    npy_integer *gi, *Ji, *Jfi, nnzg, i, jg, jj;
+    npy_int *gi, *Ji, *Jfi, nnzg, i, jg, jj;
     npy_intp dims[1];
 
     /* Get number of nonzeros in gradient vector */
@@ -210,16 +189,16 @@ void extract_sparse_gradient_jacobian(npy_integer nnzjplusno, npy_integer *sji, 
     /* Alocate and fill objective/Lagrangian gradient data and Jacobian data,
        convert indices from FORTRAN to C. */
     dims[0]=nnzg;
-    *Mgi=(PyArrayObject *)PyArray_SimpleNew(1, dims, npy_integer_type_num);
+    *Mgi=(PyArrayObject *)PyArray_SimpleNew(1, dims, NPY_INT);
     *Mgv=(PyArrayObject *)PyArray_SimpleNew(1, dims, NPY_DOUBLE);
-    gi=(npy_integer *)PyArray_DATA(*Mgi);
+    gi=(npy_int *)PyArray_DATA(*Mgi);
     gv=(npy_double *)PyArray_DATA(*Mgv);
     dims[0]=nnzjplusno-nnzg;
-    *MJi=(PyArrayObject *)PyArray_SimpleNew(1, dims, npy_integer_type_num);
-    *MJfi=(PyArrayObject *)PyArray_SimpleNew(1, dims, npy_integer_type_num);
+    *MJi=(PyArrayObject *)PyArray_SimpleNew(1, dims, NPY_INT);
+    *MJfi=(PyArrayObject *)PyArray_SimpleNew(1, dims, NPY_INT);
     *MJv=(PyArrayObject *)PyArray_SimpleNew(1, dims, NPY_DOUBLE);
-    Ji=(npy_integer *)PyArray_DATA(*MJi);
-    Jfi=(npy_integer *)PyArray_DATA(*MJfi);
+    Ji=(npy_int *)PyArray_DATA(*MJi);
+    Jfi=(npy_int *)PyArray_DATA(*MJfi);
     Jv=(npy_double *)PyArray_DATA(*MJv);
     jg=0;
     jj=0;
@@ -240,9 +219,9 @@ void extract_sparse_gradient_jacobian(npy_integer nnzjplusno, npy_integer *sji, 
 /* Extract sparse Hessian in form of NumPy arrays
    from sparse ijv format of Hessian's upper triangle + diagonal.
    Add elements to lower triangle. */
-void extract_sparse_hessian(npy_integer nnzho, npy_integer *si, npy_integer *sj, npy_double *sv,
+void extract_sparse_hessian(npy_int nnzho, npy_int *si, npy_int *sj, npy_double *sv,
                     PyArrayObject **MHi, PyArrayObject **MHj, PyArrayObject **MHv) {
-    npy_integer *Hi, *Hj, nnzdiag, i, j;
+    npy_int *Hi, *Hj, nnzdiag, i, j;
     npy_double *Hv;
     npy_intp dims[1];
 
@@ -257,11 +236,11 @@ void extract_sparse_hessian(npy_integer nnzho, npy_integer *si, npy_integer *sj,
     /* Alocate and fill objective/Lagrangian gradient data and Jacobian data,
        convert indices from FORTRAN to C, fill lower triangle. */
     dims[0]=2*nnzho-nnzdiag; /* Do not duplicate diagonal elements */
-    *MHi=(PyArrayObject *)PyArray_SimpleNew(1, dims, npy_integer_type_num);
-    *MHj=(PyArrayObject *)PyArray_SimpleNew(1, dims, npy_integer_type_num);
+    *MHi=(PyArrayObject *)PyArray_SimpleNew(1, dims, NPY_INT);
+    *MHj=(PyArrayObject *)PyArray_SimpleNew(1, dims, NPY_INT);
     *MHv=(PyArrayObject *)PyArray_SimpleNew(1, dims, NPY_DOUBLE);
-    Hi=(npy_integer *)PyArray_DATA(*MHi);
-    Hj=(npy_integer *)PyArray_DATA(*MHj);
+    Hi=(npy_int *)PyArray_DATA(*MHi);
+    Hj=(npy_int *)PyArray_DATA(*MHj);
     Hv=(npy_double *)PyArray_DATA(*MHv);
     j=0;
     for(i=0;i<nnzho;i++) {
@@ -372,14 +351,14 @@ static char cutest__setup_doc[]=
 "                  CUTEST_cdimsh, CUTEST_udimsh, CUTEST_cdimsj, CUTEST_probname\n";
 
 static PyObject *cutest__setup(PyObject *self, PyObject *args) {
-    npy_logical  efirst = FALSE_, lfirst = FALSE_, nvfrst = FALSE_;
+    npy_bool  efirst = FALSE_, lfirst = FALSE_, nvfrst = FALSE_;
     int eFirst, lFirst, nvFirst;
     PyObject *dict;
     PyArrayObject *Mx, *Mbl, *Mbu, *Mv=NULL, *Mcl=NULL, *Mcu=NULL, *Meq=NULL, *Mlinear=NULL;
     PyArrayObject *Mvt;
     doublereal *x, *bl, *bu, *v=NULL, *cl=NULL, *cu=NULL;
-    npy_integer *vartypes;
-    npy_logical *equatn=NULL, *linear=NULL;
+    npy_int *vartypes;
+    npy_bool *equatn=NULL, *linear=NULL;
     npy_intp dims[1];
     int i;
 
@@ -438,21 +417,20 @@ static PyObject *cutest__setup(PyObject *self, PyObject *args) {
         cu = (npy_double *)PyArray_DATA(Mcu);
 
         /* Create temporary CUTEst logical arrays */
-        equatn = (npy_logical *)malloc(CUTEst_ncon*sizeof(npy_logical));
-        linear = (npy_logical *)malloc(CUTEst_ncon*sizeof(npy_logical));
+        equatn = (npy_bool *)malloc(CUTEst_ncon*sizeof(npy_bool));
+        linear = (npy_bool *)malloc(CUTEst_ncon*sizeof(npy_bool));
     }
-    vartypes=(npy_integer *)malloc(CUTEst_nvar*sizeof(npy_integer));
+    vartypes=(npy_int *)malloc(CUTEst_nvar*sizeof(npy_int));
 
 #ifdef PYDEBUG
     fprintf(df, "PyCUTEst: Calling CUTEST_[uc]setup\n");
 #endif
-    int IOBUFFER;
     if (CUTEst_ncon > 0)
-        CUTEST_csetup((integer *)&status, (integer *)&funit, (integer *)&iout, (integer *)&IOBUFFER, (integer *)&CUTEst_nvar, (integer *)&CUTEst_ncon, x, bl, bu,
+        CUTEST_csetup((integer *)&status, (integer *)&funit, (integer *)&iout, (integer *)&io_buffer, (integer *)&CUTEst_nvar, (integer *)&CUTEst_ncon, x, bl, bu,
                 v, cl, cu, (logical *)equatn, (logical *)linear,
                 (integer *)&efirst, (integer *)&lfirst, (integer *)&nvfrst);
     else
-        CUTEST_usetup((integer *)&status, (integer *)&funit, (integer *)&iout, (integer *)&IOBUFFER, (integer *)&CUTEst_nvar, x, bl, bu);
+        CUTEST_usetup((integer *)&status, (integer *)&funit, (integer *)&iout, (integer *)&io_buffer, (integer *)&CUTEst_nvar, x, bl, bu);
 #ifdef PYDEBUG
     fprintf(df, "PyCUTEst:   n = %-d, m = %-d\n", CUTEst_nvar, CUTEst_ncon);
 #endif
@@ -468,8 +446,8 @@ static PyObject *cutest__setup(PyObject *self, PyObject *args) {
     /* Copy logical values to NumPy bool arrays and free temporary storage */
     if (CUTEst_ncon > 0) {
         for(i=0; i<CUTEst_ncon; i++) {
-            *((npy_bool*)(PyArray_GETPTR1(Meq, i)))=(equatn[i]==TRUE_ ? NPY_TRUE : NPY_FALSE);
-            *((npy_bool*)(PyArray_GETPTR1(Mlinear, i)))=(linear[i]==TRUE_ ? NPY_TRUE : NPY_FALSE);
+            *((npy_bool*)(PyArray_GETPTR1(Meq, i)))=equatn[i];
+            *((npy_bool*)(PyArray_GETPTR1(Mlinear, i)))=linear[i];
         }
         free(equatn);
         free(linear);
@@ -818,8 +796,8 @@ static PyObject *cutest_cons(PyObject *self, PyObject *args) {
     PyObject *arg2;
     doublereal *x, *c, *J;
     int derivs, index, wantSingle;
-    npy_integer icon;
-    npy_integer zero = 0;
+    npy_int icon;
+    npy_int zero = 0;
     npy_intp dims[2];
 
 #ifdef PYDEBUG
@@ -1203,7 +1181,7 @@ static PyObject *cutest_ihess(PyObject *self, PyObject *args) {
     doublereal *x, *H;
     npy_intp dims[2];
     int i;
-    npy_integer icon;
+    npy_int icon;
 
 #ifdef PYDEBUG
     fprintf(df, "PyCUTEst: checking arguments\n");
@@ -1386,7 +1364,7 @@ static PyObject *cutest_gradhess(PyObject *self, PyObject *args) {
     PyArrayObject *arg1, *arg2, *Mg, *MH, *MJ;
     PyObject *arg3;
     doublereal *x, *v=NULL, *g, *H, *J;
-    npy_logical grlagf;
+    npy_bool grlagf;
     npy_intp dims[2];
 
 #ifdef PYDEBUG
@@ -1499,8 +1477,8 @@ static char cutest__scons_doc[]=
 static PyObject *cutest__scons(PyObject *self, PyObject *args) {
     PyArrayObject *arg1, *Mc, *MJi, *MJfi, *MJv, *Mgi, *Mgv;
     doublereal *c, *Jv, *gv, *x, *sv;
-    npy_integer *Ji, *Jfi, *gi, *si;
-    npy_integer index, nnzsgc, lj;
+    npy_int *Ji, *Jfi, *gi, *si;
+    npy_int index, nnzsgc, lj;
     int i;
     npy_intp dims[1];
 
@@ -1533,11 +1511,11 @@ static PyObject *cutest__scons(PyObject *self, PyObject *args) {
 #endif
         x=(npy_double *)PyArray_DATA(arg1);
         dims[0]=CUTEst_nnzj;
-        MJi=(PyArrayObject *)PyArray_SimpleNew(1, dims, npy_integer_type_num);
-        MJfi=(PyArrayObject *)PyArray_SimpleNew(1, dims, npy_integer_type_num);
+        MJi=(PyArrayObject *)PyArray_SimpleNew(1, dims, NPY_INT);
+        MJfi=(PyArrayObject *)PyArray_SimpleNew(1, dims, NPY_INT);
         MJv=(PyArrayObject *)PyArray_SimpleNew(1, dims, NPY_DOUBLE);
-        Ji=(npy_integer *)PyArray_DATA(MJi);
-        Jfi=(npy_integer *)PyArray_DATA(MJfi);
+        Ji=(npy_int *)PyArray_DATA(MJi);
+        Jfi=(npy_int *)PyArray_DATA(MJfi);
         Jv=(npy_double *)PyArray_DATA(MJv);
         dims[0]=CUTEst_ncon;
         Mc=(PyArrayObject *)PyArray_SimpleNew(1, dims, NPY_DOUBLE);
@@ -1562,7 +1540,7 @@ static PyObject *cutest__scons(PyObject *self, PyObject *args) {
         fprintf(df, "PyCUTEst: preparing for evaluation\n");
 #endif
         x=(npy_double *)PyArray_DATA(arg1);
-        si=(npy_integer *)malloc(CUTEst_nvar*sizeof(npy_integer));
+        si=(npy_int *)malloc(CUTEst_nvar*sizeof(npy_int));
         sv=(npy_double *)malloc(CUTEst_nvar*sizeof(npy_double));
         dims[0]=1;
         Mc=(PyArrayObject *)PyArray_SimpleNew(1, dims, NPY_DOUBLE);
@@ -1575,9 +1553,9 @@ static PyObject *cutest__scons(PyObject *self, PyObject *args) {
 
         /* Allocate and copy results, convert indices from FORTRAN to C, free storage */
         dims[0]=nnzsgc;
-        Mgi=(PyArrayObject *)PyArray_SimpleNew(1, dims, npy_integer_type_num);
+        Mgi=(PyArrayObject *)PyArray_SimpleNew(1, dims, NPY_INT);
         Mgv=(PyArrayObject *)PyArray_SimpleNew(1, dims, NPY_DOUBLE);
-        gi=(npy_integer *)PyArray_DATA(Mgi);
+        gi=(npy_int *)PyArray_DATA(Mgi);
         gv=(npy_double *)PyArray_DATA(Mgv);
         for (i=0;i<nnzsgc;i++) {
             gi[i]=si[i]-1;
@@ -1622,8 +1600,8 @@ static char cutest__slagjac_doc[]=
 static PyObject *cutest__slagjac(PyObject *self, PyObject *args) {
     PyArrayObject *arg1, *arg2, *Mgi, *Mgv, *MJi, *MJfi, *MJv;
     doublereal *x, *v=NULL, *sv;
-    npy_integer *si, *sfi;
-    npy_integer nnzjplusn, nnzjplusno;
+    npy_int *si, *sfi;
+    npy_int nnzjplusn, nnzjplusno;
     int lagrangian;
 
 #ifdef PYDEBUG
@@ -1660,8 +1638,8 @@ static PyObject *cutest__slagjac(PyObject *self, PyObject *args) {
     if (lagrangian)
         v=(npy_double *)PyArray_DATA(arg2);
     nnzjplusn=CUTEst_nnzj+CUTEst_nvar;
-    si=(npy_integer *)malloc(nnzjplusn*sizeof(npy_integer));
-    sfi=(npy_integer *)malloc(nnzjplusn*sizeof(npy_integer));
+    si=(npy_int *)malloc(nnzjplusn*sizeof(npy_int));
+    sfi=(npy_int *)malloc(nnzjplusn*sizeof(npy_int));
     sv=(npy_double *)malloc(nnzjplusn*sizeof(npy_double));
 
 #ifdef PYDEBUG
@@ -1718,7 +1696,7 @@ static char cutest__sphess_doc[]=
 static PyObject *cutest__sphess(PyObject *self, PyObject *args) {
     PyArrayObject *arg1, *arg2, *MHi, *MHj, *MHv;
     doublereal *x, *v=NULL, *sv;
-    npy_integer *si, *sj, nnzho;
+    npy_int *si, *sj, nnzho;
 
 #ifdef PYDEBUG
     fprintf(df, "PyCUTEst: checking arguments\n");
@@ -1755,8 +1733,8 @@ static PyObject *cutest__sphess(PyObject *self, PyObject *args) {
     x=(npy_double *)PyArray_DATA(arg1);
     if (CUTEst_ncon>0)
         v=(npy_double *)PyArray_DATA(arg2);
-    si=(npy_integer *)malloc(CUTEst_nnzh*sizeof(npy_integer));
-    sj=(npy_integer *)malloc(CUTEst_nnzh*sizeof(npy_integer));
+    si=(npy_int *)malloc(CUTEst_nnzh*sizeof(npy_int));
+    sj=(npy_int *)malloc(CUTEst_nnzh*sizeof(npy_int));
     sv=(npy_double *)malloc(CUTEst_nnzh*sizeof(npy_double));
 
 #ifdef PYDEBUG
@@ -1811,8 +1789,8 @@ static char cutest__isphess_doc[]=
 static PyObject *cutest__isphess(PyObject *self, PyObject *args) {
     PyArrayObject *arg1, *MHi, *MHj, *MHv;
     doublereal *x, *sv;
-    npy_integer *si, *sj, nnzho, i;
-    npy_integer icon;
+    npy_int *si, *sj, nnzho, i;
+    npy_int icon;
 
 #ifdef PYDEBUG
     fprintf(df, "PyCUTEst: checking arguments\n");
@@ -1843,8 +1821,8 @@ static PyObject *cutest__isphess(PyObject *self, PyObject *args) {
     fprintf(df, "PyCUTEst: preparing for evaluation\n");
 #endif
     x=(npy_double *)PyArray_DATA(arg1);
-    si=(npy_integer *)malloc(CUTEst_nnzh*sizeof(npy_integer));
-    sj=(npy_integer *)malloc(CUTEst_nnzh*sizeof(npy_integer));
+    si=(npy_int *)malloc(CUTEst_nnzh*sizeof(npy_int));
+    sj=(npy_int *)malloc(CUTEst_nnzh*sizeof(npy_int));
     sv=(npy_double *)malloc(CUTEst_nnzh*sizeof(npy_double));
 
 #ifdef PYDEBUG
@@ -1914,8 +1892,8 @@ static PyObject *cutest__gradsphess(PyObject *self, PyObject *args) {
     PyArrayObject *arg1, *arg2, *Mg=NULL, *Mgi, *Mgv, *MJi, *MJfi, *MJv, *MHi, *MHj, *MHv;
     PyObject *arg3;
     doublereal *x, *v, *g, *sv, *sjv;
-    npy_integer lagrangian;
-    npy_integer *si, *sj, *sji, *sjfi, nnzho, nnzjplusn, nnzjplusno;
+    npy_int lagrangian;
+    npy_int *si, *sj, *sji, *sjfi, nnzho, nnzjplusn, nnzjplusno;
     npy_intp dims[1];
 
 #ifdef PYDEBUG
@@ -1959,15 +1937,15 @@ static PyObject *cutest__gradsphess(PyObject *self, PyObject *args) {
     fprintf(df, "PyCUTEst: preparing for evaluation\n");
 #endif
     x=(npy_double *)PyArray_DATA(arg1);
-    si=(npy_integer *)malloc(CUTEst_nnzh*sizeof(npy_integer));
-    sj=(npy_integer *)malloc(CUTEst_nnzh*sizeof(npy_integer));
+    si=(npy_int *)malloc(CUTEst_nnzh*sizeof(npy_int));
+    sj=(npy_int *)malloc(CUTEst_nnzh*sizeof(npy_int));
     sv=(npy_double *)malloc(CUTEst_nnzh*sizeof(npy_double));
 
     if (CUTEst_ncon>0) {
         v=(npy_double *)PyArray_DATA(arg2);
         nnzjplusn=CUTEst_nnzj+CUTEst_nvar;
-        sji=(npy_integer *)malloc(nnzjplusn*sizeof(npy_integer));
-        sjfi=(npy_integer *)malloc(nnzjplusn*sizeof(npy_integer));
+        sji=(npy_int *)malloc(nnzjplusn*sizeof(npy_int));
+        sjfi=(npy_int *)malloc(nnzjplusn*sizeof(npy_int));
         sjv=(npy_double *)malloc(nnzjplusn*sizeof(npy_double));
 
 #ifdef PYDEBUG

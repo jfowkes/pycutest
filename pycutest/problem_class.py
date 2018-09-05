@@ -136,10 +136,6 @@ class CUTEstProblem(object):
         self.is_linear_cons = self._module.info['linear'] if self.m > 0 else None
         """ NumPy array of Boolean flags indicating if i-th constraint is linear or not (i.e. nonlinear), None for unconstrained problems """
 
-        # Bug fix: if cl=cu, force is_eq_cons to be True
-        if self.m > 0:
-            self.is_eq_cons[self.cu - self.cl <= 1e-15] = True
-
         # Extract fixed/free variables
         self.idx_eq = np.where(self.bu - self.bl <= 1e-15)[0]  # indices of fixed variables
         self.idx_free = np.setdiff1d(np.arange(self.n), self.idx_eq)  # indices of free variables
