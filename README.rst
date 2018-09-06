@@ -2,7 +2,7 @@
 PyCUTEst: A Python interface to the CUTEst Optimization Test Environment |License| |Build Status|
 =================================================================================================
 
-PyCUTEst is a Python interface to `CUTEst <https://github.com/ralna/CUTEst>`_, a Fortran package for testing optimization software. It is based on the interface originally developed for CUTEr by `Prof. Arpad Buermen <http://www.fe.uni-lj.si/en/the_faculty/staff/alphabetically/55/>`_.
+PyCUTEst is a Python interface to `CUTEst <https://github.com/ralna/CUTEst>`_, a Fortran package for testing optimization software. It is based on the `interface originally developed for CUTEr <http://fides.fe.uni-lj.si/~arpadb/software-pycuter.html>`_ by `Prof. Arpad Buermen <http://www.fe.uni-lj.si/en/the_faculty/staff/alphabetically/55/>`_.
 
 Requirements
 ------------
@@ -113,19 +113,19 @@ Note that if an older install of PyCUTEst is present on your system you can use:
 
 to upgrade PyCUTEst to the latest version.
 
-You will then need to create a folder which will store all your compiled problems.
+You will then need to create a folder which will store all your compiled problems:
 
  .. code-block:: bash
 
     $ mkdir pycutest_cache
 
-And set an environment variable to add this to tell PyCUTEst about this directory, by adding to your :code:`~/.bashrc` file:
+And set an environment variable to tell PyCUTEst about this directory, by adding to your :code:`~/.bashrc` file:
 
  .. code-block:: bash
 
     export PYCUTEST_CACHE="/path/to/pycutest_cache"
     export PYTHONPATH="${PYCUTEST_CACHE}:${PYTHONPATH}"
-
+    
 
 Manual installation
 -------------------
@@ -148,7 +148,7 @@ If you do not have root privileges or you want to install PyCUTEst for your priv
 
     $ pip install --user .
 
-instead.
+which will install PyCUTEst in your home directory.
 
 Don't forget to set up your cache and associated environment variable (see above).
 
@@ -157,7 +157,7 @@ To upgrade PyCUTEst to the latest version, navigate to the top-level directory (
  .. code-block:: bash
 
     $ git pull
-    $ [sudo] pip install .  # with admin privileges
+    $ [sudo] pip install .  # with root privileges
 
 Testing
 -------
@@ -175,7 +175,7 @@ If PyCUTEst was installed using *pip* you can uninstall as follows:
 
     $ [sudo] pip uninstall pycutest
 
-If PyCUTEst was installed manually you have to remove the installed files by hand (located in your python site-packages directory).
+otherwise you have to remove the installed files by hand (located in your python site-packages directory).
 
 Bugs
 ----
