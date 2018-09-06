@@ -29,7 +29,9 @@ These instructions do not include installation of the MATLAB interface. You will
     $ git clone https://github.com/ralna/CUTEst ./cutest
     $ git clone https://bitbucket.org/optrove/sif ./mastsif
 
-Note that :code:`mastsif` contains all the test problem definitions and is therefore quite large. If you're short on space you may want to copy only the *.SIF files for the problems you wish to test on.
+Note that :code:`mastsif` contains all the test problem definitions and 
+is therefore quite large. If you're short on space you may want to copy 
+only the ``*.SIF`` files for the problems you wish to test on.
 
 Next set the following environment variables in your :code:`~/.bashrc` to point to the installation directories used above:
 
