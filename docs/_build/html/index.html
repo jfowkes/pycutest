@@ -1,0 +1,277 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>PyCUTEst: Python interface to the CUTEst optimization test environment &mdash; PyCUTEst v0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Installing PyCUTEst" href="install.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="#" class="icon icon-home"> PyCUTEst
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installing PyCUTEst</a></li>
+<li class="toctree-l1"><a class="reference internal" href="building.html">Building Test Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="interface.html">Problem Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example.html">Example Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="history.html">Version History</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">PyCUTEst</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="#">Docs</a> &raquo;</li>
+        
+      <li>PyCUTEst: Python interface to the CUTEst optimization test environment</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="pycutest-python-interface-to-the-cutest-optimization-test-environment">
+<h1>PyCUTEst: Python interface to the CUTEst optimization test environment<a class="headerlink" href="#pycutest-python-interface-to-the-cutest-optimization-test-environment" title="Permalink to this headline">¶</a></h1>
+<p><strong>Release:</strong> 0.1</p>
+<p><strong>Date:</strong> 06 September 2018</p>
+<p><strong>Author:</strong> <a class="reference external" href="jaroslav.fowkes&#64;maths.ox.ac.uk&#64;maths.ox.ac.uk">Jaroslav Fowkes</a> and <a class="reference external" href="mailto:lindon&#46;roberts&#37;&#52;&#48;maths&#46;ox&#46;ac&#46;uk">Lindon Roberts</a></p>
+<p>PyCUTEst is a Python interface to <a class="reference external" href="https://github.com/ralna/CUTEst">CUTEst</a>, a Fortran package for testing optimization software <a class="footnote-reference" href="#id3" id="id1">[1]</a>. It is based on the interface originally developed for CUTEr by <a class="reference external" href="http://www.fe.uni-lj.si/en/the_faculty/staff/alphabetically/55/">Prof. Arpad Buermen</a> <a class="footnote-reference" href="#id4" id="id2">[2]</a>. Currently it supports Mac and  Linux only.</p>
+<p>In essence, this package gives convenient access to a large collection of nonlinear optimization test problems.</p>
+<p>PyCUTEst is released under the GNU General Public License.</p>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installing PyCUTEst</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="install.html#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#installing-cutest-on-linux">Installing CUTEst on Linux</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#installing-cutest-on-mac">Installing CUTEst on Mac</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#installing-pycutest-using-pip">Installing PyCUTEst using pip</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#manual-installation-of-pycutest">Manual installation of PyCUTEst</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#testing">Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#uninstallation">Uninstallation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="building.html">Building Test Problems</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="building.html#finding-problems">Finding Problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="building.html#building-problems">Building Problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="building.html#cache-management">Cache Management</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="interface.html">Problem Interface</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="interface.html#full-function-documentation">Full function documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="example.html">Example Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="history.html">Version History</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="history.html#version-0-1-8-aug-2018">Version 0.1 (8 Aug 2018)</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
+</ul>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<table class="docutils footnote" frame="void" id="id3" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>Gould, N. I. M., Orban, D. and Toint, P. L. (2015) CUTEst: a Constrained and Unconstrained Testing Environment with safe threads for mathematical optimization, <em>Computational Optimization and Applications</em>, vol. 60, no. 3, pp. 545-557. <a class="reference external" href="https://doi.org/10.1007/s10589-014-9687-3">https://doi.org/10.1007/s10589-014-9687-3</a></td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id4" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[2]</a></td><td>Buermen, A. Python interface to CUTEr test problems for optimization. <a class="reference external" href="http://fides.fe.uni-lj.si/~arpadb/software-pycuter.html">http://fides.fe.uni-lj.si/~arpadb/software-pycuter.html</a></td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="install.html" class="btn btn-neutral float-right" title="Installing PyCUTEst" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Jaroslav Fowkes and Lindon Roberts.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

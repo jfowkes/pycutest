@@ -1,0 +1,408 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Installing PyCUTEst &mdash; PyCUTEst v0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Building Test Problems" href="building.html" />
+    <link rel="prev" title="PyCUTEst: Python interface to the CUTEst optimization test environment" href="index.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> PyCUTEst
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installing PyCUTEst</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installing-cutest-on-linux">Installing CUTEst on Linux</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installing-cutest-on-mac">Installing CUTEst on Mac</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installing-pycutest-using-pip">Installing PyCUTEst using pip</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#manual-installation-of-pycutest">Manual installation of PyCUTEst</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#testing">Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#uninstallation">Uninstallation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="building.html">Building Test Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="interface.html">Problem Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example.html">Example Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="history.html">Version History</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PyCUTEst</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Installing PyCUTEst</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/install.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="installing-pycutest">
+<h1>Installing PyCUTEst<a class="headerlink" href="#installing-pycutest" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
+<p>PyCUTEst requires the following software to be installed:</p>
+<ul class="simple">
+<li>Python 2.7 or Python 3 (<a class="reference external" href="http://www.python.org/">http://www.python.org/</a>)</li>
+<li>CUTEst (see below)</li>
+</ul>
+<p>Additionally, the following python packages should be installed (these will be installed automatically if using <em>pip</em>, see <a class="reference internal" href="#installing-pycutest-using-pip">Installing PyCUTEst using pip</a>):</p>
+<ul class="simple">
+<li>NumPy 1.11 or higher (<a class="reference external" href="http://www.numpy.org/">http://www.numpy.org/</a>)</li>
+<li>SciPy 0.18 or higher (<a class="reference external" href="http://www.scipy.org/">http://www.scipy.org/</a>)</li>
+</ul>
+<p>Note: PyCUTEst only supports Mac and Linux currently.</p>
+</div>
+<div class="section" id="installing-cutest-on-linux">
+<h2>Installing CUTEst on Linux<a class="headerlink" href="#installing-cutest-on-linux" title="Permalink to this headline">¶</a></h2>
+<p>These instructions do not include installation of the MATLAB interface. You will need to install four packages: <a class="reference external" href="https://github.com/ralna/ARCHDefs">archdefs</a>, <a class="reference external" href="https://github.com/ralna/SIFDecode">SIFDecode</a>, <a class="reference external" href="https://github.com/ralna/CUTEst">CUTEst</a> and <a class="reference external" href="https://bitbucket.org/optrove/sif">MASTSIF</a>. To keep things simple, install all four packages in the same directory:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ mkdir cutest
+$ <span class="nb">cd</span> cutest
+$ git clone https://github.com/ralna/ARCHDefs ./archdefs
+$ git clone https://github.com/ralna/SIFDecode ./sifdecode
+$ git clone https://github.com/ralna/CUTEst ./cutest
+$ git clone https://bitbucket.org/optrove/sif ./mastsif
+</pre></div>
+</div>
+</div></blockquote>
+<p>Note that <code class="code docutils literal notranslate"><span class="pre">mastsif</span></code> contains all the test problem definitions and is therefore quite large. If you’re short on space you may want to copy only the .SIF files for the problems you wish to test on.</p>
+<p>Next set the following environment variables in your <code class="code docutils literal notranslate"><span class="pre">~/.bashrc</span></code> to point to the installation directories used above:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># CUTEst</span>
+<span class="nb">export</span> <span class="nv">ARCHDEFS</span><span class="o">=</span>/path/to/cutest/archdefs/
+<span class="nb">export</span> <span class="nv">SIFDECODE</span><span class="o">=</span>/path/to/cutest/sifdecode/
+<span class="nb">export</span> <span class="nv">MASTSIF</span><span class="o">=</span>/path/to/cutest/mastsif/
+<span class="nb">export</span> <span class="nv">CUTEST</span><span class="o">=</span>/path/to/cutest/cutest/
+<span class="nb">export</span> <span class="nv">MYARCH</span><span class="o">=</span><span class="s2">&quot;pc64.lnx.gfo&quot;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Now we are ready to install CUTEst in double precision (requires <code class="code docutils literal notranslate"><span class="pre">gfortran</span></code> and <code class="code docutils literal notranslate"><span class="pre">gcc</span></code>):</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> ./cutest
+$ <span class="si">${</span><span class="nv">ARCHDEFS</span><span class="si">}</span>/install_optrove
+Do you wish to install CUTEst <span class="o">(</span>Y/n<span class="o">)</span>? Y
+Do you require the CUTEst-Matlab interface <span class="o">(</span>y/N<span class="o">)</span>? N
+Select platform: <span class="m">6</span> <span class="c1"># PC with generic 64-bit processor</span>
+Select operating system: <span class="m">2</span> <span class="c1"># Linux</span>
+Would you like to review and modify the system commands <span class="o">(</span>y/N<span class="o">)</span>? N
+Select fortran compiler: <span class="m">2</span> <span class="c1"># GNU gfortran compiler</span>
+Would you like to review and modify the fortran compiler settings <span class="o">(</span>y/N<span class="o">)</span>? N
+Select C compiler: <span class="m">2</span> <span class="c1"># generic GCC</span>
+Would you like to compile SIFDecode <span class="o">(</span>Y/n<span class="o">)</span>? Y
+Would you like to compile CUTEst <span class="o">(</span>Y/n<span class="o">)</span>? Y
+CUTEst may be compiled in <span class="o">(</span>S<span class="o">)</span>ingle or <span class="o">(</span>D<span class="o">)</span>ouble precision or <span class="o">(</span>B<span class="o">)</span>oth.
+Which precision <span class="k">do</span> you require <span class="k">for</span> the installed subset <span class="o">(</span>D/s/b<span class="o">)</span> ? D
+</pre></div>
+</div>
+</div></blockquote>
+<p>And CUTEst should run from here.</p>
+</div>
+<div class="section" id="installing-cutest-on-mac">
+<h2>Installing CUTEst on Mac<a class="headerlink" href="#installing-cutest-on-mac" title="Permalink to this headline">¶</a></h2>
+<p>To use CUTEst on Mac you will first need to install the Homebrew package manager:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> ruby -e <span class="s2">&quot;</span><span class="k">$(</span>curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install<span class="k">)</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Then you can easily install CUTEst:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ brew tap optimizers/cutest
+$ brew install cutest --without-single --with-matlab <span class="c1"># if using Matlab interface</span>
+$ brew install mastsif  <span class="c1"># if you want all the test problems</span>
+$ <span class="k">for</span> f in <span class="s2">&quot;archdefs&quot;</span> <span class="s2">&quot;mastsif&quot;</span> <span class="s2">&quot;sifdecode&quot;</span> <span class="s2">&quot;cutest&quot;</span><span class="p">;</span> <span class="k">do</span> <span class="se">\</span>
+$ <span class="nb">echo</span> <span class="s2">&quot;. </span><span class="k">$(</span>brew --prefix <span class="nv">$f</span><span class="k">)</span><span class="s2">/</span><span class="nv">$f</span><span class="s2">.bashrc&quot;</span> &gt;&gt; ~/.bashrc<span class="p">;</span> <span class="se">\</span>
+$ <span class="k">done</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="installing-pycutest-using-pip">
+<h2>Installing PyCUTEst using pip<a class="headerlink" href="#installing-pycutest-using-pip" title="Permalink to this headline">¶</a></h2>
+<p>For easy installation, use <em>pip</em> (<a class="reference external" href="http://www.pip-installer.org/">http://www.pip-installer.org/</a>) as root:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="o">[</span>sudo<span class="o">]</span> pip install pycutest
+</pre></div>
+</div>
+</div></blockquote>
+<p>or alternatively <em>easy_install</em>:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="o">[</span>sudo<span class="o">]</span> easy_install pycutest
+</pre></div>
+</div>
+</div></blockquote>
+<p>If you do not have root privileges or you want to install PyCUTEst for your private use, you can use:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ pip install --user pycutest
+</pre></div>
+</div>
+</div></blockquote>
+<p>which will install PyCUTEst in your home directory.</p>
+<p>Note that if an older install of PyCUTEst is present on your system you can use:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="o">[</span>sudo<span class="o">]</span> pip install --upgrade pycutest
+</pre></div>
+</div>
+</div></blockquote>
+<p>to upgrade PyCUTEst to the latest version.</p>
+<p>You will then need to create a folder which will store all your compiled problems.</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ mkdir pycutest_cache
+</pre></div>
+</div>
+</div></blockquote>
+<p>And set an environment variable to add this to tell PyCUTEst about this directory, by adding to your <code class="code docutils literal notranslate"><span class="pre">~/.bashrc</span></code> file:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">PYCUTEST_CACHE</span><span class="o">=</span><span class="s2">&quot;/path/to/pycutest_cache&quot;</span>
+<span class="nb">export</span> <span class="nv">PYTHONPATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">PYCUTEST_CACHE</span><span class="si">}</span><span class="s2">:</span><span class="si">${</span><span class="nv">PYTHONPATH</span><span class="si">}</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="manual-installation-of-pycutest">
+<h2>Manual installation of PyCUTEst<a class="headerlink" href="#manual-installation-of-pycutest" title="Permalink to this headline">¶</a></h2>
+<p>Alternatively, you can download the source code from <a class="reference external" href="https://github.com/jfowkes/pycutest">Github</a> and unpack as follows:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/jfowkes/pycutest
+$ <span class="nb">cd</span> pycutest
+</pre></div>
+</div>
+</div></blockquote>
+<p>PyCUTEst is written in pure Python and requires no compilation. It can be installed using:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="o">[</span>sudo<span class="o">]</span> pip install .
+</pre></div>
+</div>
+</div></blockquote>
+<p>If you do not have root privileges or you want to install PyCUTEst for your private use, you can use:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ pip install --user .
+</pre></div>
+</div>
+</div></blockquote>
+<p>which will install PyCUTEst in your home directory.</p>
+<p>Don’t forget to set up your cache and associated environment variable (see above).</p>
+<p>To upgrade PyCUTEst to the latest version, navigate to the top-level directory (i.e. the one containing <code class="code docutils literal notranslate"><span class="pre">setup.py</span></code>) and rerun the installation using <code class="code docutils literal notranslate"><span class="pre">pip</span></code>, as above:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ git pull
+$ <span class="o">[</span>sudo<span class="o">]</span> pip install .  <span class="c1"># with root privileges</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="testing">
+<h2>Testing<a class="headerlink" href="#testing" title="Permalink to this headline">¶</a></h2>
+<p>If you installed PyCUTEst manually, you can test your installation by running:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ python setup.py <span class="nb">test</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Alternatively, this documentation provides some simple examples of how to run PyCUTEst.</p>
+</div>
+<div class="section" id="uninstallation">
+<h2>Uninstallation<a class="headerlink" href="#uninstallation" title="Permalink to this headline">¶</a></h2>
+<p>If PyCUTEst was installed using <em>pip</em> you can uninstall as follows:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="o">[</span>sudo<span class="o">]</span> pip uninstall pycutest
+</pre></div>
+</div>
+</div></blockquote>
+<p>otherwise you have to remove the installed files by hand (located in your python site-packages directory).</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="building.html" class="btn btn-neutral float-right" title="Building Test Problems" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="PyCUTEst: Python interface to the CUTEst optimization test environment" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Jaroslav Fowkes and Lindon Roberts.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

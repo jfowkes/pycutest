@@ -1,0 +1,440 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Building Test Problems &mdash; PyCUTEst v0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Problem Interface" href="interface.html" />
+    <link rel="prev" title="Installing PyCUTEst" href="install.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> PyCUTEst
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installing PyCUTEst</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Building Test Problems</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#finding-problems">Finding Problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#building-problems">Building Problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cache-management">Cache Management</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="interface.html">Problem Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example.html">Example Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="history.html">Version History</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PyCUTEst</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Building Test Problems</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/building.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="building-test-problems">
+<h1>Building Test Problems<a class="headerlink" href="#building-test-problems" title="Permalink to this headline">¶</a></h1>
+<p>In this section, we describe the interface for finding and compiling CUTEst problems.</p>
+<div class="section" id="finding-problems">
+<h2>Finding Problems<a class="headerlink" href="#finding-problems" title="Permalink to this headline">¶</a></h2>
+<p>CUTEst has a scheme for classifying problems (see <a class="reference external" href="http://www.cuter.rl.ac.uk/Problems/classification.shtml">here</a>).
+Based on these properties, we can search for test problems using the <code class="code docutils literal notranslate"><span class="pre">find_problems()</span></code> method.
+We can check the properties of a specific function with <code class="code docutils literal notranslate"><span class="pre">problem_properties()</span></code>.</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example: using problem classification system</span>
+<span class="kn">import</span> <span class="nn">pycutest</span>
+<span class="c1"># Find unconstrained, variable-dimension problems</span>
+<span class="n">probs</span> <span class="o">=</span> <span class="n">pycutest</span><span class="o">.</span><span class="n">find_problems</span><span class="p">(</span><span class="n">constraints</span><span class="o">=</span><span class="s1">&#39;U&#39;</span><span class="p">,</span> <span class="n">userN</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">probs</span><span class="p">)[:</span><span class="mi">5</span><span class="p">])</span>
+<span class="c1"># Properties of problem ROSENBR</span>
+<span class="k">print</span><span class="p">(</span><span class="n">pycuttest</span><span class="o">.</span><span class="n">problem_properties</span><span class="p">(</span><span class="s1">&#39;ROSENBR&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Which produces the output:</p>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span># List of unconstrained, variable-dimension problems
+[&#39;ARGLINA&#39;, &#39;ARGLINB&#39;, &#39;ARGLINC&#39;, &#39;ARGTRIGLS&#39;, &#39;ARWHEAD&#39;]
+# Properties of problem &#39;ROSENBR&#39;
+{&#39;internal&#39;: False, &#39;degree&#39;: 2, &#39;n&#39;: 2, &#39;m&#39;: 0, &#39;objective&#39;: &#39;S&#39;, &#39;origin&#39;: &#39;A&#39;, &#39;constraints&#39;: &#39;U&#39;, &#39;regular&#39;: True}
+</pre></div>
+</div>
+</div></blockquote>
+<p>Full documentation for these functions is given below.</p>
+<dl class="function">
+<dt id="pycutest.find_problems">
+<code class="descclassname">pycutest.</code><code class="descname">find_problems</code><span class="sig-paren">(</span><em>objective=None</em>, <em>constraints=None</em>, <em>regular=None</em>, <em>degree=None</em>, <em>origin=None</em>, <em>internal=None</em>, <em>n=None</em>, <em>userN=None</em>, <em>m=None</em>, <em>userM=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pycutest.find_problems" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the problem names of problems that match the given requirements.
+The search is based on the CUTEst problem classification string.</p>
+<p>Problems with a user-settable number of variables/constraints match any given n / m.</p>
+<p>Returns the problem names of problems that matched the given requirements.</p>
+<p>If a requirement is not given, it is not applied.</p>
+<p>See <a class="reference external" href="http://www.cuter.rl.ac.uk/Problems/classification.shtml">http://www.cuter.rl.ac.uk/Problems/classification.shtml</a> for details on the letters used in the requirements.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>objective</strong> – a string containing one or more letters (NCLQSO) specifying the type of the objective function</li>
+<li><strong>constraints</strong> – a string containing one or more letters (UXBNLQO) the type of the constraints</li>
+<li><strong>regular</strong> – a boolean, <code class="docutils literal notranslate"><span class="pre">True</span></code> if the problem must be regular, <code class="docutils literal notranslate"><span class="pre">False</span></code> if it must be irregular</li>
+<li><strong>degree</strong> – list of the form <code class="docutils literal notranslate"><span class="pre">[min,</span> <span class="pre">max]</span></code> specifying the minimum and the maximum number of analytically available derivatives</li>
+<li><strong>origin</strong> – a string containing one or more letters (AMR) specifying the origin of the problem</li>
+<li><strong>internal</strong> – a boolean, <code class="docutils literal notranslate"><span class="pre">True</span></code> if the problem must have internal variables, <code class="docutils literal notranslate"><span class="pre">False</span></code> if internal variables are not allowed</li>
+<li><strong>n</strong> – a list of the form <code class="docutils literal notranslate"><span class="pre">[min,</span> <span class="pre">max]</span></code> specifying the lowest and the highest allowed number of variables</li>
+<li><strong>userN</strong> – <code class="docutils literal notranslate"><span class="pre">True</span></code> if the problems must have user settable number of variables, <code class="docutils literal notranslate"><span class="pre">False</span></code> if the number must be hardcoded</li>
+<li><strong>m</strong> – a list of the form <code class="docutils literal notranslate"><span class="pre">[min,</span> <span class="pre">max]</span></code> specifying the lowest and the highest allowed number of constraints</li>
+<li><strong>userM</strong> – <code class="docutils literal notranslate"><span class="pre">True</span></code> of the problems must have user settable number of variables, <code class="docutils literal notranslate"><span class="pre">False</span></code> if the number must be hardcoded</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">list of strings with problem names which satisfy the given requirements</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pycutest.problem_properties">
+<code class="descclassname">pycutest.</code><code class="descname">problem_properties</code><span class="sig-paren">(</span><em>problemName</em><span class="sig-paren">)</span><a class="headerlink" href="#pycutest.problem_properties" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns problem properties (uses the CUTEst problem classification string).</p>
+<p>See <a class="reference external" href="http://www.cuter.rl.ac.uk/Problems/classification.shtml">http://www.cuter.rl.ac.uk/Problems/classification.shtml</a> for details on the properties.</p>
+<p>The output is a dictionary with the following members:</p>
+<ul class="simple">
+<li>objective – objective type code</li>
+<li>constraints – constraints type code</li>
+<li>regular – <code class="docutils literal notranslate"><span class="pre">True</span></code> if problem is regular</li>
+<li>degree – highest degree of analytically available derivative</li>
+<li>origin – problem origin code</li>
+<li>internal – <code class="docutils literal notranslate"><span class="pre">True</span></code> if problem has internal variables</li>
+<li>n – number of variables (<code class="docutils literal notranslate"><span class="pre">None</span></code> = can be set by the user)</li>
+<li>m – number of constraints (<code class="docutils literal notranslate"><span class="pre">None</span></code> = can be set by the user)</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>problemName</strong> – problem name</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="building-problems">
+<h2>Building Problems<a class="headerlink" href="#building-problems" title="Permalink to this headline">¶</a></h2>
+<p>Many CUTEst problems have optional input parameters. The <code class="code docutils literal notranslate"><span class="pre">print_available_sif_params()</span></code> function prints a list of valid parameters for a given problem.
+Then, we can build a problem, including optional parameters, with <code class="code docutils literal notranslate"><span class="pre">import_problem()</span></code>.
+This returns an instance of the <code class="code docutils literal notranslate"><span class="pre">CUTEstProblem</span></code> class (see next section).</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example: building problem</span>
+<span class="kn">import</span> <span class="nn">pycutest</span>
+<span class="c1"># Print parameters for problem ARGLALE</span>
+<span class="n">pycutest</span><span class="o">.</span><span class="n">print_available_sif_params</span><span class="p">(</span><span class="s1">&#39;ARGLALE&#39;</span><span class="p">)</span>
+<span class="c1"># Build this problem with N=100, M=200</span>
+<span class="n">problem</span> <span class="o">=</span> <span class="n">pycutest</span><span class="o">.</span><span class="n">import_problem</span><span class="p">(</span><span class="s1">&#39;ARGLALE&#39;</span><span class="p">,</span> <span class="n">sifParams</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;N&#39;</span><span class="p">:</span><span class="mi">100</span><span class="p">,</span> <span class="s1">&#39;M&#39;</span><span class="p">:</span><span class="mi">200</span><span class="p">})</span>
+<span class="k">print</span><span class="p">(</span><span class="n">problem</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The available parameters for this problem, as shown by PyCUTEst, are:</p>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Parameters available for problem ARGLALE:
+N = 10 (int)
+N = 50 (int)
+N = 100 (int)
+N = 200 (int) [default]
+M = 20 (int, .ge. N)
+M = 100 (int, .ge. N)
+M = 200 (int, .ge. N)
+M = 400 (int, .ge. N) [default]
+End of parameters for problem ARGLALE
+# Built problem
+CUTEst problem ARGLALE (params {&#39;M&#39;: 200, &#39;N&#39;: 100}) with 100 variables and 200 constraints
+</pre></div>
+</div>
+</div></blockquote>
+<p>This means that this problem has two integer parameters <code class="code docutils literal notranslate"><span class="pre">N</span></code> and <code class="code docutils literal notranslate"><span class="pre">M</span></code> (default 200 and 400 respectively), where <code class="code docutils literal notranslate"><span class="pre">N</span></code> cannot be smaller than <code class="code docutils literal notranslate"><span class="pre">M</span></code>.</p>
+<p>Full documentation for these functions is given below.</p>
+<dl class="function">
+<dt id="pycutest.print_available_sif_params">
+<code class="descclassname">pycutest.</code><code class="descname">print_available_sif_params</code><span class="sig-paren">(</span><em>problemName</em><span class="sig-paren">)</span><a class="headerlink" href="#pycutest.print_available_sif_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call sifdecode on given problem to print out available parameters
+This function is OS dependent. Currently works only for Linux and MacOS.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>problemName</strong> – CUTEst problem name</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Nothing</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pycutest.import_problem">
+<code class="descclassname">pycutest.</code><code class="descname">import_problem</code><span class="sig-paren">(</span><em>problemName</em>, <em>destination=None</em>, <em>sifParams=None</em>, <em>sifOptions=None</em>, <em>efirst=False</em>, <em>lfirst=False</em>, <em>nvfirst=False</em>, <em>quiet=True</em>, <em>drop_fixed_variables=True</em><span class="sig-paren">)</span><a class="headerlink" href="#pycutest.import_problem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prepares a problem interface module, imports and initializes it.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>problemName</strong> – CUTEst problem name</li>
+<li><strong>destination</strong> – the name under which the compiled problem interface is stored in the cache (default = <code class="docutils literal notranslate"><span class="pre">problemName</span></code>)</li>
+<li><strong>sifParams</strong> – SIF file parameters to use (as dict, keys must be strings)</li>
+<li><strong>sifOptions</strong> – additional options passed to sifdecode given in the form of a list of strings.</li>
+<li><strong>efirst</strong> – order equation constraints first (default <code class="docutils literal notranslate"><span class="pre">True</span></code>)</li>
+<li><strong>lfirst</strong> – order linear constraints first (default <code class="docutils literal notranslate"><span class="pre">True</span></code>)</li>
+<li><strong>nvfirst</strong> – order nonlinear variables before linear variables (default <code class="docutils literal notranslate"><span class="pre">False</span></code>)</li>
+<li><strong>quiet</strong> – suppress output (default <code class="docutils literal notranslate"><span class="pre">True</span></code>)</li>
+<li><strong>drop_fixed_variables</strong> – in the resulting problem object, are fixed variables hidden from the user (default <code class="docutils literal notranslate"><span class="pre">True</span></code>)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a reference to the Python interface class for this problem (class <code class="docutils literal notranslate"><span class="pre">pycutest.CUTEstProblem</span></code>)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="cache-management">
+<h2>Cache Management<a class="headerlink" href="#cache-management" title="Permalink to this headline">¶</a></h2>
+<p>PyCUTEst works by compiling each problem in its own folder inside its cache (given by the <code class="code docutils literal notranslate"><span class="pre">PYCUTEST_CACHE</span></code> environment variable).
+A problem can be cleared from the cache using <code class="code docutils literal notranslate"><span class="pre">clear_cache()</span></code>, and a list of all problems currently installed can be displayed with <code class="code docutils literal notranslate"><span class="pre">all_cached_problems()</span></code>.
+Documentation for these functions is given below.</p>
+<dl class="function">
+<dt id="pycutest.clear_cache">
+<code class="descclassname">pycutest.</code><code class="descname">clear_cache</code><span class="sig-paren">(</span><em>problemName</em>, <em>sifParams=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pycutest.clear_cache" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes a saved problem.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>problemName</strong> – problem name</li>
+<li><strong>sifParams</strong> – sif parameters used for compilation</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pycutest.all_cached_problems">
+<code class="descclassname">pycutest.</code><code class="descname">all_cached_problems</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pycutest.all_cached_problems" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of all cached problems.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list of (problemName, sifParams) tuples, where sifParams is a dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="interface.html" class="btn btn-neutral float-right" title="Problem Interface" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="install.html" class="btn btn-neutral" title="Installing PyCUTEst" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Jaroslav Fowkes and Lindon Roberts.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
