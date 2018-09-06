@@ -161,7 +161,7 @@ class TestALLINITC_with_fixed(unittest.TestCase):
         # -1e10 <= x[2] <= 1
         # x[3] == 2
         # Nonlinear constraint
-        # x[0]**2 + x[1]**2 - 1 <= 0
+        # x[0]**2 + x[1]**2 - 1 == 0
         pycutest.clear_cache('ALLINITC')
         p = pycutest.import_problem('ALLINITC', drop_fixed_variables=False)
         # Start with basic problem properties
