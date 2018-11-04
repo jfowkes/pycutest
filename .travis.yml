@@ -34,6 +34,7 @@ install:
       fi
     - mkdir $TRAVIS_BUILD_DIR/pycutest_cache
     - export PYCUTEST_CACHE="$TRAVIS_BUILD_DIR/pycutest_cache"
+    - export PYTHONPATH="${PYCUTEST_CACHE}:${PYTHONPATH}"
     - python setup.py install
 
 script:
