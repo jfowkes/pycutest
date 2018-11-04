@@ -14,7 +14,7 @@ def array_compare(x, y, thresh=1e-8):
 
 class TestSparseUnconstrained(unittest.TestCase):
     def runTest(self):
-        pycutest.clear_cache('ARWHEAD', sifParams={'N': 100})
+        # pycutest.clear_cache('ARWHEAD', sifParams={'N': 100})
         p = pycutest.import_problem('ARWHEAD', sifParams={'N':100})
         # Some test vectors
         xs = [p.x0, np.ones((p.n,)), -np.ones((p.n)), 0.2*np.arange(p.n), np.sin(np.arange(p.n))-np.cos(np.arange(p.n))]
@@ -46,7 +46,7 @@ class TestSparseUnconstrained(unittest.TestCase):
 
 class TestSparseConstrained(unittest.TestCase):
     def runTest(self):
-        pycutest.clear_cache('ARWHDNE', sifParams={'N':100})
+        # pycutest.clear_cache('ARWHDNE', sifParams={'N':100})
         p = pycutest.import_problem('ARWHDNE', sifParams={'N':100})
         # Some test vectors
         xs = [p.x0, np.ones((p.n,)), -np.ones((p.n)), 0.2 * np.arange(p.n),

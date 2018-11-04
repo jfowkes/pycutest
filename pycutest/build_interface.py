@@ -10,6 +10,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import os, shutil, sys
 import subprocess
 from glob import glob
+import warnings
 
 from .system_paths import get_cache_path, get_sifdecoder_path
 from .c_interface import itf_c_source
@@ -143,7 +144,10 @@ def decode_and_compile_problem(problemName, destination=None, sifParams=None, si
     problemDir = get_problem_directory(destination, sifParams=sifParams)
 
     # Remember current work directory and go to cache
-    fromDir=os.getcwd()
+    try:
+        fromDir = os.getcwd()
+    except FileNotFoundError:
+        fromDir = None
     os.chdir(problemDir)
 
     # Additional args
@@ -186,8 +190,20 @@ def decode_and_compile_problem(problemName, destination=None, sifParams=None, si
     except:
         spawnOK=False
 
-    if not spawnOK or not quiet:
-        print(messages)
+    # Print output, check for parameter warnings
+    msg_lines = messages.splitlines()
+    param_error = None
+    for l in msg_lines:
+        if 'WARNING' in l:
+            param_error = l.replace('WARNING: ', '').replace(' -- skipping', '')
+        if not spawnOK or not quiet:
+            print(l)
+    if not spawnOK:
+        clear_cache(problemName, sifParams=sifParams)
+        raise RuntimeError('SIFDECODE failed, check output printed above')
+    if param_error is not None:
+        clear_cache(problemName, sifParams=sifParams)
+        raise RuntimeError('SIFDECODE error: %s' % param_error)
 
     # Collect all .f files
     filelist=glob('*.f')
@@ -197,7 +213,7 @@ def decode_and_compile_problem(problemName, destination=None, sifParams=None, si
         cmd=['gfortran', '-fPIC', '-c', filename]
         if not quiet:
             for s in cmd:
-                print(s,)
+                print(s, end=' ')
             print()
         if subprocess.call(cmd)!=0:
             raise RuntimeError("gfortran call failed for "+filename)
@@ -206,7 +222,8 @@ def decode_and_compile_problem(problemName, destination=None, sifParams=None, si
     objFileList=glob('*.o')
 
     # Go back to original work directory
-    os.chdir(fromDir)
+    if fromDir is not None:
+        os.chdir(fromDir)
 
     return objFileList
 

@@ -70,6 +70,14 @@ class TestRemoval(unittest.TestCase):
             self.assertFalse((p, sifParams) in all_probs, msg="Found %s in cached problems" % p)
 
 
+class TestParamError(unittest.TestCase):
+    def runTest(self):
+        prob = 'NGONE'
+        bad_params = {'HNS': 4}
+        pycutest.clear_cache(prob, sifParams=bad_params)
+        self.assertRaises(RuntimeError, pycutest.import_problem, prob, sifParams=bad_params)
+
+
 class TestALLINITU(unittest.TestCase):
     def runTest(self):
         pycutest.clear_cache('ALLINITU')
