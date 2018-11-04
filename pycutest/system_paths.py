@@ -10,6 +10,8 @@ import os, sys
 __all__ = ['check_platform', 'get_cutest_path', 'get_sifdecoder_path', 'get_mastsif_path', 'get_cache_path']
 
 
+base_dir = os.getcwd()
+
 def check_platform():
     if sys.platform not in ['linux', 'linux2', 'darwin']:
         raise ImportError("Unsupported platform: " + sys.platform)
@@ -91,4 +93,4 @@ def get_cache_path():
     if 'PYCUTEST_CACHE' in os.environ:
         return os.environ['PYCUTEST_CACHE']
     else:
-        return os.getcwd()
+        return base_dir
