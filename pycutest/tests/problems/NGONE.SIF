@@ -1,0 +1,196 @@
+***************************
+* SET UP THE INITIAL DATA *
+***************************
+
+NAME          NGONE
+
+*   Problem :
+*   *********
+
+*   Find a polygon of maximal area, under the constraint that no two of
+*   its vertices are further apart than 1.  The considered class of polygons
+*   has one vertex fixed at the origin and one of its neighbouring vertices
+*   constrained to lie on the horizontal axis.  Furthermore, vertices
+*   must have increasing abscissas, which implies that the polygons are
+*   of the form
+*
+*                     ---*-----*-*
+*                    *            \
+*                   /              *
+*                  /                \
+*                  *-----------------*
+*                (0,0)
+
+*   Source:
+*   Ph. Toint
+
+*   SIF input: Ph. Toint, June 1990.
+
+*   classification QQR2-AY-V-V
+
+*   HNS is the number of sides - 1
+*   The number of variables in the problem is N = 2 * ( HNS + 1 )
+*   of which 3 are fixed and one bounded above.
+
+*IE HNS                 3              $-PARAMETER   n = 8   original value
+*IE HNS                 5              $-PARAMETER   n = 12
+*IE HNS                 24             $-PARAMETER   n = 50
+*IE HNS                 49             $-PARAMETER   n = 100
+ IE HNS                 99             $-PARAMETER   n = 200
+*IE HNS                 249            $-PARAMETER   n = 500
+*IE HNS                 999            $-PARAMETER   n = 2000
+
+*   Constants
+
+ IE 0                   0
+ IE 1                   1
+
+*   Computed parameters
+
+ IA HNS-1     HNS       -1
+
+VARIABLES
+
+ DO I         0                        HNS
+ X  X(I)
+ X  Y(I)
+ ND
+
+GROUPS
+
+*   Objective function
+
+ N  AREA
+
+*   Ordering constraints on the abscissas
+
+ DO I         1                        HNS-1
+ IA I+1       I         1
+ XG OX(I)     X(I+1)    1.0            X(I)      -1.0
+ ND
+
+*   Constraints on the distance between two vertices
+
+ DO I         0                        HNS
+ IA I-1       I         -1
+ DO J         0                        I-1
+ XL D(I,J)
+ ND
+
+CONSTANTS
+
+ DO I         0                        HNS
+ IA I-1       I         -1
+ DO J         0                        I-1
+ X  NGONE     D(I,J)    1.0
+ ND
+
+BOUNDS
+
+ XX NGONE     X(0)      0.0
+ XX NGONE     Y(0)      0.0
+
+ XU NGONE     X(HNS)    1.0
+ XX NGONE     Y(HNS)    0.0
+
+START POINT
+
+ XV NGONE     'DEFAULT' 0.0
+ X  NGONE     X(HNS)    2.0
+
+ELEMENT TYPE
+
+ EV 2PR2I     XA                       XB
+ EV 2PR2I     YA                       YB
+ IV 2PR2I     DX                       SY
+
+ EV ISQ       ZA                       ZB
+ IV ISQ       U
+
+ELEMENT USES
+
+*   Objective function
+
+ DO I         0                        HNS-1
+ IA I+1       I          1
+
+ XT C(I)      2PR2I
+ ZV C(I)      XA                       X(I+1)
+ ZV C(I)      XB                       X(I)
+ ZV C(I)      YA                       Y(I+1)
+ ZV C(I)      YB                       Y(I)
+
+ ND
+
+*   Constraints on the distances between vertices
+
+ DO I         0                        HNS
+ IA I-1       I         -1
+ DO J         0                        I-1
+
+ XT H(I,J)    ISQ
+ ZV H(I,J)    ZA                       X(I)
+ ZV H(I,J)    ZB                       X(J)
+
+ XT K(I,J)    ISQ
+ ZV K(I,J)    ZA                       Y(I)
+ ZV K(I,J)    ZB                       Y(J)
+
+ ND
+
+GROUP USES
+
+*   Objective function
+
+ DO I         0                        HNS-1
+ XE AREA      C(I)      -0.5
+ ND
+
+*   Constraints on the distances between intermediate points
+
+ DO I         0                        HNS
+ IA I-1       I         -1
+ DO J         0                        I-1
+ XE D(I,J)    H(I,J)                   K(I,J)
+ ND
+
+OBJECT BOUND
+
+*   Lower bound given by the area of the intersection of the unit sphere
+*   and the positive orthant
+
+ LO NGONE               -0.78539816
+
+*   Solution
+
+*LO SOLTN(3)            -0.5
+*LO SOLTN(5)            -0.6203656662
+*LO SOLTN(25)           -0.6410147561
+*LO SOLTN(500)          -0.6433765861
+
+ENDATA
+
+***********************
+* SET UP THE FUNCTION *
+* AND RANGE ROUTINES  *
+***********************
+
+ELEMENTS      NGONE
+
+INDIVIDUALS
+
+ T  2PR2I
+ R  DX        XA        1.0            XB        -1.0
+ R  SY        YA        1.0            YB        1.0
+ F                      DX * SY
+ G  DX                  SY
+ G  SY                  DX
+ H  DX        SY        1.0
+
+ T  ISQ
+ R  U         ZA        1.0            ZB        -1.0
+ F                      U * U
+ G  U                   U + U
+ H  U         U         2.0
+
+ENDATA
