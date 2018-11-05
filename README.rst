@@ -69,7 +69,7 @@ And CUTEst should run from here.
 
 Installing CUTEst on Mac
 ------------------------
-To use CUTEst on Mac you will first need to install the Homebrew package manager:
+For simplicity, we recommend installing CUTEst using Homebrew as detailed below (but you can also install CUTEst manually by following the Linux installation instructions above). First install the Homebrew package manager:
 
  .. code-block:: bash
 
