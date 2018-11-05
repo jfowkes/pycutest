@@ -65,7 +65,12 @@ Now we are ready to install CUTEst in double precision (requires :code:`gfortran
     CUTEst may be compiled in (S)ingle or (D)ouble precision or (B)oth.
     Which precision do you require for the installed subset (D/s/b) ? D
 
-And CUTEst should run from here.
+And CUTEst should run from here. To test that the installation works, issue the commands:
+
+ .. code-block:: bash
+
+    $ cd $SIFDECODE/src ; make -f $SIFDECODE/makefiles/$MYARCH test
+    $ cd $CUTEST/src ; make -f $CUTEST/makefiles/$MYARCH test
 
 Installing CUTEst on Mac
 ------------------------
