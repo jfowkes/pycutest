@@ -51,15 +51,17 @@ Now we are ready to install CUTEst in double precision (requires :code:`gfortran
  .. code-block:: bash
 
     $ cd ./cutest
-    $ ${ARCHDEFS}/install_optrove	
+    $ ${ARCHDEFS}/install_optrove
+    Do you wish to install GALAHAD (Y/n)? N
     Do you wish to install CUTEst (Y/n)? Y
     Do you require the CUTEst-Matlab interface (y/N)? N
     Select platform: 6 # PC with generic 64-bit processor
-    Select operating system: 2 # Linux
+    Select operating system: 3 # Linux
     Would you like to review and modify the system commands (y/N)? N
-    Select fortran compiler: 2 # GNU gfortran compiler
+    Select fortran compiler: 5 # GNU gfortran compiler
     Would you like to review and modify the fortran compiler settings (y/N)? N
     Select C compiler: 2 # generic GCC
+    Would you like to review and modify the C compiler settings (y/N)? N
     Would you like to compile SIFDecode (Y/n)? Y
     Would you like to compile CUTEst (Y/n)? Y
     CUTEst may be compiled in (S)ingle or (D)ouble precision or (B)oth.
@@ -72,13 +74,15 @@ And CUTEst should run from here. To test that the installation works, issue the 
     $ cd $SIFDECODE/src ; make -f $SIFDECODE/makefiles/$MYARCH test
     $ cd $CUTEST/src ; make -f $CUTEST/makefiles/$MYARCH test
 
+**Please Note:** *currently PyCUTEst only supports gfortran and uses the default version on your path (as returned by* :code:`gfortran -v` *). Please ensure this is the same version that you install CUTEst with above, this should be the case if you select the generic* :code:`GNU gfortran compiler` *as the fortran compiler in the installer above.*
+
 Installing CUTEst on Mac
 ------------------------
-For simplicity, we recommend installing CUTEst using Homebrew as detailed below (but you can also install CUTEst manually by following the Linux installation instructions above). First install the Homebrew package manager:
+For simplicity, we recommend installing CUTEst using Homebrew as detailed below (but you can also install CUTEst manually by following the Linux installation instructions above). First it is important to ensure that you have the latest version of Xcode Command Line Tools installed (or the latest version of Xcode), please ensure this is the case by following `this guide <http://railsapps.github.io/xcode-command-line-tools.html>`__. Now install the Homebrew package manager:
 
  .. code-block:: bash
 
-    $ cd ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 
 Then you can easily install CUTEst:
 
@@ -88,9 +92,8 @@ Then you can easily install CUTEst:
     $ brew install cutest --without-single --with-matlab # if using Matlab interface
     $ brew install mastsif  # if you want all the test problems
     $ for f in "archdefs" "mastsif" "sifdecode" "cutest"; do \
-    $ echo ". $(brew --prefix $f)/$f.bashrc" >> ~/.bashrc; \
+    $   echo ". $(brew --prefix $f)/$f.bashrc" >> ~/.bashrc; \
     $ done
-
 
 Installation using pip
 ----------------------
