@@ -16,7 +16,8 @@ before_install:
         brew install cutest --without-single;
       fi
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then 
-        sudo apt-get install -qq python-numpy python-scipy gfortran;
+        sudo apt-get install -qq gfortran;
+        pip install -r requirements.txt --only-binary=numpy,scipy;
       fi
 
 install:
