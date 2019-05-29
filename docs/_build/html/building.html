@@ -17,34 +17,36 @@
   
 
   
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Problem Interface" href="interface.html" />
     <link rel="prev" title="Installing PyCUTEst" href="install.html" /> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -196,29 +198,25 @@ The search is based on the CUTEst problem classification string.</p>
 <p>Returns the problem names of problems that matched the given requirements.</p>
 <p>If a requirement is not given, it is not applied.</p>
 <p>See <a class="reference external" href="http://www.cuter.rl.ac.uk/Problems/classification.shtml">http://www.cuter.rl.ac.uk/Problems/classification.shtml</a> for details on the letters used in the requirements.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>objective</strong> – a string containing one or more letters (NCLQSO) specifying the type of the objective function</li>
-<li><strong>constraints</strong> – a string containing one or more letters (UXBNLQO) the type of the constraints</li>
-<li><strong>regular</strong> – a boolean, <code class="docutils literal notranslate"><span class="pre">True</span></code> if the problem must be regular, <code class="docutils literal notranslate"><span class="pre">False</span></code> if it must be irregular</li>
-<li><strong>degree</strong> – list of the form <code class="docutils literal notranslate"><span class="pre">[min,</span> <span class="pre">max]</span></code> specifying the minimum and the maximum number of analytically available derivatives</li>
-<li><strong>origin</strong> – a string containing one or more letters (AMR) specifying the origin of the problem</li>
-<li><strong>internal</strong> – a boolean, <code class="docutils literal notranslate"><span class="pre">True</span></code> if the problem must have internal variables, <code class="docutils literal notranslate"><span class="pre">False</span></code> if internal variables are not allowed</li>
-<li><strong>n</strong> – a list of the form <code class="docutils literal notranslate"><span class="pre">[min,</span> <span class="pre">max]</span></code> specifying the lowest and the highest allowed number of variables</li>
-<li><strong>userN</strong> – <code class="docutils literal notranslate"><span class="pre">True</span></code> if the problems must have user settable number of variables, <code class="docutils literal notranslate"><span class="pre">False</span></code> if the number must be hardcoded</li>
-<li><strong>m</strong> – a list of the form <code class="docutils literal notranslate"><span class="pre">[min,</span> <span class="pre">max]</span></code> specifying the lowest and the highest allowed number of constraints</li>
-<li><strong>userM</strong> – <code class="docutils literal notranslate"><span class="pre">True</span></code> of the problems must have user settable number of variables, <code class="docutils literal notranslate"><span class="pre">False</span></code> if the number must be hardcoded</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>objective</strong> – a string containing one or more letters (NCLQSO) specifying the type of the objective function</p></li>
+<li><p><strong>constraints</strong> – a string containing one or more letters (UXBNLQO) the type of the constraints</p></li>
+<li><p><strong>regular</strong> – a boolean, <code class="docutils literal notranslate"><span class="pre">True</span></code> if the problem must be regular, <code class="docutils literal notranslate"><span class="pre">False</span></code> if it must be irregular</p></li>
+<li><p><strong>degree</strong> – list of the form <code class="docutils literal notranslate"><span class="pre">[min,</span> <span class="pre">max]</span></code> specifying the minimum and the maximum number of analytically available derivatives</p></li>
+<li><p><strong>origin</strong> – a string containing one or more letters (AMR) specifying the origin of the problem</p></li>
+<li><p><strong>internal</strong> – a boolean, <code class="docutils literal notranslate"><span class="pre">True</span></code> if the problem must have internal variables, <code class="docutils literal notranslate"><span class="pre">False</span></code> if internal variables are not allowed</p></li>
+<li><p><strong>n</strong> – a list of the form <code class="docutils literal notranslate"><span class="pre">[min,</span> <span class="pre">max]</span></code> specifying the lowest and the highest allowed number of variables</p></li>
+<li><p><strong>userN</strong> – <code class="docutils literal notranslate"><span class="pre">True</span></code> if the problems must have user settable number of variables, <code class="docutils literal notranslate"><span class="pre">False</span></code> if the number must be hardcoded</p></li>
+<li><p><strong>m</strong> – a list of the form <code class="docutils literal notranslate"><span class="pre">[min,</span> <span class="pre">max]</span></code> specifying the lowest and the highest allowed number of constraints</p></li>
+<li><p><strong>userM</strong> – <code class="docutils literal notranslate"><span class="pre">True</span></code> of the problems must have user settable number of variables, <code class="docutils literal notranslate"><span class="pre">False</span></code> if the number must be hardcoded</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">list of strings with problem names which satisfy the given requirements</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>list of strings with problem names which satisfy the given requirements</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
@@ -228,25 +226,23 @@ The search is based on the CUTEst problem classification string.</p>
 <p>See <a class="reference external" href="http://www.cuter.rl.ac.uk/Problems/classification.shtml">http://www.cuter.rl.ac.uk/Problems/classification.shtml</a> for details on the properties.</p>
 <p>The output is a dictionary with the following members:</p>
 <ul class="simple">
-<li>objective – objective type code</li>
-<li>constraints – constraints type code</li>
-<li>regular – <code class="docutils literal notranslate"><span class="pre">True</span></code> if problem is regular</li>
-<li>degree – highest degree of analytically available derivative</li>
-<li>origin – problem origin code</li>
-<li>internal – <code class="docutils literal notranslate"><span class="pre">True</span></code> if problem has internal variables</li>
-<li>n – number of variables (<code class="docutils literal notranslate"><span class="pre">None</span></code> = can be set by the user)</li>
-<li>m – number of constraints (<code class="docutils literal notranslate"><span class="pre">None</span></code> = can be set by the user)</li>
+<li><p>objective – objective type code</p></li>
+<li><p>constraints – constraints type code</p></li>
+<li><p>regular – <code class="docutils literal notranslate"><span class="pre">True</span></code> if problem is regular</p></li>
+<li><p>degree – highest degree of analytically available derivative</p></li>
+<li><p>origin – problem origin code</p></li>
+<li><p>internal – <code class="docutils literal notranslate"><span class="pre">True</span></code> if problem has internal variables</p></li>
+<li><p>n – number of variables (<code class="docutils literal notranslate"><span class="pre">None</span></code> = can be set by the user)</p></li>
+<li><p>m – number of constraints (<code class="docutils literal notranslate"><span class="pre">None</span></code> = can be set by the user)</p></li>
 </ul>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>problemName</strong> – problem name</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">dict</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>problemName</strong> – problem name</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -290,44 +286,38 @@ CUTEst problem ARGLALE (params {&#39;M&#39;: 200, &#39;N&#39;: 100}) with 100 va
 <code class="descclassname">pycutest.</code><code class="descname">print_available_sif_params</code><span class="sig-paren">(</span><em>problemName</em><span class="sig-paren">)</span><a class="headerlink" href="#pycutest.print_available_sif_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Call sifdecode on given problem to print out available parameters
 This function is OS dependent. Currently works only for Linux and MacOS.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>problemName</strong> – CUTEst problem name</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Nothing</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>problemName</strong> – CUTEst problem name</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Nothing</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="pycutest.import_problem">
 <code class="descclassname">pycutest.</code><code class="descname">import_problem</code><span class="sig-paren">(</span><em>problemName</em>, <em>destination=None</em>, <em>sifParams=None</em>, <em>sifOptions=None</em>, <em>efirst=False</em>, <em>lfirst=False</em>, <em>nvfirst=False</em>, <em>quiet=True</em>, <em>drop_fixed_variables=True</em><span class="sig-paren">)</span><a class="headerlink" href="#pycutest.import_problem" title="Permalink to this definition">¶</a></dt>
 <dd><p>Prepares a problem interface module, imports and initializes it.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>problemName</strong> – CUTEst problem name</li>
-<li><strong>destination</strong> – the name under which the compiled problem interface is stored in the cache (default = <code class="docutils literal notranslate"><span class="pre">problemName</span></code>)</li>
-<li><strong>sifParams</strong> – SIF file parameters to use (as dict, keys must be strings)</li>
-<li><strong>sifOptions</strong> – additional options passed to sifdecode given in the form of a list of strings.</li>
-<li><strong>efirst</strong> – order equation constraints first (default <code class="docutils literal notranslate"><span class="pre">True</span></code>)</li>
-<li><strong>lfirst</strong> – order linear constraints first (default <code class="docutils literal notranslate"><span class="pre">True</span></code>)</li>
-<li><strong>nvfirst</strong> – order nonlinear variables before linear variables (default <code class="docutils literal notranslate"><span class="pre">False</span></code>)</li>
-<li><strong>quiet</strong> – suppress output (default <code class="docutils literal notranslate"><span class="pre">True</span></code>)</li>
-<li><strong>drop_fixed_variables</strong> – in the resulting problem object, are fixed variables hidden from the user (default <code class="docutils literal notranslate"><span class="pre">True</span></code>)</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>problemName</strong> – CUTEst problem name</p></li>
+<li><p><strong>destination</strong> – the name under which the compiled problem interface is stored in the cache (default = <code class="docutils literal notranslate"><span class="pre">problemName</span></code>)</p></li>
+<li><p><strong>sifParams</strong> – SIF file parameters to use (as dict, keys must be strings)</p></li>
+<li><p><strong>sifOptions</strong> – additional options passed to sifdecode given in the form of a list of strings.</p></li>
+<li><p><strong>efirst</strong> – order equation constraints first (default <code class="docutils literal notranslate"><span class="pre">True</span></code>)</p></li>
+<li><p><strong>lfirst</strong> – order linear constraints first (default <code class="docutils literal notranslate"><span class="pre">True</span></code>)</p></li>
+<li><p><strong>nvfirst</strong> – order nonlinear variables before linear variables (default <code class="docutils literal notranslate"><span class="pre">False</span></code>)</p></li>
+<li><p><strong>quiet</strong> – suppress output (default <code class="docutils literal notranslate"><span class="pre">True</span></code>)</p></li>
+<li><p><strong>drop_fixed_variables</strong> – in the resulting problem object, are fixed variables hidden from the user (default <code class="docutils literal notranslate"><span class="pre">True</span></code>)</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a reference to the Python interface class for this problem (class <code class="docutils literal notranslate"><span class="pre">pycutest.CUTEstProblem</span></code>)</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a reference to the Python interface class for this problem (class <code class="docutils literal notranslate"><span class="pre">pycutest.CUTEstProblem</span></code>)</p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -340,32 +330,25 @@ Documentation for these functions is given below.</p>
 <dt id="pycutest.clear_cache">
 <code class="descclassname">pycutest.</code><code class="descname">clear_cache</code><span class="sig-paren">(</span><em>problemName</em>, <em>sifParams=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pycutest.clear_cache" title="Permalink to this definition">¶</a></dt>
 <dd><p>Deletes a saved problem.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>problemName</strong> – problem name</li>
-<li><strong>sifParams</strong> – sif parameters used for compilation</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>problemName</strong> – problem name</p></li>
+<li><p><strong>sifParams</strong> – sif parameters used for compilation</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="pycutest.all_cached_problems">
 <code class="descclassname">pycutest.</code><code class="descname">all_cached_problems</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pycutest.all_cached_problems" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a list of all cached problems.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list of (problemName, sifParams) tuples, where sifParams is a dict</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>list of (problemName, sifParams) tuples, where sifParams is a dict</p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -382,7 +365,7 @@ Documentation for these functions is given below.</p>
         <a href="interface.html" class="btn btn-neutral float-right" title="Problem Interface" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="install.html" class="btn btn-neutral" title="Installing PyCUTEst" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="install.html" class="btn btn-neutral float-left" title="Installing PyCUTEst" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -391,7 +374,7 @@ Documentation for these functions is given below.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018, Jaroslav Fowkes and Lindon Roberts.
+        &copy; Copyright 2018, Jaroslav Fowkes and Lindon Roberts
 
     </p>
   </div>
@@ -408,33 +391,16 @@ Documentation for these functions is given below.</p>
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'0.1',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-  
-
-  <script type="text/javascript" src="_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

@@ -8,12 +8,12 @@ PyCUTEst requires the following software to be installed:
 * Python 2.7 or Python 3 (http://www.python.org/)
 * CUTEst (see below)
 
-Additionally, the following python packages should be installed (these will be installed automatically if using *pip*, see `Installing PyCUTEst using pip`_):
+Additionally, the following python packages should be installed (these will be installed automatically if using *pip*, see `Installation using pip`_):
 
 * NumPy 1.11 or higher (http://www.numpy.org/)
 * SciPy 0.18 or higher (http://www.scipy.org/)
 
-Note: PyCUTEst only supports Mac and Linux currently.
+**Please Note:** *currently PyCUTEst only supports Mac and Linux.*
 
 Installing CUTEst on Linux
 --------------------------
@@ -47,28 +47,37 @@ Now we are ready to install CUTEst in double precision (requires :code:`gfortran
 
     $ cd ./cutest
     $ ${ARCHDEFS}/install_optrove
+    Do you wish to install GALAHAD (Y/n)? N
     Do you wish to install CUTEst (Y/n)? Y
     Do you require the CUTEst-Matlab interface (y/N)? N
     Select platform: 6 # PC with generic 64-bit processor
-    Select operating system: 2 # Linux
+    Select operating system: 3 # Linux
     Would you like to review and modify the system commands (y/N)? N
-    Select fortran compiler: 2 # GNU gfortran compiler
+    Select fortran compiler: 5 # GNU gfortran compiler
     Would you like to review and modify the fortran compiler settings (y/N)? N
     Select C compiler: 2 # generic GCC
+    Would you like to review and modify the C compiler settings (y/N)? N
     Would you like to compile SIFDecode (Y/n)? Y
     Would you like to compile CUTEst (Y/n)? Y
     CUTEst may be compiled in (S)ingle or (D)ouble precision or (B)oth.
     Which precision do you require for the installed subset (D/s/b) ? D
 
-And CUTEst should run from here.
-
-Installing CUTEst on Mac
-------------------------
-To use CUTEst on Mac you will first need to install the Homebrew package manager:
+And CUTEst should run from here. To test that the installation works, issue the commands:
 
  .. code-block:: bash
 
-    $ cd ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    $ cd $SIFDECODE/src ; make -f $SIFDECODE/makefiles/$MYARCH test
+    $ cd $CUTEST/src ; make -f $CUTEST/makefiles/$MYARCH test
+
+**Please Note:** *currently PyCUTEst only supports gfortran and uses the default version on your path (as returned by* :code:`gfortran -v` *). Please ensure this is the same version that you install CUTEst with above, this should be the case if you select the generic* :code:`GNU gfortran compiler` *as the fortran compiler in the installer above.*
+
+Installing CUTEst on Mac
+------------------------
+For simplicity, we recommend installing CUTEst using Homebrew as detailed below (but you can also install CUTEst manually by following the Linux installation instructions above). First it is important to ensure that you have the latest version of Xcode Command Line Tools installed (or the latest version of Xcode), please ensure this is the case by following `this guide <http://railsapps.github.io/xcode-command-line-tools.html>`_. Now install the Homebrew package manager:
+
+ .. code-block:: bash
+
+    $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 
 Then you can easily install CUTEst:
 
@@ -81,9 +90,9 @@ Then you can easily install CUTEst:
     $ echo ". $(brew --prefix $f)/$f.bashrc" >> ~/.bashrc; \
     $ done
 
-Installing PyCUTEst using pip
------------------------------
-For easy installation, use *pip* (http://www.pip-installer.org/) as root:
+Installation using pip
+----------------------
+For easy installation, use `pip <http://www.pip-installer.org/>`_ as root:
 
  .. code-block:: bash
 
@@ -111,7 +120,7 @@ Note that if an older install of PyCUTEst is present on your system you can use:
 
 to upgrade PyCUTEst to the latest version.
 
-You will then need to create a folder which will store all your compiled problems.
+You will then need to create a folder which will store all your compiled problems:
 
  .. code-block:: bash
 
@@ -125,8 +134,8 @@ And set an environment variable to add this to tell PyCUTEst about this director
     export PYTHONPATH="${PYCUTEST_CACHE}:${PYTHONPATH}"
 
 
-Manual installation of PyCUTEst
--------------------------------
+Manual installation
+-------------------
 Alternatively, you can download the source code from `Github <https://github.com/jfowkes/pycutest>`_ and unpack as follows:
 
  .. code-block:: bash
