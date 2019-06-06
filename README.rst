@@ -18,6 +18,8 @@ Additionally, the following python packages should be installed (these will be i
 * NumPy 1.11 or higher (http://www.numpy.org/)
 * SciPy 0.18 or higher (http://www.scipy.org/)
 
+**Please Note: ** Currently PyCUTEst only supports Mac and Linux. For Windows 10 users, PyCUTEst can be used through the `Windows Subsystem for Linux <https://docs.microsoft.com/en-us/windows/wsl/faq>`_, following the Linux installation instructions.
+
 Installing CUTEst on Linux
 --------------------------
 These instructions do not include installation of the MATLAB interface. You will need to install four packages: archdefs, SIFDecode, CUTEst and MASTSIF. To keep things simple, install all four packages in the same directory:
