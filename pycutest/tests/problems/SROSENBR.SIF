@@ -1,0 +1,146 @@
+***************************
+* SET UP THE INITIAL DATA *
+***************************
+
+NAME          SROSENBR
+
+*   Problem :
+*   *********
+
+*   The separable extension of Rosenbrock's function.
+
+*   Source:  problem 21 in
+*   J.J. More', B.S. Garbow and K.E. Hillstrom,
+*   "Testing Unconstrained Optimization Software",
+*   ACM Transactions on Mathematical Software, vol. 7(1), pp. 17-41, 1981.
+
+*   SIF input: Ph. Toint, Dec 1989.
+
+*   classification SUR2-AN-V-0
+
+*   N/2 is half the number of variables
+
+*IE N/2                 5              $-PARAMETER n = 10     original value
+*IE N/2                 25             $-PARAMETER n = 50
+*IE N/2                 50             $-PARAMETER n = 100
+*IE N/2                 250            $-PARAMETER n = 500
+*IE N/2                 500            $-PARAMETER n = 1000
+ IE N/2                 2500           $-PARAMETER n = 5000
+*IE N/2                 5000           $-PARAMETER n = 10000
+
+*   Number of variables
+
+ IM N         N/2       2
+
+*   Penalty parameter
+
+ RE ALPHA               100.0
+ RD SCALE     ALPHA     1.0
+
+*   Other parameters
+
+ IE 1                   1
+
+VARIABLES
+
+ DO I         1                        N
+ X  X(I)
+ ND
+
+GROUPS
+
+ DO I         1                        N/2
+ IM 2I        I         2
+ IA 2I-1      2I        -1
+ XN GA(I)     X(2I)     1.0
+ ZN GA(I)     'SCALE'                  SCALE
+ XN GB(I)     X(2I-1)   1.0
+ ND
+
+CONSTANTS
+
+ DO I         1                        N/2
+ X  SROSENBR  GB(I)     1.0
+ ND
+
+BOUNDS
+
+ FR SROSENBR  'DEFAULT'
+
+START POINT
+
+ DO I         1                        N/2
+ IM 2I        I         2
+ IA 2I-1      2I        -1
+ X  SROSENBR  X(2I)     1.0
+ X  SROSENBR  X(2I-1)  -1.2
+ ND
+
+ELEMENT TYPE
+
+ EV MSQ       X
+
+ELEMENT USES
+
+ DO I         1                        N/2
+ IM 2I        I         2
+ IA 2I-1      2I        -1
+ XT E(I)      MSQ
+ ZV E(I)      X                        X(2I-1)
+ ND
+
+GROUP TYPE
+
+ GV L2        GVAR
+
+GROUP USES
+
+ DO I         1                        N/2
+ XT GA(I)     L2
+ XE GA(I)     E(I)
+ XT GB(I)     L2
+ ND
+
+OBJECT BOUND
+
+*   Least square problems are bounded below by zero
+
+ LO SROSENBR            0.0
+
+*   Solution
+
+*LO SOLTN               0.0
+
+ENDATA
+
+***********************
+* SET UP THE FUNCTION *
+* AND RANGE ROUTINES  *
+***********************
+
+ELEMENTS      SROSENBR
+
+INDIVIDUALS
+
+ T  MSQ
+ F                      - X * X
+ G  X                   - ( X + X )
+ H  X         X         -2.0
+
+ENDATA
+
+*********************
+* SET UP THE GROUPS *
+* ROUTINE           *
+*********************
+
+GROUPS        SROSENBR
+
+INDIVIDUALS
+
+ T  L2
+ F                      GVAR * GVAR
+ G                      GVAR + GVAR
+ H                      2.0
+
+ENDATA

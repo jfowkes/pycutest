@@ -27,8 +27,13 @@ def params_to_string(params):
     # Convert a dictionary of SIF parameters to a sensible string representation (used for folder names)
     keys = sorted(list(params.keys()))
     param_str = ''
+    # Replace characters in the key that we don't want (e.g. '/' breaks folder path)
+    key_replacements = [('/',''), ('0','zero'), ('1','one'), ('2','two'), ('3','three'), ('4','four'), ('5','five'), ('6','six'), ('7','seven'), ('8','eight'), ('9','nine')]
     for k in keys:
-        param_str += '%s%g_' % (k, params[k])
+        k_to_use = k
+        for str_from, str_to in key_replacements:
+            k_to_use = k_to_use.replace(str_from, str_to)
+        param_str += '%s%g_' % (k_to_use, params[k])
     param_str = param_str.rstrip('_')
     return param_str
 
