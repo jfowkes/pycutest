@@ -338,8 +338,16 @@ def import_problem(problemName, destination=None, sifParams=None, sifOptions=Non
     else:
         problemDir = destination
     # Import the module CACHE_SUBFOLDER.problemDir, and return a wrapper
-    return CUTEstProblem(__import__('%s.%s' % (CACHE_SUBFOLDER, problemDir), globals(), locals(), [str(problemDir)]),
-                         drop_fixed_variables=drop_fixed_variables)
+    try:
+        return CUTEstProblem(__import__('%s.%s' % (CACHE_SUBFOLDER, problemDir), globals(), locals(), [str(problemDir)]),
+                             drop_fixed_variables=drop_fixed_variables)
+    except ImportError as error:
+        try: # check if cache folder is on python path
+            __import__(CACHE_SUBFOLDER)
+        except ImportError:
+            raise ImportError('cannot import PYCUTEST_CACHE folder, have you added it to your python path?')
+        else: # else raise original error
+            raise error
 
 
 def all_cached_problems():
