@@ -35,7 +35,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Example Usage" href="example.html" />
+    <link rel="next" title="pycutest.CUTEstProblem.objcons" href="functions/pycutest.CUTEstProblem.objcons.html" />
     <link rel="prev" title="Building Test Problems" href="building.html" /> 
 </head>
 
@@ -89,7 +89,26 @@
 <li class="toctree-l1"><a class="reference internal" href="install.html">Installing PyCUTEst</a></li>
 <li class="toctree-l1"><a class="reference internal" href="building.html">Building Test Problems</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Problem Interface</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#full-function-documentation">Full function documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#problem-functions">Problem Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#problem-attributes">Problem Attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#full-function-documentation">Full function documentation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="functions/pycutest.CUTEstProblem.objcons.html">pycutest.CUTEstProblem.objcons</a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions/pycutest.CUTEstProblem.obj.html">pycutest.CUTEstProblem.obj</a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions/pycutest.CUTEstProblem.cons.html">pycutest.CUTEstProblem.cons</a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions/pycutest.CUTEstProblem.lagjac.html">pycutest.CUTEstProblem.lagjac</a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions/pycutest.CUTEstProblem.jprod.html">pycutest.CUTEstProblem.jprod</a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions/pycutest.CUTEstProblem.hess.html">pycutest.CUTEstProblem.hess</a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions/pycutest.CUTEstProblem.ihess.html">pycutest.CUTEstProblem.ihess</a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions/pycutest.CUTEstProblem.hprod.html">pycutest.CUTEstProblem.hprod</a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions/pycutest.CUTEstProblem.gradhess.html">pycutest.CUTEstProblem.gradhess</a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions/pycutest.CUTEstProblem.report.html">pycutest.CUTEstProblem.report</a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions/pycutest.CUTEstProblem.scons.html">pycutest.CUTEstProblem.scons</a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions/pycutest.CUTEstProblem.slagjac.html">pycutest.CUTEstProblem.slagjac</a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions/pycutest.CUTEstProblem.sphess.html">pycutest.CUTEstProblem.sphess</a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions/pycutest.CUTEstProblem.isphess.html">pycutest.CUTEstProblem.isphess</a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions/pycutest.CUTEstProblem.gradsphess.html">pycutest.CUTEstProblem.gradsphess</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="example.html">Example Usage</a></li>
@@ -160,494 +179,120 @@
             
   <div class="section" id="problem-interface">
 <h1>Problem Interface<a class="headerlink" href="#problem-interface" title="Permalink to this headline">¶</a></h1>
-<p>Having built a problem, PyCUTEst returns an object of class <code class="code docutils literal notranslate"><span class="pre">CUTEstProblem</span></code>.
-For fixed variables, its behaviour can be set with the <code class="code docutils literal notranslate"><span class="pre">drop_fixed_variables</span></code> flag for <code class="code docutils literal notranslate"><span class="pre">import_problem()</span></code>.
-This class has the following attributes:</p>
+<p>Having built a problem, PyCUTEst returns an instance of class <code class="code docutils literal notranslate"><span class="pre">CUTEstProblem</span></code>
+(for fixed variables, its behaviour can be set with the <code class="code docutils literal notranslate"><span class="pre">drop_fixed_variables</span></code> flag for <code class="code docutils literal notranslate"><span class="pre">import_problem()</span></code>).</p>
+<div class="section" id="problem-functions">
+<h2>Problem Functions<a class="headerlink" href="#problem-functions" title="Permalink to this headline">¶</a></h2>
+<p>The functions available for each <code class="code docutils literal notranslate"><span class="pre">CUTEstProblem</span></code> instance are:</p>
 <ul class="simple">
-<li><p><code class="code docutils literal notranslate"><span class="pre">problem.name</span></code>: CUTEst problem name (string)</p></li>
-<li><p><code class="code docutils literal notranslate"><span class="pre">problem.n</span></code>: number of variables (equal to <code class="code docutils literal notranslate"><span class="pre">problem.n_free</span></code> if <code class="code docutils literal notranslate"><span class="pre">drop_fixed_variables=True</span></code>, otherwise <code class="code docutils literal notranslate"><span class="pre">problem.n_full</span></code>)</p></li>
-<li><p><code class="code docutils literal notranslate"><span class="pre">problem.m</span></code>: number of constraints</p></li>
-<li><p><code class="code docutils literal notranslate"><span class="pre">problem.x0</span></code>: starting point for optimization routine (NumPy array of shape <code class="code docutils literal notranslate"><span class="pre">(problem.n,)</span></code>)</p></li>
-<li><p><code class="code docutils literal notranslate"><span class="pre">problem.sifParams</span></code>: dict of parameters passed to sifdecode</p></li>
-<li><p><code class="code docutils literal notranslate"><span class="pre">problem.sifOptions</span></code>: list of extra options passed to sifdecode</p></li>
-<li><p><code class="code docutils literal notranslate"><span class="pre">problem.vartype</span></code>: array of variable types (NumPy array size n, entry <code class="code docutils literal notranslate"><span class="pre">vartype[i]</span></code> indicates that x[i] is real(0), boolean(1), or integer(2))</p></li>
-<li><p><code class="code docutils literal notranslate"><span class="pre">problem.nnzh</span></code>: number of nonzero entries in upper triangular part of objective Hessian (for all variables, including fixed)</p></li>
-<li><p><code class="code docutils literal notranslate"><span class="pre">problem.nonlinear_vars_first</span></code>: flag if all nonlinear variables are listed before linear variables</p></li>
-<li><p><code class="code docutils literal notranslate"><span class="pre">problem.bl</span></code>: array of lower bounds on input (unconstrained -&gt; -1e20), as NumPy array of shape <code class="code docutils literal notranslate"><span class="pre">(problem.n,)</span></code></p></li>
-<li><p><code class="code docutils literal notranslate"><span class="pre">problem.bu</span></code>: array of upper bounds on input (unconstrained -&gt; 1e20), as NumPy array of shape <code class="code docutils literal notranslate"><span class="pre">(problem.n,)</span></code></p></li>
-<li><p><code class="code docutils literal notranslate"><span class="pre">problem.n_full</span></code>: total number of variables in CUTEst problem (<code class="code docutils literal notranslate"><span class="pre">n_free</span> <span class="pre">+</span> <span class="pre">n_fixed</span></code>)</p></li>
-<li><p><code class="code docutils literal notranslate"><span class="pre">problem.n_free</span></code>: number of free variables</p></li>
-<li><p><code class="code docutils literal notranslate"><span class="pre">problem.n_fixed</span></code>: number of fixed variables</p></li>
-</ul>
-<p>For constrained problems, we also have (these are all set to <code class="code docutils literal notranslate"><span class="pre">None</span></code> for unconstrained problems):</p>
-<ul class="simple">
-<li><p><code class="code docutils literal notranslate"><span class="pre">problem.eq_cons_first</span></code>: flag if equality constraints are listed before inequality constraints</p></li>
-<li><p><code class="code docutils literal notranslate"><span class="pre">problem.linear_cons_first</span></code>: flag if linear constraints are listed before nonlinear constraints</p></li>
-<li><p><code class="code docutils literal notranslate"><span class="pre">problem.nnzj</span></code>: number of nonzero entries in constraint Jacobian (for all variables, including fixed)</p></li>
-<li><p><code class="code docutils literal notranslate"><span class="pre">problem.v0</span></code>: starting point for Lagrange multipliers (NumPy array of shape <code class="code docutils literal notranslate"><span class="pre">(problem.m,)</span></code>)</p></li>
-<li><p><code class="code docutils literal notranslate"><span class="pre">problem.cl</span></code>: lower bounds on constraints, as NumPy array of shape <code class="code docutils literal notranslate"><span class="pre">(problem.m,)</span></code></p></li>
-<li><p><code class="code docutils literal notranslate"><span class="pre">problem.cu</span></code>: upper bounds on constraints, as NumPy array of shape <code class="code docutils literal notranslate"><span class="pre">(problem.m,)</span></code></p></li>
-<li><p><code class="code docutils literal notranslate"><span class="pre">problem.is_eq_cons</span></code>: NumPy array of Boolean flags indicating if i-th constraint is equality or not (i.e. inequality)</p></li>
-<li><p><code class="code docutils literal notranslate"><span class="pre">problem.is_linear_cons</span></code>: NumPy array of Boolean flags indicating if i-th constraint is linear or not (i.e. nonlinear)</p></li>
-</ul>
-<p>The functions available are:</p>
-<ul class="simple">
-<li><p><code class="code docutils literal notranslate"><span class="pre">problem.objcons()</span></code>: evaluate objective and constraints</p></li>
-<li><p><code class="code docutils literal notranslate"><span class="pre">problem.obj()</span></code>: evaluate objective (and optionally its gradient)</p></li>
-<li><p><code class="code docutils literal notranslate"><span class="pre">problem.cons()</span></code>: evaluate constraint(s) and optionally their Jacobian/its gradient</p></li>
-<li><p><code class="code docutils literal notranslate"><span class="pre">problem.lagjac()</span></code>: evaluate gradient of objective/Lagrangian and Jacobian of constraints</p></li>
-<li><p><code class="code docutils literal notranslate"><span class="pre">problem.jprod()</span></code>: evaluate constraint Jacobian-vector product</p></li>
-<li><p><code class="code docutils literal notranslate"><span class="pre">problem.hess()</span></code>: evaluate Hessian of objective or Lagrangian</p></li>
-<li><p><code class="code docutils literal notranslate"><span class="pre">problem.ihess()</span></code>: evaluate Hessian of objective or a specific constraint</p></li>
-<li><p><code class="code docutils literal notranslate"><span class="pre">problem.hprod()</span></code>: evaluate Hessian-vector product (for objective or Lagrangian)</p></li>
-<li><p><code class="code docutils literal notranslate"><span class="pre">problem.gradhess()</span></code>: evaluate gradient of objective/Lagrangian, Jacobian of constraints and Hessian of objective/Lagrangian</p></li>
-<li><p><code class="code docutils literal notranslate"><span class="pre">problem.report()</span></code>: return a dictionary of statistics (number of objective/gradient evaluations, etc.)</p></li>
+<li><p><a class="reference external" href="functions/pycutest.CUTEstProblem.objcons.html">objcons(x)</a>: evaluate objective and constraints</p></li>
+<li><p><a class="reference external" href="functions/pycutest.CUTEstProblem.obj.html">obj(x[, gradient])</a>: evaluate objective (and optionally its gradient)</p></li>
+<li><p><a class="reference external" href="functions/pycutest.CUTEstProblem.cons.html">cons(x[, index, gradient])</a>: evaluate constraint(s) and optionally their Jacobian/its gradient</p></li>
+<li><p><a class="reference external" href="functions/pycutest.CUTEstProblem.lagjac.html">lagjac(x[, v])</a>: evaluate gradient of objective/Lagrangian and Jacobian of constraints</p></li>
+<li><p><a class="reference external" href="functions/pycutest.CUTEstProblem.jprod.html">jprod(p[, transpose, x])</a>: evaluate constraint Jacobian-vector product</p></li>
+<li><p><a class="reference external" href="functions/pycutest.CUTEstProblem.hess.html">hess(x[, v])</a>: evaluate Hessian of objective or Lagrangian</p></li>
+<li><p><a class="reference external" href="functions/pycutest.CUTEstProblem.ihess.html">ihess(x[, cons_index])</a>: evaluate Hessian of objective or a specific constraint</p></li>
+<li><p><a class="reference external" href="functions/pycutest.CUTEstProblem.hprod.html">hprod(p[, x, v])</a>: evaluate Hessian-vector product (for objective or Lagrangian)</p></li>
+<li><p><a class="reference external" href="functions/pycutest.CUTEstProblem.gradhess.html">gradhess(x[, v, gradient_of_lagrangian])</a>: evaluate gradient of objective/Lagrangian, Jacobian of constraints and Hessian of objective/Lagrangian</p></li>
+<li><p><a class="reference external" href="functions/pycutest.CUTEstProblem.report.html">report()</a>: return a dictionary of statistics (number of objective/gradient evaluations, etc.)</p></li>
 </ul>
 <p>For large-scale problems, you may want to get vectors/matrices as sparse matrices. We have the following functions which return sparse matrices:</p>
 <ul class="simple">
-<li><p><code class="code docutils literal notranslate"><span class="pre">problem.scons()</span></code>: sparse alternative to <code class="code docutils literal notranslate"><span class="pre">problem.cons()</span></code></p></li>
-<li><p><code class="code docutils literal notranslate"><span class="pre">problem.slagjac()</span></code>: sparse alternative to <code class="code docutils literal notranslate"><span class="pre">problem.lagjac()</span></code></p></li>
-<li><p><code class="code docutils literal notranslate"><span class="pre">problem.sphess()</span></code>: sparse alternative to <code class="code docutils literal notranslate"><span class="pre">problem.hess()</span></code></p></li>
-<li><p><code class="code docutils literal notranslate"><span class="pre">problem.isphess()</span></code>: sparse alternative to <code class="code docutils literal notranslate"><span class="pre">problem.ihess()</span></code></p></li>
-<li><p><code class="code docutils literal notranslate"><span class="pre">problem.gradsphess()</span></code>: sparse alternative to <code class="code docutils literal notranslate"><span class="pre">problem.gradhess()</span></code></p></li>
+<li><p><a class="reference external" href="functions/pycutest.CUTEstProblem.scons.html">scons(x[, index, gradient])</a>: (sparse) evaluate constraint(s) and optionally their Jacobian/its gradient</p></li>
+<li><p><a class="reference external" href="functions/pycutest.CUTEstProblem.slagjac.html">slagjac(x[, v])</a>: (sparse) evaluate gradient of objective/Lagrangian and Jacobian of constraints</p></li>
+<li><p><a class="reference external" href="functions/pycutest.CUTEstProblem.sphess.html">sphess(x[, v])</a>: (sparse) evaluate Hessian of objective or Lagrangian</p></li>
+<li><p><a class="reference external" href="functions/pycutest.CUTEstProblem.isphess.html">isphess(x[, cons_index])</a>: (sparse) evaluate Hessian of objective or a specific constraint</p></li>
+<li><p><a class="reference external" href="functions/pycutest.CUTEstProblem.gradsphess.html">gradsphess(x[, v, gradient_of_lagrangian])</a>: (sparse) evaluate gradient of objective/Lagrangian, Jacobian of constraints and Hessian of objective/Lagrangian</p></li>
 </ul>
-<p>Full details of each function are given below.</p>
+<p>Full details of each function above are given by clicking on it.</p>
+</div>
+<div class="section" id="problem-attributes">
+<h2>Problem Attributes<a class="headerlink" href="#problem-attributes" title="Permalink to this headline">¶</a></h2>
+<p>Each <code class="code docutils literal notranslate"><span class="pre">CUTEstProblem</span></code> instance has the following attributes:</p>
+<ul class="simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">name</span></code>: CUTEst problem name (string)</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">n</span></code>: number of variables (equal to <code class="code docutils literal notranslate"><span class="pre">n_free</span></code> if <code class="code docutils literal notranslate"><span class="pre">drop_fixed_variables=True</span></code>, otherwise <code class="code docutils literal notranslate"><span class="pre">n_full</span></code>)</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">m</span></code>: number of constraints</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">x0</span></code>: starting point for optimization routine (NumPy array of shape <code class="code docutils literal notranslate"><span class="pre">(n,)</span></code>)</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">sifParams</span></code>: dict of parameters passed to sifdecode</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">sifOptions</span></code>: list of extra options passed to sifdecode</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">vartype</span></code>: array of variable types (NumPy array size n, entry <code class="code docutils literal notranslate"><span class="pre">vartype[i]</span></code> indicates that x[i] is real(0), boolean(1), or integer(2))</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">nnzh</span></code>: number of nonzero entries in upper triangular part of objective Hessian (for all variables, including fixed)</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">nonlinear_vars_first</span></code>: flag if all nonlinear variables are listed before linear variables</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">bl</span></code>: array of lower bounds on input (unconstrained -&gt; -1e20), as NumPy array of shape <code class="code docutils literal notranslate"><span class="pre">(n,)</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">bu</span></code>: array of upper bounds on input (unconstrained -&gt; 1e20), as NumPy array of shape <code class="code docutils literal notranslate"><span class="pre">(n,)</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">n_full</span></code>: total number of variables in CUTEst problem (<code class="code docutils literal notranslate"><span class="pre">n_free</span> <span class="pre">+</span> <span class="pre">n_fixed</span></code>)</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">n_free</span></code>: number of free variables</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">n_fixed</span></code>: number of fixed variables</p></li>
+</ul>
+<p>For constrained problems, we also have (these are all set to <code class="code docutils literal notranslate"><span class="pre">None</span></code> for unconstrained problems):</p>
+<ul class="simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">eq_cons_first</span></code>: flag if equality constraints are listed before inequality constraints</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">linear_cons_first</span></code>: flag if linear constraints are listed before nonlinear constraints</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">nnzj</span></code>: number of nonzero entries in constraint Jacobian (for all variables, including fixed)</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">v0</span></code>: starting point for Lagrange multipliers (NumPy array of shape <code class="code docutils literal notranslate"><span class="pre">(m,)</span></code>)</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">cl</span></code>: lower bounds on constraints, as NumPy array of shape <code class="code docutils literal notranslate"><span class="pre">(m,)</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">cu</span></code>: upper bounds on constraints, as NumPy array of shape <code class="code docutils literal notranslate"><span class="pre">(m,)</span></code></p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">is_eq_cons</span></code>: NumPy array of Boolean flags indicating if i-th constraint is equality or not (i.e. inequality)</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">is_linear_cons</span></code>: NumPy array of Boolean flags indicating if i-th constraint is linear or not (i.e. nonlinear)</p></li>
+</ul>
+</div>
 <div class="section" id="full-function-documentation">
 <h2>Full function documentation<a class="headerlink" href="#full-function-documentation" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="pycutest.CUTEstProblem">
-<em class="property">class </em><code class="descclassname">pycutest.</code><code class="descname">CUTEstProblem</code><span class="sig-paren">(</span><em>module</em>, <em>drop_fixed_variables=True</em><span class="sig-paren">)</span><a class="headerlink" href="#pycutest.CUTEstProblem" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
-<dt id="pycutest.CUTEstProblem.cons">
-<code class="descname">cons</code><span class="sig-paren">(</span><em>x</em>, <em>index=None</em>, <em>gradient=False</em><span class="sig-paren">)</span><a class="headerlink" href="#pycutest.CUTEstProblem.cons" title="Permalink to this definition">¶</a></dt>
-<dd><p>Evaluate the constraints (and optionally their Jacobian).</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># constraint vector</span>
-<span class="n">c</span>      <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">cons</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-<span class="c1"># i-th constraint</span>
-<span class="n">ci</span>     <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">cons</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">i</span><span class="p">)</span>
-<span class="c1"># constraints and Jacobian</span>
-<span class="n">c</span><span class="p">,</span> <span class="n">J</span>   <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">cons</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">gradient</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-<span class="c1"># i-th constraint and its gradient</span>
-<span class="n">ci</span><span class="p">,</span> <span class="n">Ji</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">cons</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">gradient</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>For unconstrained problems, this returns None.</p>
-<p>This calls CUTEst routine CUTEST_ccfg or CUTEST_ccifg.</p>
-<p>For large problems, problem.scons returns sparse matrices.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> – input vector</p></li>
-<li><p><strong>index</strong> – which constraint to evaluate (default=None -&gt; all constraints). Must be in 0..self.m-1.</p></li>
-<li><p><strong>gradient</strong> – whether to return constraint(s) and gradient/Jacobian, or just constraint (default=False; i.e. constraint only)</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>value of constraint(s) and Jacobian/gradient of constraint(s) at x</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="pycutest.CUTEstProblem.gradhess">
-<code class="descname">gradhess</code><span class="sig-paren">(</span><em>x</em>, <em>v=None</em>, <em>gradient_of_lagrangian=True</em><span class="sig-paren">)</span><a class="headerlink" href="#pycutest.CUTEstProblem.gradhess" title="Permalink to this definition">¶</a></dt>
-<dd><p>Evaluate the gradient of objective or Lagrangian, Jacobian of constraints and Hessian of objective/Lagrangian.
-For constrained problems, the gradient is L_{x}(x,v) and the Hessian is L_{x,x}(x,v).</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># for unconstrained problems</span>
-<span class="n">g</span><span class="p">,</span> <span class="n">H</span>    <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">gradhess</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-<span class="c1"># for constrained problems (g = grad Lagrangian)</span>
-<span class="n">g</span><span class="p">,</span> <span class="n">J</span><span class="p">,</span> <span class="n">H</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">gradhess</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">v</span><span class="o">=</span><span class="n">v</span><span class="p">)</span>
-<span class="c1"># for constrained problems (g = grad objective)</span>
-<span class="n">g</span><span class="p">,</span> <span class="n">J</span><span class="p">,</span> <span class="n">H</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">gradhess</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">v</span><span class="o">=</span><span class="n">v</span><span class="p">,</span> <span class="n">gradient_of_lagrangian</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>For constrained problems, v must be specified, and the Hessian of the Lagrangian is always returned.
-For Hessian of the objective, use problem.ihess().</p>
-<p>For large problems, problem.gradsphess returns sparse matrices.</p>
-<p>This calls CUTEst routine CUTEST_cgrdh or CUTEST_ugrdh.</p>
-<p>Note: in CUTEst, the sign convention is such that the Lagrangian = objective + lagrange_multipliers * constraints</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> – input vector</p></li>
-<li><p><strong>v</strong> – vector of Lagrange multipliers. Required for constrained problems.</p></li>
-<li><p><strong>gradient_of_lagrangian</strong> – for constrained problems, return gradient of objective or Lagrangian?</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>gradient of objective or Lagrangian, (Jacobian of constraints) and Hessian of objective/Lagrangian at x</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="pycutest.CUTEstProblem.gradsphess">
-<code class="descname">gradsphess</code><span class="sig-paren">(</span><em>x</em>, <em>v=None</em>, <em>gradient_of_lagrangian=True</em><span class="sig-paren">)</span><a class="headerlink" href="#pycutest.CUTEstProblem.gradsphess" title="Permalink to this definition">¶</a></dt>
-<dd><p>Evaluate the gradient of objective or Lagrangian, Jacobian of constraints and Hessian of objective/Lagrangian.
-For constrained problems, the gradient is L_{x}(x,v) and the Hessian is L_{x,x}(x,v).</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># For unconstrained problems</span>
-<span class="n">g</span><span class="p">,</span> <span class="n">H</span>    <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">gradsphess</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-<span class="c1"># For constrained problem (g = grad Lagrangian)</span>
-<span class="n">g</span><span class="p">,</span> <span class="n">J</span><span class="p">,</span> <span class="n">H</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">gradsphess</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">v</span><span class="o">=</span><span class="n">v</span><span class="p">)</span>
-<span class="c1"># For constrained problems (g = grad objective)</span>
-<span class="n">g</span><span class="p">,</span> <span class="n">J</span><span class="p">,</span> <span class="n">H</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">gradsphess</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">v</span><span class="o">=</span><span class="n">v</span><span class="p">,</span> <span class="n">gradient_of_lagrangian</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>For constrained problems, v must be specified, and the Hessian of the Lagrangian is always returned.
-For Hessian of the objective, use problem.ihess().</p>
-<p>The vector g and matrices J and H are of type scipy.sparse.coo_matrix.</p>
-<p>For small problems, problem.gradhess returns dense matrices.</p>
-<p>This calls CUTEst routine CUTEST_csgrsh or CUTEST_ugrsh.</p>
-<p>Note: in CUTEst, the sign convention is such that the Lagrangian = objective + lagrange_multipliers * constraints</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> – input vector</p></li>
-<li><p><strong>v</strong> – vector of Lagrange multipliers. Required for constrained problems.</p></li>
-<li><p><strong>gradient_of_lagrangian</strong> – for constrained problems, return gradient of objective or Lagrangian?</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>gradient of objective or Lagrangian, (Jacobian of constraints) and Hessian of objective/Lagrangian at x, type scipy.sparse.coo_matrix</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="pycutest.CUTEstProblem.hess">
-<code class="descname">hess</code><span class="sig-paren">(</span><em>x</em>, <em>v=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pycutest.CUTEstProblem.hess" title="Permalink to this definition">¶</a></dt>
-<dd><p>Evaluate the Hessian of the objective or Lagrangian.
-For constrained problems, the Hessian is L_{x,x}(x,v).</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Hessian of objective at x for unconstrained problems</span>
-<span class="n">H</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">hess</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-<span class="c1"># Hessian of Lagrangian at (x, v) for constrained problems</span>
-<span class="n">H</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">hess</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">v</span><span class="o">=</span><span class="n">v</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>For unconstrained problems, v must be None.
-For constrained problems, v must be specified.
-To evaluate the Hessian of the objective for constrained problems use ihess()</p>
-<p>For large problems, problem.sphess returns sparse matrices.</p>
-<p>This calls CUTEst routine CUTEST_cdh or CUTEST_udh.</p>
-<p>Note: in CUTEst, the sign convention is such that the Lagrangian = objective + lagrange_multipliers * constraints</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> – input vector</p></li>
-<li><p><strong>v</strong> – Lagrange multiplies (needed for constrained problems)</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Hessian of objective (unconstrained) or Lagrangian (constrained) at x</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="pycutest.CUTEstProblem.hprod">
-<code class="descname">hprod</code><span class="sig-paren">(</span><em>p</em>, <em>x=None</em>, <em>v=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pycutest.CUTEstProblem.hprod" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate Hessian-vector product H*p, where H is Hessian of objective (unconstrained) or Lagrangian (constrained).
-For constrained problems, the Hessian is L_{x,x}(x,v).</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># use last computed Hessian to compute H*p</span>
-<span class="n">r</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">hprod</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
-<span class="c1"># use Hessian of Lagrangian L_{x,x}(x,v) to compute H*p (constrained only)</span>
-<span class="n">r</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">hprod</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">v</span><span class="o">=</span><span class="n">v</span><span class="p">)</span>
-<span class="c1"># use Hessian of objective at x to compute H*p (unconstrained only)</span>
-<span class="n">r</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">hprod</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>For unconstrained problems, v must be None.
-For constrained problems, v must be specified.</p>
-<p>This calls CUTEst routine CUTEST_chprod or CUTEST_uhprod</p>
-<p>Note: in CUTEst, the sign convention is such that the Lagrangian = objective + lagrange_multipliers * constraints</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>p</strong> – vector to be multiplied by the Hessian</p></li>
-<li><p><strong>x</strong> – input vector for the Hessian</p></li>
-<li><p><strong>v</strong> – Lagrange multipliers for the Lagrangian. Required for constrained problems.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Hessian-vector product H*p</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="pycutest.CUTEstProblem.ihess">
-<code class="descname">ihess</code><span class="sig-paren">(</span><em>x</em>, <em>cons_index=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pycutest.CUTEstProblem.ihess" title="Permalink to this definition">¶</a></dt>
-<dd><p>Evaluate the Hessian of the objective or the index-th constraint.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Hessian of the objective</span>
-<span class="n">H</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">ihess</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-<span class="c1"># Hessian of i-th constraint</span>
-<span class="n">H</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">ihess</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">cons_index</span><span class="o">=</span><span class="n">i</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>For large problems, problem.isphess returns sparse matrices.</p>
-<p>This calls CUTEst routine CUTEST_cidh or CUTEST_udh.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> – input vector</p></li>
-<li><p><strong>cons_index</strong> – index of constraint (default is None -&gt; use objective). Must be in 0..self.m-1.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Hessian of objective or a single constraint at x</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="pycutest.CUTEstProblem.isphess">
-<code class="descname">isphess</code><span class="sig-paren">(</span><em>x</em>, <em>cons_index=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pycutest.CUTEstProblem.isphess" title="Permalink to this definition">¶</a></dt>
-<dd><p>Evaluate the sparse Hessian of the objective or the index-th constraint.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Hessian of the objective</span>
-<span class="n">H</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">isphess</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-<span class="c1"># Hessian of the i-th constraint</span>
-<span class="n">H</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">isphess</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">cons_index</span><span class="o">=</span><span class="n">i</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>The matrix H is of type scipy.sparse.coo_matrix.</p>
-<p>For small problems, problem.ihess returns dense matrices.</p>
-<p>This calls CUTEst routine CUTEST_cish or CUTEST_ush.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> – input vector</p></li>
-<li><p><strong>cons_index</strong> – index of constraint (default is None -&gt; use objective). Must be in 0..self.m-1.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Hessian of objective or a single constraint at x, type scipy.sparse.coo_matrix</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="pycutest.CUTEstProblem.jprod">
-<code class="descname">jprod</code><span class="sig-paren">(</span><em>p</em>, <em>transpose=False</em>, <em>x=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pycutest.CUTEstProblem.jprod" title="Permalink to this definition">¶</a></dt>
-<dd><p>Evaluate product of constraint Jacobian with a vector p</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># evaluate J*p where J is the last compute Jacobian</span>
-<span class="n">r</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">jprod</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
-<span class="c1"># evaluate J.T*p where J is the last compute Jacobian</span>
-<span class="n">r</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">jprod</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">transpose</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-<span class="c1"># evaluate Jacobian at x, and return J(x)*p</span>
-<span class="n">r</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">jprod</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
-<span class="c1"># evaluate Jacobian at x, and return J(x).T*p</span>
-<span class="n">r</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">jprod</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">transpose</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>For unconstrained problems, r is None.</p>
-<p>This calls CUTEst routine CUTEST_cjprod.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>p</strong> – vector to be multiplied by the Jacobian of constraints</p></li>
-<li><p><strong>transpose</strong> – if True, multiply by transpose of Jacobian (J.T*p)</p></li>
-<li><p><strong>x</strong> – input vector for Jacobian (default=None -&gt; use last computed Jacobian)</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Jacobian-vector product J(x)*p or J(x).T * p if transpose=True</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="pycutest.CUTEstProblem.lagjac">
-<code class="descname">lagjac</code><span class="sig-paren">(</span><em>x</em>, <em>v=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pycutest.CUTEstProblem.lagjac" title="Permalink to this definition">¶</a></dt>
-<dd><p>Evaluate gradient of objective/Lagrangian, and Jacobian of constraints.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># objective gradient and the Jacobian of constraints</span>
-<span class="n">g</span><span class="p">,</span> <span class="n">J</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">lagjac</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-<span class="c1"># Lagrangian gradient and the Jacobian of constraints</span>
-<span class="n">g</span><span class="p">,</span> <span class="n">J</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">lagjac</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">v</span><span class="o">=</span><span class="n">v</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>For unconstrained problems, J is None.</p>
-<p>For large problems, problem.slagjac returns sparse matrices.</p>
-<p>This calls CUTEst routine CUTEST_cgr.</p>
-<p>Note: in CUTEst, the sign convention is such that the Lagrangian = objective + lagrange_multipliers * constraints</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> – input vector</p></li>
-<li><p><strong>v</strong> – input vector of Lagrange multipliers</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>gradient of objective/Lagrangian, and Jacobian of constraints</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="pycutest.CUTEstProblem.obj">
-<code class="descname">obj</code><span class="sig-paren">(</span><em>x</em>, <em>gradient=False</em><span class="sig-paren">)</span><a class="headerlink" href="#pycutest.CUTEstProblem.obj" title="Permalink to this definition">¶</a></dt>
-<dd><p>Evaluate the objective (and optionally its gradient).</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># objective</span>
-<span class="n">f</span>    <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">obj</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-<span class="c1"># objective and gradient</span>
-<span class="n">f</span><span class="p">,</span> <span class="n">g</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">obj</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">gradient</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>This calls CUTEst routine CUTEST_uofg or CUTEST_cofg.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> – input vector</p></li>
-<li><p><strong>gradient</strong> – whether to return objective and gradient, or just objective (default=False; i.e. objective only)</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>objective value f, or tuple (f,g) of objective and gradient at x</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="pycutest.CUTEstProblem.objcons">
-<code class="descname">objcons</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#pycutest.CUTEstProblem.objcons" title="Permalink to this definition">¶</a></dt>
-<dd><p>Evaluate objective and constraints.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># objective and constraints</span>
-<span class="n">f</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">objcons</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>For unconstrained problems, c is None.</p>
-<p>This calls CUTEst routine CUTEst_cfn.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>x</strong> – input vector</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>tuple (f, c) of objective and constraint values at x for constrained problems.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="pycutest.CUTEstProblem.report">
-<code class="descname">report</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pycutest.CUTEstProblem.report" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get CUTEst usage statistics.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">stats</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">report</span><span class="p">()</span>
-</pre></div>
-</div>
-<p>Statistics are:</p>
-<ul class="simple">
-<li><p>f = number of objective evaluations</p></li>
-<li><p>g = number of objective gradient evaluations</p></li>
-<li><p>H = number of objective Hessian evaluations</p></li>
-<li><p>Hprod = number of objective Hessian-vector products</p></li>
-<li><p>tsetup = CPU time for setup</p></li>
-<li><p>trun = CPU time for run</p></li>
-</ul>
-<p>and for constrained problems, also</p>
-<ul class="simple">
-<li><p>c = number of constraint evaluations (None for unconstrained)</p></li>
-<li><p>cg = number of constraint gradient evaluations (None for unconstrained)</p></li>
-<li><p>cH = number of constraint Hessian evaluations (None for unconstrained)</p></li>
-</ul>
-<p>This calls CUTEst routine CUTEST_creport or CUTEST_ureport.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>dict of usage statistics</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="pycutest.CUTEstProblem.scons">
-<code class="descname">scons</code><span class="sig-paren">(</span><em>x</em>, <em>index=None</em>, <em>gradient=False</em><span class="sig-paren">)</span><a class="headerlink" href="#pycutest.CUTEstProblem.scons" title="Permalink to this definition">¶</a></dt>
-<dd><p>Evaluate the constraints and optionally their sparse Jacobian/gradient.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># constraints</span>
-<span class="n">c</span>      <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">scons</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-<span class="c1"># i-th constraint</span>
-<span class="n">ci</span>     <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">scons</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">i</span><span class="p">)</span>
-<span class="c1"># constraints and sparse Jacobian</span>
-<span class="n">c</span><span class="p">,</span> <span class="n">J</span>   <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">scons</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">gradient</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-<span class="c1"># i-th constraint and its sparse gradient</span>
-<span class="n">ci</span><span class="p">,</span> <span class="n">Ji</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">scons</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">gradient</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>The matrix J or vector Ji is of type scipy.sparse.coo_matrix.</p>
-<p>For unconstrained problems, this returns is None.</p>
-<p>For small problems, problem.cons returns dense matrices.</p>
-<p>This calls CUTEst routine CUTEST_ccfsg or CUTEST_ccifsg.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> – input vector</p></li>
-<li><p><strong>index</strong> – which constraint to evaluate (default=None -&gt; all constraints). Must be in 0..self.m-1.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>value of constraint(s) and sparse Jacobian/gradient of constraint(s) at x, type scipy.sparse.coo_matrix</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="pycutest.CUTEstProblem.slagjac">
-<code class="descname">slagjac</code><span class="sig-paren">(</span><em>x</em>, <em>v=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pycutest.CUTEstProblem.slagjac" title="Permalink to this definition">¶</a></dt>
-<dd><p>Evaluate sparse gradient of objective or Lagrangian, and sparse Jacobian of constraints</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># objective gradient and Jacobian</span>
-<span class="n">g</span><span class="p">,</span> <span class="n">J</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">slagjac</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-<span class="c1"># Lagrangian gradient and Jacobian</span>
-<span class="n">g</span><span class="p">,</span> <span class="n">J</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">slagjac</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">v</span><span class="o">=</span><span class="n">v</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>The vector g and matrix J are of type scipy.sparse.coo_matrix.</p>
-<p>For unconstrained problems, J is None.</p>
-<p>For small problems, problem.lagjac returns dense matrices.</p>
-<p>This calls CUTEst routine CUTEST_csgr.</p>
-<p>Note: in CUTEst, the sign convention is such that the Lagrangian = objective + lagrange_multipliers * constraints</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> – input vector</p></li>
-<li><p><strong>v</strong> – vector of Lagrange multipliers</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>gradient of objective/Lagrangian, and Jacobian, type scipy.sparse.coo_matrix</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="pycutest.CUTEstProblem.sphess">
-<code class="descname">sphess</code><span class="sig-paren">(</span><em>x</em>, <em>v=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pycutest.CUTEstProblem.sphess" title="Permalink to this definition">¶</a></dt>
-<dd><p>Evaluate sparse Hessian of objective or Lagrangian.
-For constrained problems, the Hessian is L_{x,x}(x,v).</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Hessian of objective (unconstrained problems)</span>
-<span class="n">H</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">sphess</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-<span class="c1"># Hessian of Lagrangian (constrained problems)</span>
-<span class="n">H</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">sphess</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>For unconstrained problems, v must be None.
-For constrained problems, v must be specified.
-To evaluate the Hessian of the objective for constrained problems use isphess()</p>
-<p>The matrix H is of type scipy.sparse.coo_matrix.</p>
-<p>For small problems, problem.hess returns dense matrices.</p>
-<p>This calls CUTEst routine CUTEST_csh or CUTEST_ush.</p>
-<p>Note: in CUTEst, the sign convention is such that the Lagrangian = objective + lagrange_multipliers * constraints</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> – input vector</p></li>
-<li><p><strong>v</strong> – vector of Lagrange multipliers. Must be specified for constrained problems.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Hessian of objective or Lagrangian, type scipy.sparse.coo_matrix</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
+<p>Please click on a function below for full documentation:</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="functions/pycutest.CUTEstProblem.objcons.html#pycutest.CUTEstProblem.objcons" title="pycutest.CUTEstProblem.objcons"><code class="xref py py-obj docutils literal notranslate"><span class="pre">objcons</span></code></a>(x)</p></td>
+<td><p>Evaluate objective and constraints.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="functions/pycutest.CUTEstProblem.obj.html#pycutest.CUTEstProblem.obj" title="pycutest.CUTEstProblem.obj"><code class="xref py py-obj docutils literal notranslate"><span class="pre">obj</span></code></a>(x[, gradient])</p></td>
+<td><p>Evaluate the objective (and optionally its gradient).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="functions/pycutest.CUTEstProblem.cons.html#pycutest.CUTEstProblem.cons" title="pycutest.CUTEstProblem.cons"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cons</span></code></a>(x[, index, gradient])</p></td>
+<td><p>Evaluate the constraints (and optionally their Jacobian).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="functions/pycutest.CUTEstProblem.lagjac.html#pycutest.CUTEstProblem.lagjac" title="pycutest.CUTEstProblem.lagjac"><code class="xref py py-obj docutils literal notranslate"><span class="pre">lagjac</span></code></a>(x[, v])</p></td>
+<td><p>Evaluate gradient of objective/Lagrangian, and Jacobian of constraints.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="functions/pycutest.CUTEstProblem.jprod.html#pycutest.CUTEstProblem.jprod" title="pycutest.CUTEstProblem.jprod"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jprod</span></code></a>(p[, transpose, x])</p></td>
+<td><p>Evaluate product of constraint Jacobian with a vector p</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="functions/pycutest.CUTEstProblem.hess.html#pycutest.CUTEstProblem.hess" title="pycutest.CUTEstProblem.hess"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hess</span></code></a>(x[, v])</p></td>
+<td><p>Evaluate the Hessian of the objective or Lagrangian.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="functions/pycutest.CUTEstProblem.ihess.html#pycutest.CUTEstProblem.ihess" title="pycutest.CUTEstProblem.ihess"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ihess</span></code></a>(x[, cons_index])</p></td>
+<td><p>Evaluate the Hessian of the objective or the index-th constraint.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="functions/pycutest.CUTEstProblem.hprod.html#pycutest.CUTEstProblem.hprod" title="pycutest.CUTEstProblem.hprod"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hprod</span></code></a>(p[, x, v])</p></td>
+<td><p>Calculate Hessian-vector product H*p, where H is Hessian of objective (unconstrained) or Lagrangian (constrained).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="functions/pycutest.CUTEstProblem.gradhess.html#pycutest.CUTEstProblem.gradhess" title="pycutest.CUTEstProblem.gradhess"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gradhess</span></code></a>(x[, v, gradient_of_lagrangian])</p></td>
+<td><p>Evaluate the gradient of objective or Lagrangian, Jacobian of constraints and Hessian of objective/Lagrangian.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="functions/pycutest.CUTEstProblem.report.html#pycutest.CUTEstProblem.report" title="pycutest.CUTEstProblem.report"><code class="xref py py-obj docutils literal notranslate"><span class="pre">report</span></code></a>()</p></td>
+<td><p>Get CUTEst usage statistics.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="functions/pycutest.CUTEstProblem.scons.html#pycutest.CUTEstProblem.scons" title="pycutest.CUTEstProblem.scons"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scons</span></code></a>(x[, index, gradient])</p></td>
+<td><p>Evaluate the constraints and optionally their sparse Jacobian/gradient.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="functions/pycutest.CUTEstProblem.slagjac.html#pycutest.CUTEstProblem.slagjac" title="pycutest.CUTEstProblem.slagjac"><code class="xref py py-obj docutils literal notranslate"><span class="pre">slagjac</span></code></a>(x[, v])</p></td>
+<td><p>Evaluate sparse gradient of objective or Lagrangian, and sparse Jacobian of constraints</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="functions/pycutest.CUTEstProblem.sphess.html#pycutest.CUTEstProblem.sphess" title="pycutest.CUTEstProblem.sphess"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sphess</span></code></a>(x[, v])</p></td>
+<td><p>Evaluate sparse Hessian of objective or Lagrangian.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="functions/pycutest.CUTEstProblem.isphess.html#pycutest.CUTEstProblem.isphess" title="pycutest.CUTEstProblem.isphess"><code class="xref py py-obj docutils literal notranslate"><span class="pre">isphess</span></code></a>(x[, cons_index])</p></td>
+<td><p>Evaluate the sparse Hessian of the objective or the index-th constraint.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="functions/pycutest.CUTEstProblem.gradsphess.html#pycutest.CUTEstProblem.gradsphess" title="pycutest.CUTEstProblem.gradsphess"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gradsphess</span></code></a>(x[, v, gradient_of_lagrangian])</p></td>
+<td><p>Evaluate the gradient of objective or Lagrangian, Jacobian of constraints and Hessian of objective/Lagrangian.</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 
@@ -659,7 +304,7 @@ To evaluate the Hessian of the objective for constrained problems use isphess()<
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="example.html" class="btn btn-neutral float-right" title="Example Usage" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="functions/pycutest.CUTEstProblem.objcons.html" class="btn btn-neutral float-right" title="pycutest.CUTEstProblem.objcons" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="building.html" class="btn btn-neutral float-left" title="Building Test Problems" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
@@ -697,7 +342,13 @@ To evaluate the Hessian of the objective for constrained problems use isphess()<
   
   
     
-   
+    
+
+  <style>
+         .wy-nav-content { max-width: none; }
+  </style>
+
+
 
 </body>
 </html>

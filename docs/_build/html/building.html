@@ -191,7 +191,7 @@ We can check the properties of a specific function with <code class="code docuti
 <p>Full documentation for these functions is given below.</p>
 <dl class="function">
 <dt id="pycutest.find_problems">
-<code class="descclassname">pycutest.</code><code class="descname">find_problems</code><span class="sig-paren">(</span><em>objective=None</em>, <em>constraints=None</em>, <em>regular=None</em>, <em>degree=None</em>, <em>origin=None</em>, <em>internal=None</em>, <em>n=None</em>, <em>userN=None</em>, <em>m=None</em>, <em>userM=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pycutest.find_problems" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pycutest.</code><code class="sig-name descname">find_problems</code><span class="sig-paren">(</span><em class="sig-param">objective=None</em>, <em class="sig-param">constraints=None</em>, <em class="sig-param">regular=None</em>, <em class="sig-param">degree=None</em>, <em class="sig-param">origin=None</em>, <em class="sig-param">internal=None</em>, <em class="sig-param">n=None</em>, <em class="sig-param">userN=None</em>, <em class="sig-param">m=None</em>, <em class="sig-param">userM=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pycutest.find_problems" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the problem names of problems that match the given requirements.
 The search is based on the CUTEst problem classification string.</p>
 <p>Problems with a user-settable number of variables/constraints match any given n / m.</p>
@@ -221,7 +221,7 @@ The search is based on the CUTEst problem classification string.</p>
 
 <dl class="function">
 <dt id="pycutest.problem_properties">
-<code class="descclassname">pycutest.</code><code class="descname">problem_properties</code><span class="sig-paren">(</span><em>problemName</em><span class="sig-paren">)</span><a class="headerlink" href="#pycutest.problem_properties" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pycutest.</code><code class="sig-name descname">problem_properties</code><span class="sig-paren">(</span><em class="sig-param">problemName</em><span class="sig-paren">)</span><a class="headerlink" href="#pycutest.problem_properties" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns problem properties (uses the CUTEst problem classification string).</p>
 <p>See <a class="reference external" href="http://www.cuter.rl.ac.uk/Problems/classification.shtml">http://www.cuter.rl.ac.uk/Problems/classification.shtml</a> for details on the properties.</p>
 <p>The output is a dictionary with the following members:</p>
@@ -283,7 +283,7 @@ CUTEst problem ARGLALE (params {&#39;M&#39;: 200, &#39;N&#39;: 100}) with 100 va
 <p>Full documentation for these functions is given below.</p>
 <dl class="function">
 <dt id="pycutest.print_available_sif_params">
-<code class="descclassname">pycutest.</code><code class="descname">print_available_sif_params</code><span class="sig-paren">(</span><em>problemName</em><span class="sig-paren">)</span><a class="headerlink" href="#pycutest.print_available_sif_params" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pycutest.</code><code class="sig-name descname">print_available_sif_params</code><span class="sig-paren">(</span><em class="sig-param">problemName</em><span class="sig-paren">)</span><a class="headerlink" href="#pycutest.print_available_sif_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Call sifdecode on given problem to print out available parameters
 This function is OS dependent. Currently works only for Linux and MacOS.</p>
 <dl class="field-list simple">
@@ -298,7 +298,7 @@ This function is OS dependent. Currently works only for Linux and MacOS.</p>
 
 <dl class="function">
 <dt id="pycutest.import_problem">
-<code class="descclassname">pycutest.</code><code class="descname">import_problem</code><span class="sig-paren">(</span><em>problemName</em>, <em>destination=None</em>, <em>sifParams=None</em>, <em>sifOptions=None</em>, <em>efirst=False</em>, <em>lfirst=False</em>, <em>nvfirst=False</em>, <em>quiet=True</em>, <em>drop_fixed_variables=True</em><span class="sig-paren">)</span><a class="headerlink" href="#pycutest.import_problem" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pycutest.</code><code class="sig-name descname">import_problem</code><span class="sig-paren">(</span><em class="sig-param">problemName</em>, <em class="sig-param">destination=None</em>, <em class="sig-param">sifParams=None</em>, <em class="sig-param">sifOptions=None</em>, <em class="sig-param">efirst=False</em>, <em class="sig-param">lfirst=False</em>, <em class="sig-param">nvfirst=False</em>, <em class="sig-param">quiet=True</em>, <em class="sig-param">drop_fixed_variables=True</em><span class="sig-paren">)</span><a class="headerlink" href="#pycutest.import_problem" title="Permalink to this definition">¶</a></dt>
 <dd><p>Prepares a problem interface module, imports and initializes it.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -328,7 +328,7 @@ A problem can be cleared from the cache using <code class="code docutils literal
 Documentation for these functions is given below.</p>
 <dl class="function">
 <dt id="pycutest.clear_cache">
-<code class="descclassname">pycutest.</code><code class="descname">clear_cache</code><span class="sig-paren">(</span><em>problemName</em>, <em>sifParams=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pycutest.clear_cache" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pycutest.</code><code class="sig-name descname">clear_cache</code><span class="sig-paren">(</span><em class="sig-param">problemName</em>, <em class="sig-param">sifParams=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pycutest.clear_cache" title="Permalink to this definition">¶</a></dt>
 <dd><p>Deletes a saved problem.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -342,7 +342,7 @@ Documentation for these functions is given below.</p>
 
 <dl class="function">
 <dt id="pycutest.all_cached_problems">
-<code class="descclassname">pycutest.</code><code class="descname">all_cached_problems</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pycutest.all_cached_problems" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pycutest.</code><code class="sig-name descname">all_cached_problems</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pycutest.all_cached_problems" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a list of all cached problems.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -400,7 +400,13 @@ Documentation for these functions is given below.</p>
   
   
     
-   
+    
+
+  <style>
+         .wy-nav-content { max-width: none; }
+  </style>
+
+
 
 </body>
 </html>
