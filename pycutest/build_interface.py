@@ -141,6 +141,12 @@ def decode_and_compile_problem(problemName, destination=None, sifParams=None, si
     *destination* must not contain dots because it is a part of a Python module name.
     """
 
+    # Define FileNotFoundError on Python 2
+    try:
+        FileNotFoundError
+    except NameError:
+        FileNotFoundError = OSError
+
     # Default destination
     if destination is None:
         destination=problemName
@@ -184,6 +190,7 @@ def decode_and_compile_problem(problemName, destination=None, sifParams=None, si
 
         # Collect output
         messages=p.stdout.read()
+        p.stdout.close()
 
         # Now wait for the process to finish. If we don't wait p might get garbage-collected before the
         # actual process finishes which can result in a crash of the interpreter.
