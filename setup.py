@@ -34,7 +34,7 @@ setup(
     author='Jaroslav Fowkes and Lindon Roberts',
     author_email='jaroslav.fowkes@maths.ox.ac.uk',
     url="https://github.com/jfowkes/pycutest/",
-    #download_url="https://github.com/jfowkes/pycutest/archive/v0.2.tar.gz",
+    download_url="https://github.com/jfowkes/pycutest/archive/v1.0.tar.gz",
     packages=['pycutest'],
     license='GNU GPL',
     keywords = "mathematics optimization",
