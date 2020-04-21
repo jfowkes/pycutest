@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Example Usage &mdash; PyCUTEst v0.2 documentation</title>
+  <title>Example Usage &mdash; PyCUTEst v1.0 documentation</title>
   
 
   
@@ -21,10 +21,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                0.2
+                1.0
               </div>
             
           
@@ -166,29 +166,29 @@
 
 <span class="c1"># Ensure compatibility with Python 2</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pycutest</span>
 
 <span class="n">p</span> <span class="o">=</span> <span class="n">pycutest</span><span class="o">.</span><span class="n">import_problem</span><span class="p">(</span><span class="s1">&#39;ROSENBR&#39;</span><span class="p">)</span>
 
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;Rosenbrock function in </span><span class="si">%g</span><span class="s2">D&quot;</span> <span class="o">%</span> <span class="n">p</span><span class="o">.</span><span class="n">n</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Rosenbrock function in </span><span class="si">%g</span><span class="s2">D&quot;</span> <span class="o">%</span> <span class="n">p</span><span class="o">.</span><span class="n">n</span><span class="p">)</span>
 
 <span class="n">iters</span> <span class="o">=</span> <span class="mi">0</span>
 
 <span class="n">x</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">x0</span>
-<span class="n">f</span><span class="p">,</span> <span class="n">g</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">obj</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">gradient</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>  <span class="c1"># objective and gradient</span>
+<span class="n">f</span><span class="p">,</span> <span class="n">g</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">obj</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">gradient</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># objective and gradient</span>
 <span class="n">H</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">hess</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># Hessian</span>
 
 <span class="k">while</span> <span class="n">iters</span> <span class="o">&lt;</span> <span class="mi">100</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">g</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">1e-10</span><span class="p">:</span>
-    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Iteration </span><span class="si">%g</span><span class="s2">: objective value is </span><span class="si">%g</span><span class="s2"> with norm of gradient </span><span class="si">%g</span><span class="s2"> at x = </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">iters</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">g</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Iteration </span><span class="si">%g</span><span class="s2">: objective value is </span><span class="si">%g</span><span class="s2"> with norm of gradient </span><span class="si">%g</span><span class="s2"> at x = </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">iters</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">g</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span>
     <span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="o">-</span><span class="n">g</span><span class="p">)</span>  <span class="c1"># Newton step</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">s</span>  <span class="c1"># used fixed step length</span>
-    <span class="n">f</span><span class="p">,</span> <span class="n">g</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">obj</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">gradient</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">f</span><span class="p">,</span> <span class="n">g</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">obj</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">gradient</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">H</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">hess</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
     <span class="n">iters</span> <span class="o">+=</span> <span class="mi">1</span>
 
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;Found minimum x = </span><span class="si">%s</span><span class="s2"> after </span><span class="si">%g</span><span class="s2"> iterations&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">iters</span><span class="p">))</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;Done&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Found minimum x = </span><span class="si">%s</span><span class="s2"> after </span><span class="si">%g</span><span class="s2"> iterations&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">iters</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Done&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>For this problem, Newton’s method finds the unique local and global minimum <code class="code docutils literal notranslate"><span class="pre">f(1,1)=0</span></code> quickly:</p>

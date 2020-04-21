@@ -12,3 +12,8 @@ Version 0.2 (6 Jun 2019)
 * Recognise local gfortran installation for Mac
 * Update required NumPy and SciPy versions for Python 2.7
 
+Version 1.0 (22 Apr 2020)
+-------------------------
+* Handle non-letter characters in SIF parameter names
+* Fix unclosed file warnings on Mac
+* Automatically check if PYCUTEST_CACHE variable is in system path
