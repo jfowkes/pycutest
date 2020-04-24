@@ -1,0 +1,257 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pycutest.import_problem &mdash; PyCUTEst v1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pycutest.clear_cache" href="pycutest.clear_cache.html" />
+    <link rel="prev" title="pycutest.print_available_sif_params" href="pycutest.print_available_sif_params.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> PyCUTEst
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installing PyCUTEst</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../building.html">Building Test Problems</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../building.html#finding-problems">Finding Problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../building.html#building-problems">Building Problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../building.html#cache-management">Cache Management</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../building.html#full-function-documentation">Full function documentation</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="pycutest.find_problems.html">pycutest.find_problems</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pycutest.problem_properties.html">pycutest.problem_properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pycutest.print_available_sif_params.html">pycutest.print_available_sif_params</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">pycutest.import_problem</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pycutest.clear_cache.html">pycutest.clear_cache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pycutest.all_cached_problems.html">pycutest.all_cached_problems</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../interface.html">Problem Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../example.html">Example Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../history.html">Version History</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PyCUTEst</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../building.html">Building Test Problems</a> &raquo;</li>
+        
+      <li>pycutest.import_problem</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/functions/pycutest.import_problem.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="pycutest-import-problem">
+<h1>pycutest.import_problem<a class="headerlink" href="#pycutest-import-problem" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="pycutest.import_problem">
+<code class="sig-prename descclassname">pycutest.</code><code class="sig-name descname">import_problem</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">problemName</span></em>, <em class="sig-param"><span class="n">destination</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sifParams</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sifOptions</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">efirst</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">lfirst</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">nvfirst</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">quiet</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">drop_fixed_variables</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycutest.import_problem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prepares a problem interface module, imports and initializes it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>problemName</strong> – CUTEst problem name</p></li>
+<li><p><strong>destination</strong> – the name under which the compiled problem interface is stored in the cache (default = <code class="docutils literal notranslate"><span class="pre">problemName</span></code>)</p></li>
+<li><p><strong>sifParams</strong> – SIF file parameters to use (as dict, keys must be strings)</p></li>
+<li><p><strong>sifOptions</strong> – additional options passed to sifdecode given in the form of a list of strings.</p></li>
+<li><p><strong>efirst</strong> – order equation constraints first (default <code class="docutils literal notranslate"><span class="pre">True</span></code>)</p></li>
+<li><p><strong>lfirst</strong> – order linear constraints first (default <code class="docutils literal notranslate"><span class="pre">True</span></code>)</p></li>
+<li><p><strong>nvfirst</strong> – order nonlinear variables before linear variables (default <code class="docutils literal notranslate"><span class="pre">False</span></code>)</p></li>
+<li><p><strong>quiet</strong> – suppress output (default <code class="docutils literal notranslate"><span class="pre">True</span></code>)</p></li>
+<li><p><strong>drop_fixed_variables</strong> – in the resulting problem object, are fixed variables hidden from the user (default <code class="docutils literal notranslate"><span class="pre">True</span></code>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a reference to the Python interface class for this problem (class <code class="docutils literal notranslate"><span class="pre">pycutest.CUTEstProblem</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="pycutest.clear_cache.html" class="btn btn-neutral float-right" title="pycutest.clear_cache" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="pycutest.print_available_sif_params.html" class="btn btn-neutral float-left" title="pycutest.print_available_sif_params" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Jaroslav Fowkes and Lindon Roberts
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+  <style>
+         .wy-nav-content { max-width: none; }
+  </style>
+
+
+
+</body>
+</html>

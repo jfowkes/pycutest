@@ -15,5 +15,5 @@ Version 0.2 (6 Jun 2019)
 Version 1.0 (22 Apr 2020)
 -------------------------
 * Handle non-letter characters in SIF parameter names
-* Fix unclosed file warnings on Mac
+* Fix unclosed file warnings
 * Automatically check if PYCUTEST_CACHE variable is in system path
