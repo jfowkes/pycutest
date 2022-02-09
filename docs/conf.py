@@ -54,7 +54,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'PyCUTEst'
-copyright = '2018, Jaroslav Fowkes and Lindon Roberts'
+copyright = '2020, Jaroslav Fowkes and Lindon Roberts'
 author = 'Jaroslav Fowkes and Lindon Roberts'
 
 # The version info for the project you're documenting, acts as replacement for

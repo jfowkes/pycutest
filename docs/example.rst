@@ -8,7 +8,7 @@ The following code presents a simple use of PyCUTEst to minimize `Rosenbrock's f
     """
     PyCUTEst example: minimize 2D Rosenbrock function using Newton's method.
 
-    Jaroslav Fowkes and Lindon Roberts, 2018.
+    Jaroslav Fowkes and Lindon Roberts, 2020.
     """
 
     # Ensure compatibility with Python 2
