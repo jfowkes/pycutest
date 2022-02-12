@@ -1,6 +1,6 @@
-================================================================================================================
-PyCUTEst: A Python interface to the CUTEst Optimization Test Environment |License| |Build Status| |PyPI Version|
-================================================================================================================
+============================================================================================================================
+PyCUTEst: A Python interface to the CUTEst Optimization Test Environment |License| |Build Status| |PyPI Version| |Downloads|
+============================================================================================================================
 
 PyCUTEst is a Python interface to `CUTEst <https://github.com/ralna/CUTEst>`_, a Fortran package for testing optimization software. It is based on the `interface originally developed for CUTEr <http://fides.fe.uni-lj.si/~arpadb/software-pycuter.html>`_ by `Prof. Arpad Buermen <http://www.fe.uni-lj.si/en/the_faculty/staff/alphabetically/55/>`_.
 
@@ -204,5 +204,10 @@ This algorithm is released under the GNU GPL license.
              :alt: GNU GPL v3 License
 .. |Build Status| image::  https://travis-ci.org/jfowkes/pycutest.svg?branch=master
                   :target: https://travis-ci.org/jfowkes/pycutest
+                  :alt: Build status
 .. |PyPI Version| image:: https://img.shields.io/pypi/v/pycutest.svg
                   :target: https://pypi.python.org/pypi/pycutest
+                  :alt: PyPI version
+.. |Downloads| image:: https://static.pepy.tech/personalized-badge/pycutest?period=total&units=international_system&left_color=black&right_color=green&left_text=Downloads
+               :target: https://pepy.tech/project/pycutest
+               :alt: Total downloads                  
