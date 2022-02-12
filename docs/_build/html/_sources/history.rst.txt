@@ -17,3 +17,7 @@ Version 1.0 (22 Apr 2020)
 * Handle non-letter characters in SIF parameter names
 * Fix unclosed file warnings
 * Automatically check if PYCUTEST_CACHE variable is in system path
+
+Version 1.1 (14 Feb 2022)
+-------------------------
+* Automatically add PYCUTEST_CACHE to PYTHONPATH at runtime (simplifies installation)

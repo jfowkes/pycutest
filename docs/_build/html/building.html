@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Building Test Problems &mdash; PyCUTEst v1.0 documentation</title>
+  <title>Building Test Problems &mdash; PyCUTEst v1.1 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                1.0
+                1.1
               </div>
             
           
@@ -241,7 +241,7 @@ CUTEst problem ARGLALE (params {&#39;M&#39;: 200, &#39;N&#39;: 100}) with 100 va
 </div>
 <div class="section" id="cache-management">
 <h2>Cache Management<a class="headerlink" href="#cache-management" title="Permalink to this headline">¶</a></h2>
-<p>PyCUTEst works by compiling each problem in its own folder inside its cache (given by the <code class="code docutils literal notranslate"><span class="pre">PYCUTEST_CACHE</span></code> environment variable).
+<p>PyCUTEst works by compiling each problem in its own folder inside its cache (given by the <code class="code docutils literal notranslate"><span class="pre">PYCUTEST_CACHE</span></code> environment variable if specified, or the current working directory if not).
 A problem can be cleared from the cache using <a class="reference external" href="functions/pycutest.clear_cache.html">clear_cache()</a>, and a list of all problems currently installed can be displayed with <a class="reference external" href="functions/pycutest.all_cached_problems.html">all_cached_problems()</a>.
 Documentation for these functions is given below.</p>
 </div>
@@ -297,7 +297,7 @@ Documentation for these functions is given below.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2020, Jaroslav Fowkes and Lindon Roberts
+        &copy; Copyright 2020-2022, Jaroslav Fowkes and Lindon Roberts
 
     </p>
   </div>

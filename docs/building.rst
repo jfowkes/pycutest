@@ -73,7 +73,7 @@ Full documentation for these functions is given below.
 
 Cache Management
 ----------------
-PyCUTEst works by compiling each problem in its own folder inside its cache (given by the :code:`PYCUTEST_CACHE` environment variable).
+PyCUTEst works by compiling each problem in its own folder inside its cache (given by the :code:`PYCUTEST_CACHE` environment variable if specified, or the current working directory if not).
 A problem can be cleared from the cache using `clear_cache() <functions/pycutest.clear_cache.html>`_, and a list of all problems currently installed can be displayed with `all_cached_problems() <functions/pycutest.all_cached_problems.html>`_.
 Documentation for these functions is given below.
 

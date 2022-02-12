@@ -10,11 +10,11 @@ Python interface to the CUTEst optimization test environment
 
 **Release:** |version|
 
-**Date:** 22 April 2020
+**Date:** 14 February 2022
 
-**Author:** `Jaroslav Fowkes <jaroslav.fowkes@maths.ox.ac.uk@maths.ox.ac.uk>`_ and `Lindon Roberts <lindon.roberts@maths.ox.ac.uk>`_
+**Author:** `Jaroslav Fowkes <jaroslav.fowkes@maths.ox.ac.uk>`_ and `Lindon Roberts <https://lindonroberts.github.io/>`_
 
-PyCUTEst is a Python interface to `CUTEst <https://github.com/ralna/CUTEst>`_, a Fortran package for testing optimization software [1]_. It is based on the interface originally developed for CUTEr by `Prof. Arpad Buermen <http://www.fe.uni-lj.si/en/the_faculty/staff/alphabetically/55/>`_ [2]_. Currently it supports Mac and Linux only, although on Windows 10 it can be used through the `Windows Subsystem for Linux <https://docs.microsoft.com/en-us/windows/wsl/faq>`_, following the Linux installation instructions.
+PyCUTEst is a Python interface to `CUTEst <https://github.com/ralna/CUTEst>`_, a Fortran package for testing optimization software [1]_. It is based on the interface originally developed for CUTEr by `Prof. Arpad Buermen <http://www.fe.uni-lj.si/en/the_faculty/staff/alphabetically/55/>`_ [2]_. Currently it supports Mac and Linux only, although on Windows 10 (and later) it can be used through the `Windows Subsystem for Linux <https://docs.microsoft.com/en-us/windows/wsl/>`_, following the Linux installation instructions.
 
 In essence, this package gives convenient access to a large collection of nonlinear optimization test problems.
 

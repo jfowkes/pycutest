@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Installing PyCUTEst &mdash; PyCUTEst v1.0 documentation</title>
+  <title>Installing PyCUTEst &mdash; PyCUTEst v1.1 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                1.0
+                1.1
               </div>
             
           
@@ -90,8 +90,8 @@
 <li class="toctree-l2"><a class="reference internal" href="#requirements">Requirements</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#installing-cutest-on-linux">Installing CUTEst on Linux</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#installing-cutest-on-mac">Installing CUTEst on Mac</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#installation-using-pip">Installation using pip</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#manual-installation">Manual installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installing-pycutest-using-pip">Installing PyCUTEst using pip</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#manual-installation-of-pycutest">Manual installation of PyCUTEst</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#testing">Testing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#uninstallation">Uninstallation</a></li>
 </ul>
@@ -173,12 +173,12 @@
 <li><p>Python 2.7 or Python 3 (<a class="reference external" href="http://www.python.org/">http://www.python.org/</a>)</p></li>
 <li><p>CUTEst (see below)</p></li>
 </ul>
-<p>Additionally, the following python packages should be installed (these will be installed automatically if using <em>pip</em>, see <a class="reference internal" href="#installation-using-pip">Installation using pip</a>):</p>
+<p>Additionally, the following python packages should be installed (these will be installed automatically if using <em>pip</em>, see <a class="reference internal" href="#installing-pycutest-using-pip">Installing PyCUTEst using pip</a>):</p>
 <ul class="simple">
 <li><p>NumPy 1.11 or higher (<a class="reference external" href="http://www.numpy.org/">http://www.numpy.org/</a>)</p></li>
 <li><p>SciPy 0.18 or higher (<a class="reference external" href="http://www.scipy.org/">http://www.scipy.org/</a>)</p></li>
 </ul>
-<p><strong>Please Note:</strong> Currently PyCUTEst only supports Mac and Linux. For Windows 10 users, PyCUTEst can be used through the <a class="reference external" href="https://docs.microsoft.com/en-us/windows/wsl/faq">Windows Subsystem for Linux</a>, following the Linux installation instructions.</p>
+<p><strong>Please Note:</strong> Currently PyCUTEst only supports Mac and Linux. For Windows 10 (or later) users, PyCUTEst can be used through the <a class="reference external" href="https://docs.microsoft.com/en-us/windows/wsl/">Windows Subsystem for Linux</a>, following the Linux installation instructions.</p>
 </div>
 <div class="section" id="installing-cutest-on-linux">
 <h2>Installing CUTEst on Linux<a class="headerlink" href="#installing-cutest-on-linux" title="Permalink to this headline">¶</a></h2>
@@ -255,8 +255,8 @@ $ <span class="k">done</span>
 </div>
 </div></blockquote>
 </div>
-<div class="section" id="installation-using-pip">
-<h2>Installation using pip<a class="headerlink" href="#installation-using-pip" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="installing-pycutest-using-pip">
+<h2>Installing PyCUTEst using pip<a class="headerlink" href="#installing-pycutest-using-pip" title="Permalink to this headline">¶</a></h2>
 <p>For easy installation, use <a class="reference external" href="http://www.pip-installer.org/">pip</a> as root:</p>
 <blockquote>
 <div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="o">[</span>sudo<span class="o">]</span> pip install pycutest
@@ -292,13 +292,13 @@ $ <span class="k">done</span>
 <p>And set an environment variable to add this to tell PyCUTEst about this directory, by adding to your <code class="code docutils literal notranslate"><span class="pre">~/.bashrc</span></code> file:</p>
 <blockquote>
 <div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">PYCUTEST_CACHE</span><span class="o">=</span><span class="s2">&quot;/path/to/pycutest_cache&quot;</span>
-<span class="nb">export</span> <span class="nv">PYTHONPATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">PYCUTEST_CACHE</span><span class="si">}</span><span class="s2">:</span><span class="si">${</span><span class="nv">PYTHONPATH</span><span class="si">}</span><span class="s2">&quot;</span>
 </pre></div>
 </div>
 </div></blockquote>
+<p>If you do not set this environment variable, then PyCUTEst will create a cache folder of compiled problems inside your current working directory.</p>
 </div>
-<div class="section" id="manual-installation">
-<h2>Manual installation<a class="headerlink" href="#manual-installation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="manual-installation-of-pycutest">
+<h2>Manual installation of PyCUTEst<a class="headerlink" href="#manual-installation-of-pycutest" title="Permalink to this headline">¶</a></h2>
 <p>Alternatively, you can download the source code from <a class="reference external" href="https://github.com/jfowkes/pycutest">Github</a> and unpack as follows:</p>
 <blockquote>
 <div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/jfowkes/pycutest
@@ -370,7 +370,7 @@ $ <span class="o">[</span>sudo<span class="o">]</span> pip install .  <span clas
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2020, Jaroslav Fowkes and Lindon Roberts
+        &copy; Copyright 2020-2022, Jaroslav Fowkes and Lindon Roberts
 
     </p>
   </div>
