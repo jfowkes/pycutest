@@ -13,7 +13,7 @@ PyCUTEst requires the following software to be installed:
 * Python 2.7 or Python 3 (http://www.python.org/)
 * CUTEst (see below)
 
-Additionally, the following python packages should be installed (these will be installed automatically if using *pip*, see `Installation using pip`_):
+Additionally, the following python packages should be installed (these will be installed automatically if using *pip*, see `Installing PyCUTEst using pip`_):
 
 * NumPy 1.11 or higher (http://www.numpy.org/)
 * SciPy 0.18 or higher (http://www.scipy.org/)
@@ -97,8 +97,8 @@ Then you can easily install CUTEst:
     $   echo ". $(brew --prefix $f)/$f.bashrc" >> ~/.bashrc; \
     $ done
 
-Installation using pip
-----------------------
+Installing PyCUTEst using pip
+-----------------------------
 For easy installation, use `pip <http://www.pip-installer.org/>`_ as root:
 
  .. code-block:: bash
@@ -138,11 +138,12 @@ And set an environment variable to tell PyCUTEst about this directory, by adding
  .. code-block:: bash
 
     export PYCUTEST_CACHE="/path/to/pycutest_cache"
-    export PYTHONPATH="${PYCUTEST_CACHE}:${PYTHONPATH}"
+
+If you do not set this environment variable, then PyCUTEst will create a cache folder of compiled problems inside your current working directory.
     
 
-Manual installation
--------------------
+Manual installation of PyCUTEst
+-------------------------------
 Alternatively, you can download the source code from `Github <https://github.com/jfowkes/pycutest>`_ and unpack as follows:
 
  .. code-block:: bash
