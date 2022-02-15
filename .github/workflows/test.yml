@@ -29,9 +29,11 @@ jobs:
         git clone https://github.com/ralna/ARCHDefs ./cutest/archdefs &&
         git clone https://github.com/ralna/SIFDecode ./cutest/sifdecode &&
         git clone https://github.com/ralna/CUTEst ./cutest/cutest &&
-        ln -s $TRAVIS_BUILD_DIR/pycutest/tests/problems ./cutest/mastsif &&
+        ln -s $GITHUB_WORKSPACE/pycutest/tests/problems ./cutest/mastsif &&
         source ./.cutest.env &&
         ./.install_cutest.sh
+        mkdir $GITHUB_WORKSPACE/pycutest_cache
+        export PYCUTEST_CACHE="$GITHUB_WORKSPACE/pycutest_cache"
         python setup.py install
     - name: Tests
       run: |
