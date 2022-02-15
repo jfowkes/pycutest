@@ -190,8 +190,8 @@ class TestALLINITC_with_fixed(unittest.TestCase):
         self.assertTrue(array_compare(p.v0, np.array([0.0])), msg="Wrong v0")
         self.assertTrue(array_compare(p.cl, np.array([0.0])), msg="Wrong cl") 
         self.assertTrue(array_compare(p.cu, np.array([0.0])), msg="Wrong cu")
-        self.assertEqual(p.is_eq_cons, np.array([True], dtype=np.bool), msg="Wrong is_eq_cons")
-        self.assertEqual(p.is_linear_cons, np.array([False], dtype=np.bool), msg="Wrong is_linear_cons")
+        self.assertEqual(p.is_eq_cons, np.array([True], dtype=bool), msg="Wrong is_eq_cons")
+        self.assertEqual(p.is_linear_cons, np.array([False], dtype=bool), msg="Wrong is_linear_cons")
 
         # If we need to multiply against another vector, use these
         ps = [np.zeros((4,)), 0.3 * np.ones((4,)), -0.5*np.arange(4)]
@@ -328,8 +328,8 @@ class TestALLINITC_with_free(unittest.TestCase):
         self.assertTrue(array_compare(p.v0, np.array([0.0])), msg="Wrong v0")
         self.assertTrue(array_compare(p.cl, np.array([0.0])), msg="Wrong cl") 
         self.assertTrue(array_compare(p.cu, np.array([0.0])), msg="Wrong cu")
-        self.assertEqual(p.is_eq_cons, np.array([True], dtype=np.bool), msg="Wrong is_eq_cons")
-        self.assertEqual(p.is_linear_cons, np.array([False], dtype=np.bool), msg="Wrong is_linear_cons")
+        self.assertEqual(p.is_eq_cons, np.array([True], dtype=bool), msg="Wrong is_eq_cons")
+        self.assertEqual(p.is_linear_cons, np.array([False], dtype=bool), msg="Wrong is_linear_cons")
 
         # If we need to multiply against another vector, use these
         ps = [np.zeros((3,)), 0.3 * np.ones((3,)), -0.5*np.arange(3)]
