@@ -203,8 +203,8 @@ This algorithm is released under the GNU GPL license.
 .. |License| image::  https://img.shields.io/badge/License-GPL%20v3-blue.svg
              :target: https://www.gnu.org/licenses/gpl-3.0
              :alt: GNU GPL v3 License
-.. |Build Status| image::  https://travis-ci.org/jfowkes/pycutest.svg?branch=master
-                  :target: https://travis-ci.org/jfowkes/pycutest
+.. |Build Status| image::  https://img.shields.io/github/workflow/status/jfowkes/pycutest/Tests?style=flat-square
+                  :target: https://github.com/jfowkes/pycutest/actions/workflows/test.yml
                   :alt: Build status
 .. |PyPI Version| image:: https://img.shields.io/pypi/v/pycutest.svg
                   :target: https://pypi.python.org/pypi/pycutest
