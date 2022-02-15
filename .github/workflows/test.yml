@@ -41,3 +41,4 @@ jobs:
         python -m unittest pycutest.tests.test_sifdecode_extras
         python -m unittest pycutest.tests.test_basic_functionality
         python -m unittest pycutest.tests.test_sparse_functionality
+        python -m unittest pycutest.tests.test_sifparam_chars.py
