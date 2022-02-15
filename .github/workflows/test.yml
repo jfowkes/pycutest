@@ -37,6 +37,7 @@ jobs:
         python setup.py install
     - name: Tests
       run: |
+        source ./.cutest.env
         python -m unittest pycutest.tests.test_sifdecode_extras
         python -m unittest pycutest.tests.test_basic_functionality
         python -m unittest pycutest.tests.test_sparse_functionality
