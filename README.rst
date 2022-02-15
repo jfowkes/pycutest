@@ -1,6 +1,6 @@
-=============================================================================================================
-PyCUTEst: A Python interface to the CUTEst Optimization Test Environment |License| |PyPI Version| |Downloads|
-=============================================================================================================
+============================================================================================================================
+PyCUTEst: A Python interface to the CUTEst Optimization Test Environment |License| |Build Status| |PyPI Version| |Downloads|
+============================================================================================================================
 
 PyCUTEst is a Python interface to `CUTEst <https://github.com/ralna/CUTEst>`_, a Fortran package for testing optimization software. It is based on the `interface originally developed for CUTEr <http://fides.fe.uni-lj.si/~arpadb/software-pycuter.html>`_ by `Prof. Arpad Buermen <http://www.fe.uni-lj.si/en/the_faculty/staff/alphabetically/55/>`_.
 
@@ -18,7 +18,7 @@ Additionally, the following python packages should be installed (these will be i
 * NumPy 1.11 or higher (http://www.numpy.org/)
 * SciPy 0.18 or higher (http://www.scipy.org/)
 
-**Please Note:** Currently PyCUTEst only supports Mac and Linux. For Windows 10 (and later), PyCUTEst can be used through the `Windows Subsystem for Linux <https://docs.microsoft.com/en-us/windows/wsl/>`_, following the Linux installation instructions.
+**Please Note:** Currently PyCUTEst only supports Mac and Linux. For Windows 10 users, PyCUTEst can be used through the `Windows Subsystem for Linux <https://docs.microsoft.com/en-us/windows/wsl/faq>`_, following the Linux installation instructions.
 
 Installing CUTEst on Linux
 --------------------------
@@ -203,6 +203,9 @@ This algorithm is released under the GNU GPL license.
 .. |License| image::  https://img.shields.io/badge/License-GPL%20v3-blue.svg
              :target: https://www.gnu.org/licenses/gpl-3.0
              :alt: GNU GPL v3 License
+.. |Build Status| image::  https://travis-ci.org/jfowkes/pycutest.svg?branch=master
+                  :target: https://travis-ci.org/jfowkes/pycutest
+                  :alt: Build status
 .. |PyPI Version| image:: https://img.shields.io/pypi/v/pycutest.svg
                   :target: https://pypi.python.org/pypi/pycutest
                   :alt: PyPI version
