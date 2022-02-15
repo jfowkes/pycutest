@@ -30,8 +30,8 @@ jobs:
         git clone https://github.com/ralna/SIFDecode ./cutest/sifdecode &&
         git clone https://github.com/ralna/CUTEst ./cutest/cutest &&
         ln -s $TRAVIS_BUILD_DIR/pycutest/tests/problems ./cutest/mastsif &&
-        source ./.travis_cutest.env &&
-        ./.travis_install_cutest.sh
+        source ./.cutest.env &&
+        ./.install_cutest.sh
         python setup.py install
     - name: Tests
       run: |
