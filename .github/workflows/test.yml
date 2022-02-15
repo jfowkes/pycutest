@@ -33,11 +33,11 @@ jobs:
         source ./.cutest.env &&
         ./.install_cutest.sh
         mkdir $GITHUB_WORKSPACE/pycutest_cache
-        export PYCUTEST_CACHE="$GITHUB_WORKSPACE/pycutest_cache"
         python setup.py install
     - name: Tests
       run: |
         source ./.cutest.env
+        export PYCUTEST_CACHE="$GITHUB_WORKSPACE/pycutest_cache"
         python -m unittest pycutest.tests.test_sifdecode_extras
         python -m unittest pycutest.tests.test_basic_functionality
         python -m unittest pycutest.tests.test_sparse_functionality
