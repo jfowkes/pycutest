@@ -26,10 +26,8 @@ setupScript="""#!/usr/bin/env python
 # Ensure compatibility with Python 2
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from distutils.core import setup, Extension
 import os
 import numpy as np
-from subprocess import call
 from glob import glob
 
 #
@@ -42,31 +40,46 @@ from glob import glob
 # End of OS specific
 #
 
-# Module
-module1 = Extension(
-      str('_pycutestitf'),
-      [str('cutestitf.c')],
-      include_dirs=include_dirs,
-      define_macros=define_macros,
-      extra_objects=objFileList,
-      libraries=libraries,
-      library_dirs=library_dirs,
-      extra_link_args=extra_link_args
+def configuration(parent_package='', top_path=None):
+    from numpy.distutils.misc_util import Configuration
+    config = Configuration(None, parent_package, top_path)
+    config.set_options(
+        ignore_setup_xxx_py=True,
+        assume_default_configuration=True,
+        delegate_options_to_subpackages=True,
+        quiet=True,
     )
 
+    # Module
+    config.add_extension(
+        str('_pycutestitf'),
+        [str('cutestitf.c')],
+        include_dirs=include_dirs,
+        define_macros=define_macros,
+        extra_objects=objFileList,
+        libraries=libraries,
+        library_dirs=library_dirs,
+        extra_link_args=extra_link_args,
+    )
+
+    return config
+
 # Settings
-setup(name='PyCUTEst automatic test function interface builder',
-    version='1.0',
-    description='Builds a CUTEst test function interface for Python.',
-    long_description='Builds a CUTEst test function interface for Python.',
-    author='Arpad Buermen, Jaroslav Fowkes, Lindon Roberts',
-    author_email='arpadb@fides.fe.uni-lj.si, fowkes@maths.ox.ac.uk, robertsl@maths.ox.ac.uk',
-    url='',
-    platforms='Linux',
-    license='GNU GPL',
-    packages=[],
-    ext_modules=[module1]
-)
+if __name__ == '__main__':
+    from numpy.distutils.core import setup
+    setup(
+        name='PyCUTEst automatic test function interface builder',
+        version='1.0',
+        description='Builds a CUTEst test function interface for Python.',
+        long_description='Builds a CUTEst test function interface for Python.',
+        author='Arpad Buermen, Jaroslav Fowkes, Lindon Roberts',
+        author_email='arpadb@fides.fe.uni-lj.si, fowkes@maths.ox.ac.uk, robertsl@maths.ox.ac.uk',
+        url='',
+        platforms='Linux',
+        license='GNU GPL',
+        packages=[],
+        configuration=configuration,
+    )
 """
 
 #
@@ -74,9 +87,9 @@ setup(name='PyCUTEst automatic test function interface builder',
 #
 setupScriptLinux="""
 define_macros=[('LINUX', None)]
-include_dirs=[os.path.join(np.get_include(), 'numpy'),os.environ['CUTEST']+'/include/']
+include_dirs=[os.path.join(np.get_include(), 'numpy'), os.path.join(os.environ['CUTEST'], 'include')]
 objFileList=glob('*.o')
-objFileList.append(os.environ['CUTEST']+'/objects/'+os.environ['MYARCH']+'/double/libcutest.a')
+objFileList.append(os.path.join(os.environ['CUTEST'], 'objects', os.environ['MYARCH'], 'double', 'libcutest.a'))
 libraries=['gfortran']
 library_dirs=[]
 extra_link_args=[]
