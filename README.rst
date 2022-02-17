@@ -18,7 +18,7 @@ Additionally, the following python packages should be installed (these will be i
 * NumPy 1.11 or higher (http://www.numpy.org/)
 * SciPy 0.18 or higher (http://www.scipy.org/)
 
-**Please Note:** Currently PyCUTEst only supports Mac and Linux. For Windows 10 users, PyCUTEst can be used through the `Windows Subsystem for Linux <https://docs.microsoft.com/en-us/windows/wsl/faq>`_, following the Linux installation instructions.
+**Please Note:** Currently PyCUTEst only supports Mac and Linux. For Windows 10 (and later), PyCUTEst can be used through the `Windows Subsystem for Linux <https://docs.microsoft.com/en-us/windows/wsl/>`_, following the Linux installation instructions.
 
 Installing CUTEst on Linux
 --------------------------
@@ -84,7 +84,7 @@ For simplicity, we recommend installing CUTEst using Homebrew as detailed below 
 
  .. code-block:: bash
 
-    $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    $ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
 Then you can easily install CUTEst:
 
