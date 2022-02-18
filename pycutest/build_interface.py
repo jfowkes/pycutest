@@ -299,7 +299,7 @@ def compile_and_install_interface(problemName, destination=None, sifParams=None,
         raise RuntimeError("Failed to build the Python interface module")
 
     # Call 'python setup.py install --install-lib .'
-    if subprocess.call([sys.executable, '-m', 'pip']+quietopt+['install', '.'])!=0:
+    if subprocess.call([sys.executable, 'setup.py']+quietopt+['build_ext', '--inplace'])!=0:
         raise RuntimeError("Failed to install the Python interface module")
 
     # Create __init__.py
