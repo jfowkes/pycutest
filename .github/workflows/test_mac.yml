@@ -1,0 +1,45 @@
+name: Mac-Tests
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["2.7", "3.8", "3.9", "3.10"]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        sudo ln -s /usr/local/bin/gfortran-11 /usr/local/bin/gfortran
+        sudo mkdir /usr/local/gfortran
+        sudo ln -s /usr/local/Cellar/gcc@11/*/lib/gcc/11 /usr/local/gfortran/lib
+        brew tap optimizers/cutest &&
+        brew install cutest --without-single
+        pip install -r requirements.txt --only-binary=numpy,scipy
+        sudo ln -s $GITHUB_WORKSPACE/pycutest/tests/problems /usr/local/opt/mastsif &&
+        mkdir $GITHUB_WORKSPACE/pycutest_cache
+        python setup.py install
+    - name: Tests
+      run: |
+        source /usr/local/opt/archdefs/archdefs.bashrc &&
+        source /usr/local/opt/sifdecode/sifdecode.bashrc &&
+        export MASTSIF=/usr/local/opt/mastsif/ &&
+        source /usr/local/opt/cutest/cutest.bashrc
+        export PYCUTEST_CACHE="$GITHUB_WORKSPACE/pycutest_cache"
+        python -m unittest pycutest.tests.test_sifdecode_extras
+        python -m unittest pycutest.tests.test_basic_functionality
+        python -m unittest pycutest.tests.test_sparse_functionality
+        python -m unittest pycutest.tests.test_sifparam_chars
