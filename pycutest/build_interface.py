@@ -10,7 +10,6 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import os, shutil, sys
 import subprocess
 from glob import glob
-import warnings
 
 from .system_paths import get_cache_path, get_sifdecoder_path
 from .c_interface import itf_c_source
@@ -300,7 +299,7 @@ def compile_and_install_interface(problemName, destination=None, sifParams=None,
         raise RuntimeError("Failed to build the Python interface module")
 
     # Call 'python setup.py install --install-lib .'
-    if subprocess.call([sys.executable, 'setup.py']+quietopt+['install', '--install-lib', '.'])!=0:
+    if subprocess.call([sys.executable, '-m', 'pip']+quietopt+['install', '.'])!=0:
         raise RuntimeError("Failed to install the Python interface module")
 
     # Create __init__.py
