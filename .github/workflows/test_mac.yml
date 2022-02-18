@@ -34,7 +34,10 @@ jobs:
         python setup.py install
     - name: Tests
       run: |
-        source ./.cutest_mac.env
+        source /usr/local/opt/archdefs/archdefs.bashrc
+        source /usr/local/opt/sifdecode/sifdecode.bashrc
+        source /usr/local/opt/mastsif/mastsif.bashrc
+        source /usr/local/opt/cutest/cutest.bashrc
         export PYCUTEST_CACHE="$GITHUB_WORKSPACE/pycutest_cache"
         python -m unittest pycutest.tests.test_sifdecode_extras
         python -m unittest pycutest.tests.test_basic_functionality
