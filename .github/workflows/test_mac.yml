@@ -1,4 +1,4 @@
-name: macOS-Tests
+name: Mac-Tests
 
 on:
   push:
@@ -23,6 +23,8 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
+        alias gcc=gcc-11
+        alias gfortran=gfortran-11
         brew tap optimizers/cutest &&
         brew install cutest --without-single
         pip install -r requirements.txt --only-binary=numpy,scipy
