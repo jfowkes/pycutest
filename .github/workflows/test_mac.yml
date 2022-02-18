@@ -29,14 +29,14 @@ jobs:
         brew tap optimizers/cutest &&
         brew install cutest --without-single
         pip install -r requirements.txt --only-binary=numpy,scipy
-        ln -s $GITHUB_WORKSPACE/pycutest/tests/problems /usr/local/opt/mastsif/share/mastsif &&
+        sudo ln -s $GITHUB_WORKSPACE/pycutest/tests/problems /usr/local/opt/mastsif &&
         mkdir $GITHUB_WORKSPACE/pycutest_cache
         python setup.py install
     - name: Tests
       run: |
-        source /usr/local/opt/archdefs/archdefs.bashrc
-        source /usr/local/opt/sifdecode/sifdecode.bashrc
-        source /usr/local/opt/mastsif/mastsif.bashrc
+        source /usr/local/opt/archdefs/archdefs.bashrc &&
+        source /usr/local/opt/sifdecode/sifdecode.bashrc &&
+        export MASTSIF=/usr/local/opt/mastsif/ &&
         source /usr/local/opt/cutest/cutest.bashrc
         export PYCUTEST_CACHE="$GITHUB_WORKSPACE/pycutest_cache"
         python -m unittest pycutest.tests.test_sifdecode_extras
