@@ -39,6 +39,7 @@ jobs:
         export MASTSIF=/usr/local/opt/mastsif/ &&
         source /usr/local/opt/cutest/cutest.bashrc
         export PYCUTEST_CACHE="$GITHUB_WORKSPACE/pycutest_cache"
+        export MACOSX_DEPLOYMENT_TARGET=11.5
         python -m unittest pycutest.tests.test_sifdecode_extras
         python -m unittest pycutest.tests.test_basic_functionality
         python -m unittest pycutest.tests.test_sparse_functionality
