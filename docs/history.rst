@@ -2,6 +2,13 @@ Version History
 ===============
 This section lists the different versions of PyCUTEst and the updates between them.
 
+Version 1.2 (21 Feb 2022)
+-------------------------
+* Use setuptools instead of distutils
+* Remove deprecated NumPy calls
+* Improve macOS support
+* Update documentation
+
 Version 1.1 (14 Feb 2022)
 -------------------------
 * Automatically add PYCUTEST_CACHE to PYTHONPATH at runtime (simplifies installation)

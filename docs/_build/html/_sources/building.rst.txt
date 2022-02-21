@@ -19,7 +19,7 @@ We can check the properties of a specific problem with `problem_properties() <fu
       print(sorted(probs)[:5])
 
       # Properties of problem ROSENBR
-      print(pycuttest.problem_properties('ROSENBR'))
+      print(pycutest.problem_properties('ROSENBR'))
 
 Which produces the output:
 
