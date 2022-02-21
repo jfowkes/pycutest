@@ -88,7 +88,7 @@ extra_link_args=[]
 #
 setupScriptMac="""
 define_macros=[('LINUX', None)]
-include_dirs=[os.path.join(np.get_include(), 'numpy')]
+include_dirs=[os.path.join(np.get_include(), 'numpy'),os.environ['CUTEST']+'/include/']
 objFileList=glob('*.o')
 objFileList.append('%s')
 libraries=['gfortran']
