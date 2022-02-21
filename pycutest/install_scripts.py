@@ -26,11 +26,11 @@ setupScript="""#!/usr/bin/env python
 # Ensure compatibility with Python 2
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from distutils.core import setup, Extension
 import os
+
 import numpy as np
-from subprocess import call
 from glob import glob
+from setuptools import setup, Extension, find_packages
 
 #
 # OS specific
@@ -43,19 +43,20 @@ from glob import glob
 #
 
 # Module
-module1 = Extension(
-      str('_pycutestitf'),
-      [str('cutestitf.c')],
-      include_dirs=include_dirs,
-      define_macros=define_macros,
-      extra_objects=objFileList,
-      libraries=libraries,
-      library_dirs=library_dirs,
-      extra_link_args=extra_link_args
-    )
+module = Extension(
+    str('_pycutestitf'),
+    sources=[str('cutestitf.c')],
+    include_dirs=include_dirs,
+    define_macros=define_macros,
+    extra_objects=objFileList,
+    libraries=libraries,
+    library_dirs=library_dirs,
+    extra_link_args=extra_link_args,
+)
 
 # Settings
-setup(name='PyCUTEst automatic test function interface builder',
+setup(
+    name='PyCUTEst automatic test function interface builder',
     version='1.0',
     description='Builds a CUTEst test function interface for Python.',
     long_description='Builds a CUTEst test function interface for Python.',
@@ -64,8 +65,8 @@ setup(name='PyCUTEst automatic test function interface builder',
     url='',
     platforms='Linux',
     license='GNU GPL',
-    packages=[],
-    ext_modules=[module1]
+    packages=find_packages(),
+    ext_modules=[module],
 )
 """
 
