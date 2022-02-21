@@ -92,7 +92,7 @@ include_dirs=[os.path.join(np.get_include(), 'numpy'),os.environ['CUTEST']+'/inc
 objFileList=glob('*.o')
 objFileList.append('%s')
 libraries=['gfortran']
-library_dirs=[max(glob('/usr/local/Cellar/gcc/*/lib/gcc/*/'),key=os.path.getmtime),'/usr/local/gfortran/lib/']
+library_dirs=[max(glob('/usr/local/Cellar/gcc/*/lib/gcc/*/'),key=os.path.getmtime)]
 extra_link_args=['-Wl,-no_compact_unwind']
 """ % get_cutest_path()  # will probably get the homebrew location, but may revert to environment variables
 
