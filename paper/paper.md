@@ -38,18 +38,29 @@ how users can install the underlying dependencies.
 
 # State of the field
 
-List of existing tools:
-* Underlying CUTE/CUTEr/CUTEst packages (have everything but not easily accessible)
-* AMPL
-* GAMS
-* JuMP
+The CUTEst [@cutest] library is a widely used collection of nonlinear optimization test problems, based on the original
+CUTE [@cute] and CUTEr [@cuter] packages.
+It has a collection of over 1500 problems, many of which are parametrized to allow for variable dimensions, etc.
+However, despite the popularity of this package, it is currently only accessible through Fortran or MATLAB interfaces 
+provided in the main package, or a new Julia interface [@cutestjl].
+In particular, there is no way to use CUTEst through Python, even though Python is widely used in numerical 
+computation and has a large ecosystem of open source software for nonlinear optimization.
+
+The other most popular tools for encoding optimization test problems are the modelling languages AMPL [@ampl] 
+and GAMS [@gams]. 
+Although both provide Python interfaces, and in fact many CUTEst problems have been translated into AMPL [@cuteampl],
+they are proprietary packages. 
+One open source alternative to AMPL and GAMS is the Julia package JuMP [@jump].
 
 # Statement of need
-Key ideas:
-* Simplification of algorithm development and testing
-* Allows benchmarking of solvers for specific test cases
-* CUTEst only high-level interface until now is Matlab (not open source)
-* Significant Python optimization community
+
+PyCUTEst allows Python users access to the full CUTEst package of test problems via a simple interface for 
+compiling problems (which automatically generates a C interface to the underlying Fortran package).
+To our knowledge, this is the only available Python package for accessing the CUTEst library.
+
+The main benefits of this package are:
+* Enabling the use of CUTEst to the sizeable community of Python optimization software developers and users.
+* Allowing simple benchmarking of optimization algorithms against a widely use standard collection of problems.
 
 # Acknowledgements
 
