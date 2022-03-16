@@ -160,8 +160,8 @@ class CUTEstProblem(object):
             self.vartype = self.all_to_free(self.vartype)
             # Not updating self.nnzh and self.nnzj, because even isphess doesn't give right results
         else:  # Doesn't matter whether they are actually fixed or free, they all look free to us
-            self.idx_eq = np.array([], dtype=np.int)
-            self.idx_free = np.arange(self.n, dtype=np.int)
+            self.idx_eq = np.array([], dtype=int)
+            self.idx_free = np.arange(self.n, dtype=int)
             self.n_fixed = 0
             self.n_free = self.n_full
             self.n = self.n_full
@@ -200,12 +200,12 @@ class CUTEstProblem(object):
             return pad_vector(x, self.idx_free, self.idx_eq, np.zeros((self.n_full,)) if use_zeros else self.bl_full)
         else:
             return x
-    
+
     def check_input_x(self, x):
         """
         Check x has correct dimensions
-        
-        :param x: input vector 
+
+        :param x: input vector
         :return: raises RuntimeError if x has wrong dimension
         """
         if x.shape != (self.n,):
