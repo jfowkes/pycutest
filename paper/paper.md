@@ -27,7 +27,7 @@ Because of the complexity of such problems, a plethora of algorithms and softwar
 [`PyCUTEst`](https://github.com/jfowkes/pycutest) provides efficient access to the `CUTEst` [@cutest] library of 
 nonlinear optimization test problems.
 
-This assists numerical algorithm and software developers to test new ideas against a state-of-the-art and collection 
+This assists numerical algorithm and software developers to test new ideas against a state-of-the-art collection 
 of test problems which span small- and large-scale, constrained and unconstrained nonlinear optimization problems.
 
 `PyCUTEst` also allows scientists and other users of optimization software to compare potential software and algorithms
@@ -41,7 +41,7 @@ how users can install the underlying dependencies.
 The CUTEst [@cutest] library is a widely used collection of nonlinear optimization test problems, based on the original
 CUTE [@cute] and CUTEr [@cuter] packages.
 It has a collection of over 1500 problems, many of which are parametrized to allow for variable dimensions, etc.
-However, despite the popularity of this package, it is currently only accessible through Fortran or MATLAB interfaces 
+However, despite the popularity of this package, it is currently only accessible through Fortran, C or MATLAB interfaces 
 provided in the main package, or a new Julia interface [@cutestjl].
 In particular, there is no way to use CUTEst through Python, even though Python is widely used in numerical 
 computation and has a large ecosystem of open source software for nonlinear optimization.
@@ -56,11 +56,11 @@ One open source alternative to AMPL and GAMS is the Julia package JuMP [@jump].
 
 PyCUTEst allows Python users access to the full CUTEst package of test problems via a simple interface for 
 compiling problems (which automatically generates a C interface to the underlying Fortran package).
-To our knowledge, this is the only available Python package for accessing the CUTEst library.
+To the best of our knowledge, this is the only available Python package for accessing the CUTEst library.
 
 The main benefits of this package are:
 * Enabling the use of CUTEst to the sizeable community of Python optimization software developers and users.
-* Allowing simple benchmarking of optimization algorithms against a widely use standard collection of problems.
+* Allowing simple benchmarking of optimization algorithms against a widely used standard collection of problems.
 
 # Acknowledgements
 
