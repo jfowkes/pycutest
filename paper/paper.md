@@ -60,7 +60,9 @@ compiling problems (that automatically generates a C interface to the underlying
 To the best of our knowledge, this is the only available Python package for accessing the `CUTEst` library that is stable and maintained.
 
 The main benefits of the `PyCUTEst` package are:
+
 * Enabling the use of the `CUTEst` test collection by the sizeable community of Python optimization software developers and users.
+
 * Allowing simple benchmarking of optimization algorithms and software in Python against a widely used standard collection of test problems.
 
 Our aim is for `PyCUTEst` to make it easier for both optimization users and software developers to develop and test new and existing algorithms and software in Python. Since its inception just under four years ago, `PyCUTEst` has had over 12,000 downloads, and we believe is well on the way to achieving this aim.
