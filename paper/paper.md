@@ -4,7 +4,7 @@ tags:
   - Python
   - optimization
 authors:
-  - name: Arpad Bürmen
+  - name: Árpád Bűrmen
     affiliation: 1
   - name: Jaroslav Fowkes
     affiliation: 2
