@@ -91,7 +91,7 @@ Then you can easily install CUTEst:
     $   echo ". $(brew --prefix $f)/$f.bashrc" >> ~/.bashrc; \
     $ done
 
-**Please Note:** *you may see warnings such as* :code:`ld: warning: object file (RANGE.o) was built for newer macOS version (11.5) than being linked (10.15)` *when using PyCUTEst on Mac, to suppress these warnings please set the environment variable* :code:`MACOSX_DEPLOYMENT_TARGET` *to your current macOS version (e.g.* :code:`export MACOSX_DEPLOYMENT_TARGET=11.5` *in this example, you can make this permanent by adding it your* :code:`~/.bashrc` *file).*
+**Please Note:** *you may see warnings such as* :code:`ld: warning: object file (RANGE.o) was built for newer macOS version (11.5) than being linked (10.15)` *when using PyCUTEst on Mac, to suppress these warnings please set the environment variable* :code:`MACOSX_DEPLOYMENT_TARGET` *to your current macOS version (e.g.* :code:`export MACOSX_DEPLOYMENT_TARGET=11.5` *in this example, you can make this permanent by adding it to your* :code:`~/.bashrc` *file).*
 
 Installing PyCUTEst using pip
 -----------------------------
