@@ -6,7 +6,7 @@
 PyCUTEst
 ========
 Python interface to the CUTEst optimization test environment
---------------------------------------------------------------
+------------------------------------------------------------
 
 **Release:** |version|
 
@@ -20,9 +20,21 @@ In essence, this package gives convenient access to a large collection of nonlin
 
 PyCUTEst is released under the GNU General Public License.
 
+The aim of PyCUTEst
+-------------------
+PyCUTEst gives Python users access to the full `CUTEst <https://github.com/ralna/CUTEst>`_ collection of optimization test problems via a simple interface for compiling problems (that automatically generates a C interface to the underlying Fortran package).
+
+The main benefits of the PyCUTEst package are:
+
+* Enabling the use of the CUTEst test collection by the sizeable community of Python optimization software developers and users.
+
+* Allowing simple benchmarking of optimization algorithms and software in Python against a widely used standard collection of test problems.
+
+Our aim is for PyCUTEst to make it easier for both optimization users and software developers to develop and test new and existing algorithms and software in Python.
+
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Contents
 
    install
    building
@@ -33,13 +45,13 @@ PyCUTEst is released under the GNU General Public License.
 * :ref:`genindex`
 
 .. * :ref:`modindex`
-   * :ref:`search`      
-   
+   * :ref:`search`
+
 References
 ----------
 
-.. [1]  
+.. [1]
    Gould, N. I. M., Orban, D. and Toint, P. L. (2015) CUTEst: a Constrained and Unconstrained Testing Environment with safe threads for mathematical optimization, *Computational Optimization and Applications*, vol. 60, no. 3, pp. 545-557. https://doi.org/10.1007/s10589-014-9687-3
-   
+
 .. [2]
    Buermen, A. Python interface to CUTEr test problems for optimization. http://fides.fe.uni-lj.si/~arpadb/software-pycuter.html
