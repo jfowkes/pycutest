@@ -147,10 +147,6 @@ To upgrade PyCUTEst to the latest version, navigate to the top-level directory (
     $ git pull
     $ pip install .
 
-Testing
--------
-This documentation provides some simple examples of how to run PyCUTEst.
-
 Uninstallation
 --------------
 You can uninstall PyCUTEst as follows:
