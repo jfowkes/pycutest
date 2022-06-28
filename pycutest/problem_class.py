@@ -256,7 +256,9 @@ class CUTEstProblem(object):
         This calls CUTEst routine CUTEst_cfn.
 
         :param x: input vector
+        :type x: numpy.ndarray with shape (n,)
         :return: tuple (f, c) of objective and constraint values at x for constrained problems.
+        :rtype: (float, numpy.ndarray(m,))
         """
         self.check_input_x(x)
         f, c = self._module.objcons(self.free_to_all(x))
@@ -279,8 +281,11 @@ class CUTEstProblem(object):
         This calls CUTEst routine CUTEST_uofg or CUTEST_cofg.
 
         :param x: input vector
+        :type x: numpy.ndarray with shape (n,)
         :param gradient: whether to return objective and gradient, or just objective (default=False; i.e. objective only)
+        :type gradient: bool, optional
         :return: objective value f, or tuple (f,g) of objective and gradient at x
+        :rtype: float or (float, numpy.ndarray(n,))
         """
         self.check_input_x(x)
         if gradient:
@@ -294,7 +299,7 @@ class CUTEstProblem(object):
 
     def cons(self, x, index=None, gradient=False):
         """
-        Evaluate the constraints (and optionally their Jacobian).
+        Evaluate the constraints (and optionally their Jacobian or gradient).
 
         .. code-block:: python
 
@@ -314,9 +319,13 @@ class CUTEstProblem(object):
         For large problems, problem.scons returns sparse matrices.
 
         :param x: input vector
+        :type x: numpy.ndarray with shape (n,)
         :param index: which constraint to evaluate (default=None -> all constraints). Must be in 0..self.m-1.
+        :type index: int, optional
         :param gradient: whether to return constraint(s) and gradient/Jacobian, or just constraint (default=False; i.e. constraint only)
-        :return: value of constraint(s) and Jacobian/gradient of constraint(s) at x
+        :type gradient: bool, optional
+        :return: value of constraint(s), and Jacobian or gradient of constraint(s) at x
+        :rtype: numpy.ndarray(m,) or float or (numpy.ndarray(m,), numpy.ndarray(m,n)) or (float, numpy.ndarray(n,))
         """
         if self.m <= 0:
             return None
@@ -342,7 +351,7 @@ class CUTEstProblem(object):
 
     def lagjac(self, x, v=None):
         """
-        Evaluate gradient of objective/Lagrangian, and Jacobian of constraints.
+        Evaluate gradient of objective or Lagrangian, and Jacobian of constraints.
 
         .. code-block:: python
 
@@ -360,8 +369,11 @@ class CUTEstProblem(object):
         Note: in CUTEst, the sign convention is such that the Lagrangian = objective + lagrange_multipliers * constraints
 
         :param x: input vector
+        :type x: numpy.ndarray with shape (n,)
         :param v: input vector of Lagrange multipliers
-        :return: gradient of objective/Lagrangian, and Jacobian of constraints
+        :type v: numpy.ndarray with shape (m,), optional
+        :return: gradient of objective or Lagrangian, and Jacobian of constraints
+        :rtype: (numpy.ndarray(n,), numpy.ndarray(m,n))
         """
         self.check_input_x(x)
         if v is None:
@@ -380,9 +392,9 @@ class CUTEstProblem(object):
 
         .. code-block:: python
 
-            # evaluate J*p where J is the last compute Jacobian
+            # evaluate J*p where J is the last computed Jacobian
             r = problem.jprod(p)
-            # evaluate J.T*p where J is the last compute Jacobian
+            # evaluate J.T*p where J is the last computed Jacobian
             r = problem.jprod(p, transpose=True)
             # evaluate Jacobian at x, and return J(x)*p
             r = problem.jprod(p, x=x)
@@ -394,9 +406,13 @@ class CUTEstProblem(object):
         This calls CUTEst routine CUTEST_cjprod.
 
         :param p: vector to be multiplied by the Jacobian of constraints
+        :type p: numpy.ndarray with shape (n,) or (m,) if transpose=True
         :param transpose: if True, multiply by transpose of Jacobian (J.T*p)
+        :type transpose: bool, optional
         :param x: input vector for Jacobian (default=None -> use last computed Jacobian)
-        :return: Jacobian-vector product J(x)*p or J(x).T * p if transpose=True
+        :type x: numpy.ndarray with shape (n,), optional
+        :return: Jacobian-vector product J(x)*p or J(x).T*p if transpose=True
+        :rtype: numpy.ndarray(m,) or numpy.ndarray(n,) if transpose=True
         """
         if self.m <= 0:
             return None
@@ -434,8 +450,11 @@ class CUTEstProblem(object):
         Note: in CUTEst, the sign convention is such that the Lagrangian = objective + lagrange_multipliers * constraints
 
         :param x: input vector
-        :param v: Lagrange multiplies (needed for constrained problems)
+        :type x: numpy.ndarray with shape (n,)
+        :param v: vector of Lagrange multipliers (must be specified for constrained problems)
+        :type v: numpy.ndarray with shape (m,), optional
         :return: Hessian of objective (unconstrained) or Lagrangian (constrained) at x
+        :rtype: numpy.ndarray(n,n)
         """
         self.check_input_x(x)
         self.check_input_v(v)
@@ -449,7 +468,7 @@ class CUTEstProblem(object):
 
     def ihess(self, x, cons_index=None):
         """
-        Evaluate the Hessian of the objective or the index-th constraint.
+        Evaluate the Hessian of the objective or the i-th constraint.
 
         .. code-block:: python
 
@@ -463,8 +482,11 @@ class CUTEstProblem(object):
         This calls CUTEst routine CUTEST_cidh or CUTEST_udh.
 
         :param x: input vector
+        :type x: numpy.ndarray with shape (n,)
         :param cons_index: index of constraint (default is None -> use objective). Must be in 0..self.m-1.
+        :type cons_index: int, optional
         :return: Hessian of objective or a single constraint at x
+        :rtype: numpy.ndarray(n,n)
         """
         self.check_input_x(x)
         if cons_index is None:
@@ -496,9 +518,13 @@ class CUTEstProblem(object):
         Note: in CUTEst, the sign convention is such that the Lagrangian = objective + lagrange_multipliers * constraints
 
         :param p: vector to be multiplied by the Hessian
+        :type p: numpy.ndarray with shape (n,)
         :param x: input vector for the Hessian
-        :param v: Lagrange multipliers for the Lagrangian. Required for constrained problems.
+        :type x: numpy.ndarray with shape (n,), optional
+        :param v: vector of Lagrange multipliers (must be specified for constrained problems)
+        :type v: numpy.ndarray with shape (m,), optional
         :return: Hessian-vector product H*p
+        :rtype: numpy.ndarray(n,)
         """
         self.check_input_x(p)
         if self.m > 0:
@@ -519,7 +545,7 @@ class CUTEstProblem(object):
 
     def gradhess(self, x, v=None, gradient_of_lagrangian=True):
         """
-        Evaluate the gradient of objective or Lagrangian, Jacobian of constraints and Hessian of objective/Lagrangian.
+        Evaluate the gradient of objective or Lagrangian, Jacobian of constraints, and Hessian of objective or Lagrangian.
         For constrained problems, the gradient is L_{x}(x,v) and the Hessian is L_{x,x}(x,v).
 
         .. code-block:: python
@@ -541,9 +567,13 @@ class CUTEstProblem(object):
         Note: in CUTEst, the sign convention is such that the Lagrangian = objective + lagrange_multipliers * constraints
 
         :param x: input vector
-        :param v: vector of Lagrange multipliers. Required for constrained problems.
+        :type x: numpy.ndarray with shape (n,)
+        :param v: vector of Lagrange multipliers (must be specified for constrained problems)
+        :type v: numpy.ndarray with shape (m,), optional
         :param gradient_of_lagrangian: for constrained problems, return gradient of objective or Lagrangian?
-        :return: gradient of objective or Lagrangian, (Jacobian of constraints) and Hessian of objective/Lagrangian at x
+        :type gradient_of_lagrangian: bool, optional
+        :return: gradient of objective or Lagrangian, (Jacobian of constraints), and Hessian of objective or Lagrangian at x
+        :rtype: (numpy.ndarray(n,), numpy.ndarray(n,n)) or (numpy.ndarray(n,), numpy.ndarray(m,n), numpy.ndarray(n,n))
         """
         self.check_input_x(x)
         self.check_input_v(v)
@@ -556,7 +586,7 @@ class CUTEstProblem(object):
 
     def scons(self, x, index=None, gradient=False):
         """
-        Evaluate the constraints and optionally their sparse Jacobian/gradient.
+        Evaluate the constraints (and optionally their sparse Jacobian or gradient).
 
         .. code-block:: python
 
@@ -571,15 +601,20 @@ class CUTEstProblem(object):
 
         The matrix J or vector Ji is of type scipy.sparse.coo_matrix.
 
-        For unconstrained problems, this returns is None.
+        For unconstrained problems, this returns None.
 
         For small problems, problem.cons returns dense matrices.
 
         This calls CUTEst routine CUTEST_ccfsg or CUTEST_ccifsg.
 
         :param x: input vector
+        :type x: numpy.ndarray with shape (n,)
         :param index: which constraint to evaluate (default=None -> all constraints). Must be in 0..self.m-1.
-        :return: value of constraint(s) and sparse Jacobian/gradient of constraint(s) at x, type scipy.sparse.coo_matrix
+        :type index: int, optional
+        :param gradient: whether to return constraint(s) and gradient/Jacobian, or just constraint (default=False; i.e. constraint only)
+        :type gradient: bool, optional
+        :return: value of constraint(s), and sparse Jacobian or gradient of constraint(s) at x
+        :rtype: numpy.ndarray(m,) or float or (numpy.ndarray(m,), scipy.sparse.coo_matrix(m,n)) or (float, scipy.sparse.coo_matrix(n,))
         """
         if self.m <= 0:
             return None
@@ -601,7 +636,7 @@ class CUTEstProblem(object):
 
     def slagjac(self, x, v=None):
         """
-        Evaluate sparse gradient of objective or Lagrangian, and sparse Jacobian of constraints
+        Evaluate sparse gradient of objective or Lagrangian, and sparse Jacobian of constraints.
 
         .. code-block:: python
 
@@ -621,8 +656,11 @@ class CUTEstProblem(object):
         Note: in CUTEst, the sign convention is such that the Lagrangian = objective + lagrange_multipliers * constraints
 
         :param x: input vector
+        :type x: numpy.ndarray with shape (n,)
         :param v: vector of Lagrange multipliers
-        :return: gradient of objective/Lagrangian, and Jacobian, type scipy.sparse.coo_matrix
+        :type v: numpy.ndarray with shape (m,), optional
+        :return: sparse gradient of objective or Lagrangian, and sparse Jacobian of constraints
+        :rtype: (scipy.sparse.coo_matrix(n,), scipy.sparse.coo_matrix(m,n))
         """
         self.check_input_x(x)
         if v is None:
@@ -660,8 +698,11 @@ class CUTEstProblem(object):
         Note: in CUTEst, the sign convention is such that the Lagrangian = objective + lagrange_multipliers * constraints
 
         :param x: input vector
-        :param v: vector of Lagrange multipliers. Must be specified for constrained problems.
-        :return: Hessian of objective or Lagrangian, type scipy.sparse.coo_matrix
+        :type x: numpy.ndarray with shape (n,)
+        :param v: vector of Lagrange multipliers (must be specified for constrained problems)
+        :type v: numpy.ndarray with shape (m,), optional
+        :return: sparse Hessian of objective (unconstrained) or Lagrangian (constrained) at x
+        :rtype: scipy.sparse.coo_matrix(n,n)
         """
         self.check_input_x(x)
         self.check_input_v(v)
@@ -673,7 +714,7 @@ class CUTEstProblem(object):
 
     def isphess(self, x, cons_index=None):
         """
-        Evaluate the sparse Hessian of the objective or the index-th constraint.
+        Evaluate the sparse Hessian of the objective or the i-th constraint.
 
         .. code-block:: python
 
@@ -689,8 +730,11 @@ class CUTEstProblem(object):
         This calls CUTEst routine CUTEST_cish or CUTEST_ush.
 
         :param x: input vector
+        :type x: numpy.ndarray with shape (n,)
         :param cons_index: index of constraint (default is None -> use objective). Must be in 0..self.m-1.
-        :return: Hessian of objective or a single constraint at x, type scipy.sparse.coo_matrix
+        :type cons_index: int, optional
+        :return: sparse Hessian of objective or a single constraint at x
+        :rtype: scipy.sparse.coo_matrix(n,n)
         """
         self.check_input_x(x)
         if cons_index is None:
@@ -703,7 +747,7 @@ class CUTEstProblem(object):
 
     def gradsphess(self, x, v=None, gradient_of_lagrangian=True):
         """
-        Evaluate the gradient of objective or Lagrangian, Jacobian of constraints and Hessian of objective/Lagrangian.
+        Evaluate the sparse gradient of objective or Lagrangian, sparse Jacobian of constraints, and sparse Hessian of objective or Lagrangian.
         For constrained problems, the gradient is L_{x}(x,v) and the Hessian is L_{x,x}(x,v).
 
         .. code-block:: python
@@ -727,9 +771,13 @@ class CUTEstProblem(object):
         Note: in CUTEst, the sign convention is such that the Lagrangian = objective + lagrange_multipliers * constraints
 
         :param x: input vector
-        :param v: vector of Lagrange multipliers. Required for constrained problems.
+        :type x: numpy.ndarray with shape (n,)
+        :param v: vector of Lagrange multipliers (must be specified for constrained problems)
+        :type v: numpy.ndarray with shape (m,), optional
         :param gradient_of_lagrangian: for constrained problems, return gradient of objective or Lagrangian?
-        :return: gradient of objective or Lagrangian, (Jacobian of constraints) and Hessian of objective/Lagrangian at x, type scipy.sparse.coo_matrix
+        :type gradient_of_lagrangian: bool, optional
+        :return: sparse gradient of objective or Lagrangian, (sparse Jacobian of constraints), and sparse Hessian of objective or Lagrangian at x
+        :rtype: (scipy.sparse.coo_matrix(n,), scipy.sparse.coo_matrix(n,n)) or (scipy.sparse.coo_matrix(n,), scipy.sparse.coo_matrix(m,n), scipy.sparse.coo_matrix(n,n)
         """
         self.check_input_x(x)
         self.check_input_v(v)
