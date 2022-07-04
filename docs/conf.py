@@ -108,6 +108,14 @@ html_title = 'PyCUTEst v%s documentation' % __version__
 #
 # html_theme_options = {}
 
+# Add Edit on GitHub link
+html_context = {
+  'display_github': True,
+  'github_user': 'jfowkes',
+  'github_repo': 'pycutest',
+  'github_version': 'master/docs/',
+}
+
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
