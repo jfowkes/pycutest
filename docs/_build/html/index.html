@@ -14,11 +14,12 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Installing PyCUTEst" href="install.html" /> 
+    <link rel="next" title="Installation" href="install.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -39,12 +40,13 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="install.html">Installing PyCUTEst</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="building.html">Building Test Problems</a></li>
 <li class="toctree-l1"><a class="reference internal" href="interface.html">Problem Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="example.html">Example Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="history.html">Version History</a></li>
 </ul>
 
@@ -64,7 +66,7 @@
       <li><a href="#" class="icon icon-home"></a> &raquo;</li>
       <li>PyCUTEst</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+              <a href="https://github.com/jfowkes/pycutest/blob/master/docs/index.rst" class="fa fa-github"> Edit on GitHub</a>
       </li>
   </ul>
   <hr/>
@@ -73,26 +75,32 @@
            <div itemprop="articleBody">
              
   <section id="pycutest">
-<h1>PyCUTEst<a class="headerlink" href="#pycutest" title="Permalink to this headline"></a></h1>
+<h1>PyCUTEst<a class="headerlink" href="#pycutest" title="Permalink to this heading"></a></h1>
 <section id="python-interface-to-the-cutest-optimization-test-environment">
-<h2>Python interface to the CUTEst optimization test environment<a class="headerlink" href="#python-interface-to-the-cutest-optimization-test-environment" title="Permalink to this headline"></a></h2>
+<h2>Python interface to the CUTEst optimization test environment<a class="headerlink" href="#python-interface-to-the-cutest-optimization-test-environment" title="Permalink to this heading"></a></h2>
 <p><strong>Release:</strong> 1.2</p>
 <p><strong>Date:</strong> 21 February 2022</p>
 <p><strong>Author:</strong> <a class="reference external" href="mailto:jaroslav&#46;fowkes&#37;&#52;&#48;maths&#46;ox&#46;ac&#46;uk">Jaroslav Fowkes</a> and <a class="reference external" href="https://lindonroberts.github.io/">Lindon Roberts</a></p>
-<p>PyCUTEst is a Python interface to <a class="reference external" href="https://github.com/ralna/CUTEst">CUTEst</a>, a Fortran package for testing optimization software <a class="footnote-reference brackets" href="#id3" id="id1">1</a>. It is based on the interface originally developed for CUTEr by <a class="reference external" href="http://www.fe.uni-lj.si/en/the_faculty/staff/alphabetically/55/">Prof. Arpad Buermen</a> <a class="footnote-reference brackets" href="#id4" id="id2">2</a>. Currently it supports Mac and Linux only, although on Windows 10 (and later) it can be used through the <a class="reference external" href="https://docs.microsoft.com/en-us/windows/wsl/">Windows Subsystem for Linux</a>, following the Linux installation instructions.</p>
+<p>PyCUTEst is a Python interface to <a class="reference external" href="https://github.com/ralna/CUTEst">CUTEst</a>, a Fortran package for testing optimization software <a class="footnote-reference brackets" href="#id4" id="id1">1</a>. It is based on the interface originally developed for CUTEr by <a class="reference external" href="http://www.fe.uni-lj.si/en/the_faculty/staff/alphabetically/55/">Prof. Arpad Buermen</a> <a class="footnote-reference brackets" href="#id5" id="id2">2</a>. Currently it supports Mac and Linux only, although on Windows 10 (and later) it can be used through the <a class="reference external" href="https://docs.microsoft.com/en-us/windows/wsl/">Windows Subsystem for Linux</a>, following the Linux installation instructions.</p>
 <p>In essence, this package gives convenient access to a large collection of nonlinear optimization test problems.</p>
 <p>PyCUTEst is released under the GNU General Public License.</p>
+</section>
+<section id="the-aim-of-pycutest">
+<h2>The aim of PyCUTEst<a class="headerlink" href="#the-aim-of-pycutest" title="Permalink to this heading"></a></h2>
+<p>PyCUTEst gives Python users access to the full <a class="reference external" href="https://github.com/ralna/CUTEst">CUTEst</a> collection of optimization test problems via a simple interface for compiling problems (that automatically generates a C interface to the underlying Fortran package).</p>
+<p>The main benefits of the PyCUTEst package are:</p>
+<ul class="simple">
+<li><p>Enabling the use of the CUTEst test collection by the sizeable community of Python optimization software developers and users.</p></li>
+<li><p>Allowing simple benchmarking of optimization algorithms and software in Python against a widely used standard collection of test problems.</p></li>
+</ul>
+<p>Our aim is for PyCUTEst to make it easier for both optimization users and software developers to develop and test new and existing algorithms and software in Python.</p>
 <div class="toctree-wrapper compound">
-<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Contents</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="install.html">Installing PyCUTEst</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="install.html#requirements">Requirements</a></li>
-<li class="toctree-l2"><a class="reference internal" href="install.html#installing-cutest-on-linux">Installing CUTEst on Linux</a></li>
-<li class="toctree-l2"><a class="reference internal" href="install.html#installing-cutest-on-mac">Installing CUTEst on Mac</a></li>
-<li class="toctree-l2"><a class="reference internal" href="install.html#installing-pycutest-using-pip">Installing PyCUTEst using pip</a></li>
-<li class="toctree-l2"><a class="reference internal" href="install.html#manual-installation-of-pycutest">Manual installation of PyCUTEst</a></li>
-<li class="toctree-l2"><a class="reference internal" href="install.html#testing">Testing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="install.html#uninstallation">Uninstallation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#installing-cutest">Installing CUTEst</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#installing-pycutest">Installing PyCUTEst</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="building.html">Building Test Problems</a><ul>
@@ -108,7 +116,12 @@
 <li class="toctree-l2"><a class="reference internal" href="interface.html#full-method-documentation">Full method documentation</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="example.html">Example Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example.html">Example Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="example.html#general-optimization">General optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example.html#nonlinear-least-squares">Nonlinear least-squares</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="history.html">Version History</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="history.html#version-1-2-21-feb-2022">Version 1.2 (21 Feb 2022)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="history.html#version-1-1-14-feb-2022">Version 1.1 (14 Feb 2022)</a></li>
@@ -124,12 +137,12 @@
 </ul>
 </section>
 <section id="references">
-<h2>References<a class="headerlink" href="#references" title="Permalink to this headline"></a></h2>
+<h2>References<a class="headerlink" href="#references" title="Permalink to this heading"></a></h2>
 <dl class="footnote brackets">
-<dt class="label" id="id3"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dt class="label" id="id4"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
 <dd><p>Gould, N. I. M., Orban, D. and Toint, P. L. (2015) CUTEst: a Constrained and Unconstrained Testing Environment with safe threads for mathematical optimization, <em>Computational Optimization and Applications</em>, vol. 60, no. 3, pp. 545-557. <a class="reference external" href="https://doi.org/10.1007/s10589-014-9687-3">https://doi.org/10.1007/s10589-014-9687-3</a></p>
 </dd>
-<dt class="label" id="id4"><span class="brackets"><a class="fn-backref" href="#id2">2</a></span></dt>
+<dt class="label" id="id5"><span class="brackets"><a class="fn-backref" href="#id2">2</a></span></dt>
 <dd><p>Buermen, A. Python interface to CUTEr test problems for optimization. <a class="reference external" href="http://fides.fe.uni-lj.si/~arpadb/software-pycuter.html">http://fides.fe.uni-lj.si/~arpadb/software-pycuter.html</a></p>
 </dd>
 </dl>
@@ -140,7 +153,7 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="install.html" class="btn btn-neutral float-right" title="Installing PyCUTEst" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="install.html" class="btn btn-neutral float-right" title="Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
