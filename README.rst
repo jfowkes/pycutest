@@ -164,6 +164,10 @@ Bugs
 ----
 Please report any bugs using GitHub's issue tracker.
 
+Contributing
+------------
+We welcome contributions to PyCUTEst, please create a GitHub pull request.
+
 License
 -------
 This package is released under the GNU GPL license.
