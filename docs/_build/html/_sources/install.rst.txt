@@ -1,5 +1,5 @@
-Installing PyCUTEst
-===================
+Installation
+============
 
 Requirements
 ------------
@@ -15,8 +15,12 @@ Additionally, the following python packages should be installed (these will be i
 
 **Please Note:** Currently PyCUTEst only supports Mac and Linux. For Windows 10 (or later), PyCUTEst can be used through the `Windows Subsystem for Linux <https://docs.microsoft.com/en-us/windows/wsl/>`_, following the Linux installation instructions.
 
+Installing CUTEst
+-----------------
+Note that CUTEst must be installed in order for PyCUTEst to work.
+
 Installing CUTEst on Linux
---------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 These instructions do not include installation of the MATLAB interface. You will need to install four packages: `archdefs <https://github.com/ralna/ARCHDefs>`_, `SIFDecode <https://github.com/ralna/SIFDecode>`_, `CUTEst <https://github.com/ralna/CUTEst>`_ and `MASTSIF <https://bitbucket.org/optrove/sif>`_. To keep things simple, install all four packages in the same directory:
 
  .. code-block:: bash
@@ -73,7 +77,7 @@ And CUTEst should run from here. To test that the installation works, issue the 
 **Please Note:** *currently PyCUTEst only supports gfortran and uses the default version on your path (as returned by* :code:`gfortran -v` *). Please ensure this is the same version that you install CUTEst with above otherwise you may experience segmentation faults, this should be the case if you select the generic* :code:`GNU gfortran compiler` *as the fortran compiler in the installer above.*
 
 Installing CUTEst on Mac
-------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^
 Install CUTEst using Homebrew as detailed below (installing CUTEst manually on Mac is not supported). First it is important to ensure that you have the latest version of Xcode Command Line Tools installed (or the latest version of Xcode), please ensure this is the case by following `this guide <https://mac.install.guide/commandlinetools/index.html>`_. Now install the Homebrew package manager:
 
  .. code-block:: bash
@@ -91,10 +95,47 @@ Then you can easily install CUTEst:
     $   echo ". $(brew --prefix $f)/$f.bashrc" >> ~/.bashrc; \
     $ done
 
-**Please Note:** *you may see warnings such as* :code:`ld: warning: object file (RANGE.o) was built for newer macOS version (11.5) than being linked (10.15)` *when using PyCUTEst on Mac, to suppress these warnings please set the environment variable* :code:`MACOSX_DEPLOYMENT_TARGET` *to your current macOS version (e.g.* :code:`export MACOSX_DEPLOYMENT_TARGET=11.5` *in this example, you can make this permanent by adding it your* :code:`~/.bashrc` *file).*
+**Please Note:** *you may see warnings such as* :code:`ld: warning: object file (RANGE.o) was built for newer macOS version (11.5) than being linked (10.15)` *when using PyCUTEst on Mac, to suppress these warnings please set the environment variable* :code:`MACOSX_DEPLOYMENT_TARGET` *to your current macOS version (e.g.* :code:`export MACOSX_DEPLOYMENT_TARGET=11.5` *in this example, you can make this permanent by adding it to your* :code:`~/.bashrc` *file).*
+
+CUTEst Docker Container
+^^^^^^^^^^^^^^^^^^^^^^^
+CUTEst can be installed into its own Docker container using the following Dockerfile:
+
+ .. code-block:: docker
+
+    FROM continuumio/miniconda3
+
+    WORKDIR /cutest
+    RUN apt update
+    RUN apt install -y build-essential git gfortran
+    RUN git clone https://github.com/ralna/ARCHDefs ./archdefs
+    RUN git clone https://github.com/ralna/SIFDecode ./sifdecode
+    RUN git clone https://github.com/ralna/CUTEst ./cutest
+    RUN git clone https://bitbucket.org/optrove/sif ./mastsif
+
+    ENV ARCHDEFS /cutest/archdefs/
+    ENV SIFDECODE /cutest/sifdecode/
+    ENV MASTSIF /cutest/mastsif/
+    ENV CUTEST /cutest/cutest/
+    ENV MYARCH "pc64.lnx.gfo"
+    ENTRYPOINT ./archdefs/install_optrove && tail -f /dev/null
+
+You can then build, launch, and login to the container in the usual way:
+
+ .. code-block:: bash
+
+    $ docker build -t cutest .          # build the container
+    $ docker run -dt cutest             # launch the container
+    $ docker exec -it cutest /bin/bash  # login to the container
+
+Please see the `docker docs <https://docs.docker.com/get-started/>`_ for more details on using docker containers.
+
+Installing PyCUTEst
+-------------------
+Note that CUTEst must be installed in order for PyCUTEst to work (see above).
 
 Installing PyCUTEst using pip
------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 For easy installation, use `pip <http://www.pip-installer.org/>`_:
 
  .. code-block:: bash
@@ -124,7 +165,7 @@ And set an environment variable to tell PyCUTEst about this directory, by adding
 If you do not set this environment variable, then PyCUTEst will create a cache folder of compiled problems inside your current working directory.
 
 Manual installation of PyCUTEst
--------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Alternatively, you can download the source code from `Github <https://github.com/jfowkes/pycutest>`_ and unpack as follows:
 
  .. code-block:: bash
@@ -147,12 +188,8 @@ To upgrade PyCUTEst to the latest version, navigate to the top-level directory (
     $ git pull
     $ pip install .
 
-Testing
--------
-This documentation provides some simple examples of how to run PyCUTEst.
-
-Uninstallation
---------------
+Uninstallation of PyCUTEst
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 You can uninstall PyCUTEst as follows:
 
  .. code-block:: bash

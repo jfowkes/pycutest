@@ -14,6 +14,7 @@
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -40,9 +41,9 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../install.html">Installing PyCUTEst</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../building.html">Building Test Problems</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../interface.html">Problem Interface</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../interface.html#problem-methods">Problem Methods</a></li>
@@ -68,6 +69,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../example.html">Example Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../history.html">Version History</a></li>
 </ul>
 
@@ -88,7 +90,7 @@
           <li><a href="../interface.html">Problem Interface</a> &raquo;</li>
       <li>CUTEstProblem.jprod</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/methods/pycutest.CUTEstProblem.jprod.rst.txt" rel="nofollow"> View page source</a>
+              <a href="https://github.com/jfowkes/pycutest/blob/master/docs/methods/pycutest.CUTEstProblem.jprod.rst" class="fa fa-github"> Edit on GitHub</a>
       </li>
   </ul>
   <hr/>
@@ -97,14 +99,14 @@
            <div itemprop="articleBody">
              
   <section id="cutestproblem-jprod">
-<h1>CUTEstProblem.jprod<a class="headerlink" href="#cutestproblem-jprod" title="Permalink to this headline"></a></h1>
+<h1>CUTEstProblem.jprod<a class="headerlink" href="#cutestproblem-jprod" title="Permalink to this heading"></a></h1>
 <dl class="py method">
 <dt class="sig sig-object py" id="pycutest.CUTEstProblem.jprod">
 <span class="sig-prename descclassname"><span class="pre">CUTEstProblem.</span></span><span class="sig-name descname"><span class="pre">jprod</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transpose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycutest.CUTEstProblem.jprod" title="Permalink to this definition"></a></dt>
 <dd><p>Evaluate product of constraint Jacobian with a vector p</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># evaluate J*p where J is the last compute Jacobian</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># evaluate J*p where J is the last computed Jacobian</span>
 <span class="n">r</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">jprod</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
-<span class="c1"># evaluate J.T*p where J is the last compute Jacobian</span>
+<span class="c1"># evaluate J.T*p where J is the last computed Jacobian</span>
 <span class="n">r</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">jprod</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">transpose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="c1"># evaluate Jacobian at x, and return J(x)*p</span>
 <span class="n">r</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">jprod</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
@@ -117,13 +119,16 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>p</strong> – vector to be multiplied by the Jacobian of constraints</p></li>
-<li><p><strong>transpose</strong> – if True, multiply by transpose of Jacobian (J.T*p)</p></li>
-<li><p><strong>x</strong> – input vector for Jacobian (default=None -&gt; use last computed Jacobian)</p></li>
+<li><p><strong>p</strong> (<em>numpy.ndarray with shape</em><em> (</em><em>n</em><em>,</em><em>) or </em><em>(</em><em>m</em><em>,</em><em>) </em><em>if transpose=True</em>) – vector to be multiplied by the Jacobian of constraints</p></li>
+<li><p><strong>transpose</strong> (<em>bool</em><em>, </em><em>optional</em>) – if True, multiply by transpose of Jacobian (J.T*p)</p></li>
+<li><p><strong>x</strong> (<em>numpy.ndarray with shape</em><em> (</em><em>n</em><em>,</em><em>)</em><em>, </em><em>optional</em>) – input vector for Jacobian (default=None -&gt; use last computed Jacobian)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Jacobian-vector product J(x)*p or J(x).T * p if transpose=True</p>
+<dd class="field-even"><p>Jacobian-vector product J(x)*p or J(x).T*p if transpose=True</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.ndarray(m,) or numpy.ndarray(n,) if transpose=True</p>
 </dd>
 </dl>
 </dd></dl>

@@ -14,6 +14,7 @@
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -40,9 +41,9 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../install.html">Installing PyCUTEst</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../building.html">Building Test Problems</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../interface.html">Problem Interface</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../interface.html#problem-methods">Problem Methods</a></li>
@@ -68,6 +69,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../example.html">Example Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../history.html">Version History</a></li>
 </ul>
 
@@ -88,7 +90,7 @@
           <li><a href="../interface.html">Problem Interface</a> &raquo;</li>
       <li>CUTEstProblem.hess</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/methods/pycutest.CUTEstProblem.hess.rst.txt" rel="nofollow"> View page source</a>
+              <a href="https://github.com/jfowkes/pycutest/blob/master/docs/methods/pycutest.CUTEstProblem.hess.rst" class="fa fa-github"> Edit on GitHub</a>
       </li>
   </ul>
   <hr/>
@@ -97,7 +99,7 @@
            <div itemprop="articleBody">
              
   <section id="cutestproblem-hess">
-<h1>CUTEstProblem.hess<a class="headerlink" href="#cutestproblem-hess" title="Permalink to this headline"></a></h1>
+<h1>CUTEstProblem.hess<a class="headerlink" href="#cutestproblem-hess" title="Permalink to this heading"></a></h1>
 <dl class="py method">
 <dt class="sig sig-object py" id="pycutest.CUTEstProblem.hess">
 <span class="sig-prename descclassname"><span class="pre">CUTEstProblem.</span></span><span class="sig-name descname"><span class="pre">hess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycutest.CUTEstProblem.hess" title="Permalink to this definition"></a></dt>
@@ -118,12 +120,15 @@ To evaluate the Hessian of the objective for constrained problems use ihess()</p
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> – input vector</p></li>
-<li><p><strong>v</strong> – Lagrange multiplies (needed for constrained problems)</p></li>
+<li><p><strong>x</strong> (<em>numpy.ndarray with shape</em><em> (</em><em>n</em><em>,</em><em>)</em>) – input vector</p></li>
+<li><p><strong>v</strong> (<em>numpy.ndarray with shape</em><em> (</em><em>m</em><em>,</em><em>)</em><em>, </em><em>optional</em>) – vector of Lagrange multipliers (must be specified for constrained problems)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Hessian of objective (unconstrained) or Lagrangian (constrained) at x</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.ndarray(n,n)</p>
 </dd>
 </dl>
 </dd></dl>

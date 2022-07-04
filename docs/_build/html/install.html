@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Installing PyCUTEst &mdash; PyCUTEst v1.2 documentation</title>
+  <title>Installation &mdash; PyCUTEst v1.2 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -14,6 +14,7 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -40,21 +41,28 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Installing PyCUTEst</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#requirements">Requirements</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#installing-cutest-on-linux">Installing CUTEst on Linux</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#installing-cutest-on-mac">Installing CUTEst on Mac</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#installing-pycutest-using-pip">Installing PyCUTEst using pip</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#manual-installation-of-pycutest">Manual installation of PyCUTEst</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#testing">Testing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#uninstallation">Uninstallation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installing-cutest">Installing CUTEst</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#installing-cutest-on-linux">Installing CUTEst on Linux</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#installing-cutest-on-mac">Installing CUTEst on Mac</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cutest-docker-container">CUTEst Docker Container</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#installing-pycutest">Installing PyCUTEst</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#installing-pycutest-using-pip">Installing PyCUTEst using pip</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#manual-installation-of-pycutest">Manual installation of PyCUTEst</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#uninstallation-of-pycutest">Uninstallation of PyCUTEst</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="building.html">Building Test Problems</a></li>
 <li class="toctree-l1"><a class="reference internal" href="interface.html">Problem Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="example.html">Example Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="history.html">Version History</a></li>
 </ul>
 
@@ -72,9 +80,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Installing PyCUTEst</li>
+      <li>Installation</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/install.rst.txt" rel="nofollow"> View page source</a>
+              <a href="https://github.com/jfowkes/pycutest/blob/master/docs/install.rst" class="fa fa-github"> Edit on GitHub</a>
       </li>
   </ul>
   <hr/>
@@ -82,10 +90,10 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="installing-pycutest">
-<h1>Installing PyCUTEst<a class="headerlink" href="#installing-pycutest" title="Permalink to this headline"></a></h1>
+  <section id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this heading"></a></h1>
 <section id="requirements">
-<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline"></a></h2>
+<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this heading"></a></h2>
 <p>PyCUTEst requires the following software to be installed:</p>
 <ul class="simple">
 <li><p>Python 2.7 or Python 3 (<a class="reference external" href="http://www.python.org/">http://www.python.org/</a>)</p></li>
@@ -98,8 +106,11 @@
 </ul>
 <p><strong>Please Note:</strong> Currently PyCUTEst only supports Mac and Linux. For Windows 10 (or later), PyCUTEst can be used through the <a class="reference external" href="https://docs.microsoft.com/en-us/windows/wsl/">Windows Subsystem for Linux</a>, following the Linux installation instructions.</p>
 </section>
+<section id="installing-cutest">
+<h2>Installing CUTEst<a class="headerlink" href="#installing-cutest" title="Permalink to this heading"></a></h2>
+<p>Note that CUTEst must be installed in order for PyCUTEst to work.</p>
 <section id="installing-cutest-on-linux">
-<h2>Installing CUTEst on Linux<a class="headerlink" href="#installing-cutest-on-linux" title="Permalink to this headline"></a></h2>
+<h3>Installing CUTEst on Linux<a class="headerlink" href="#installing-cutest-on-linux" title="Permalink to this heading"></a></h3>
 <p>These instructions do not include installation of the MATLAB interface. You will need to install four packages: <a class="reference external" href="https://github.com/ralna/ARCHDefs">archdefs</a>, <a class="reference external" href="https://github.com/ralna/SIFDecode">SIFDecode</a>, <a class="reference external" href="https://github.com/ralna/CUTEst">CUTEst</a> and <a class="reference external" href="https://bitbucket.org/optrove/sif">MASTSIF</a>. To keep things simple, install all four packages in the same directory:</p>
 <blockquote>
 <div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ mkdir cutest
@@ -155,7 +166,7 @@ $ <span class="nb">cd</span> <span class="nv">$CUTEST</span>/src <span class="p"
 <p><strong>Please Note:</strong> <em>currently PyCUTEst only supports gfortran and uses the default version on your path (as returned by</em> <code class="code docutils literal notranslate"><span class="pre">gfortran</span> <span class="pre">-v</span></code> <em>). Please ensure this is the same version that you install CUTEst with above otherwise you may experience segmentation faults, this should be the case if you select the generic</em> <code class="code docutils literal notranslate"><span class="pre">GNU</span> <span class="pre">gfortran</span> <span class="pre">compiler</span></code> <em>as the fortran compiler in the installer above.</em></p>
 </section>
 <section id="installing-cutest-on-mac">
-<h2>Installing CUTEst on Mac<a class="headerlink" href="#installing-cutest-on-mac" title="Permalink to this headline"></a></h2>
+<h3>Installing CUTEst on Mac<a class="headerlink" href="#installing-cutest-on-mac" title="Permalink to this heading"></a></h3>
 <p>Install CUTEst using Homebrew as detailed below (installing CUTEst manually on Mac is not supported). First it is important to ensure that you have the latest version of Xcode Command Line Tools installed (or the latest version of Xcode), please ensure this is the case by following <a class="reference external" href="https://mac.install.guide/commandlinetools/index.html">this guide</a>. Now install the Homebrew package manager:</p>
 <blockquote>
 <div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ /bin/bash -c <span class="s2">&quot;</span><span class="k">$(</span>curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh<span class="k">)</span><span class="s2">&quot;</span>
@@ -173,10 +184,47 @@ $ <span class="k">done</span>
 </pre></div>
 </div>
 </div></blockquote>
-<p><strong>Please Note:</strong> <em>you may see warnings such as</em> <code class="code docutils literal notranslate"><span class="pre">ld:</span> <span class="pre">warning:</span> <span class="pre">object</span> <span class="pre">file</span> <span class="pre">(RANGE.o)</span> <span class="pre">was</span> <span class="pre">built</span> <span class="pre">for</span> <span class="pre">newer</span> <span class="pre">macOS</span> <span class="pre">version</span> <span class="pre">(11.5)</span> <span class="pre">than</span> <span class="pre">being</span> <span class="pre">linked</span> <span class="pre">(10.15)</span></code> <em>when using PyCUTEst on Mac, to suppress these warnings please set the environment variable</em> <code class="code docutils literal notranslate"><span class="pre">MACOSX_DEPLOYMENT_TARGET</span></code> <em>to your current macOS version (e.g.</em> <code class="code docutils literal notranslate"><span class="pre">export</span> <span class="pre">MACOSX_DEPLOYMENT_TARGET=11.5</span></code> <em>in this example, you can make this permanent by adding it your</em> <code class="code docutils literal notranslate"><span class="pre">~/.bashrc</span></code> <em>file).</em></p>
+<p><strong>Please Note:</strong> <em>you may see warnings such as</em> <code class="code docutils literal notranslate"><span class="pre">ld:</span> <span class="pre">warning:</span> <span class="pre">object</span> <span class="pre">file</span> <span class="pre">(RANGE.o)</span> <span class="pre">was</span> <span class="pre">built</span> <span class="pre">for</span> <span class="pre">newer</span> <span class="pre">macOS</span> <span class="pre">version</span> <span class="pre">(11.5)</span> <span class="pre">than</span> <span class="pre">being</span> <span class="pre">linked</span> <span class="pre">(10.15)</span></code> <em>when using PyCUTEst on Mac, to suppress these warnings please set the environment variable</em> <code class="code docutils literal notranslate"><span class="pre">MACOSX_DEPLOYMENT_TARGET</span></code> <em>to your current macOS version (e.g.</em> <code class="code docutils literal notranslate"><span class="pre">export</span> <span class="pre">MACOSX_DEPLOYMENT_TARGET=11.5</span></code> <em>in this example, you can make this permanent by adding it to your</em> <code class="code docutils literal notranslate"><span class="pre">~/.bashrc</span></code> <em>file).</em></p>
 </section>
+<section id="cutest-docker-container">
+<h3>CUTEst Docker Container<a class="headerlink" href="#cutest-docker-container" title="Permalink to this heading"></a></h3>
+<p>CUTEst can be installed into its own Docker container using the following Dockerfile:</p>
+<blockquote>
+<div><div class="highlight-docker notranslate"><div class="highlight"><pre><span></span><span class="k">FROM</span><span class="w"> </span><span class="s">continuumio/miniconda3</span>
+
+<span class="k">WORKDIR</span><span class="w"> </span><span class="s">/cutest</span>
+<span class="k">RUN</span><span class="w"> </span>apt update
+<span class="k">RUN</span><span class="w"> </span>apt install -y build-essential git gfortran
+<span class="k">RUN</span><span class="w"> </span>git clone https://github.com/ralna/ARCHDefs ./archdefs
+<span class="k">RUN</span><span class="w"> </span>git clone https://github.com/ralna/SIFDecode ./sifdecode
+<span class="k">RUN</span><span class="w"> </span>git clone https://github.com/ralna/CUTEst ./cutest
+<span class="k">RUN</span><span class="w"> </span>git clone https://bitbucket.org/optrove/sif ./mastsif
+
+<span class="k">ENV</span><span class="w"> </span>ARCHDEFS /cutest/archdefs/
+<span class="k">ENV</span><span class="w"> </span>SIFDECODE /cutest/sifdecode/
+<span class="k">ENV</span><span class="w"> </span>MASTSIF /cutest/mastsif/
+<span class="k">ENV</span><span class="w"> </span>CUTEST /cutest/cutest/
+<span class="k">ENV</span><span class="w"> </span>MYARCH <span class="s2">&quot;pc64.lnx.gfo&quot;</span>
+<span class="k">ENTRYPOINT</span><span class="w"> </span>./archdefs/install_optrove <span class="o">&amp;&amp;</span> tail -f /dev/null
+</pre></div>
+</div>
+</div></blockquote>
+<p>You can then build, launch, and login to the container in the usual way:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ docker build -t cutest .          <span class="c1"># build the container</span>
+$ docker run -dt cutest             <span class="c1"># launch the container</span>
+$ docker <span class="nb">exec</span> -it cutest /bin/bash  <span class="c1"># login to the container</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Please see the <a class="reference external" href="https://docs.docker.com/get-started/">docker docs</a> for more details on using docker containers.</p>
+</section>
+</section>
+<section id="installing-pycutest">
+<h2>Installing PyCUTEst<a class="headerlink" href="#installing-pycutest" title="Permalink to this heading"></a></h2>
+<p>Note that CUTEst must be installed in order for PyCUTEst to work (see above).</p>
 <section id="installing-pycutest-using-pip">
-<h2>Installing PyCUTEst using pip<a class="headerlink" href="#installing-pycutest-using-pip" title="Permalink to this headline"></a></h2>
+<h3>Installing PyCUTEst using pip<a class="headerlink" href="#installing-pycutest-using-pip" title="Permalink to this heading"></a></h3>
 <p>For easy installation, use <a class="reference external" href="http://www.pip-installer.org/">pip</a>:</p>
 <blockquote>
 <div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ pip install pycutest
@@ -205,7 +253,7 @@ $ <span class="k">done</span>
 <p>If you do not set this environment variable, then PyCUTEst will create a cache folder of compiled problems inside your current working directory.</p>
 </section>
 <section id="manual-installation-of-pycutest">
-<h2>Manual installation of PyCUTEst<a class="headerlink" href="#manual-installation-of-pycutest" title="Permalink to this headline"></a></h2>
+<h3>Manual installation of PyCUTEst<a class="headerlink" href="#manual-installation-of-pycutest" title="Permalink to this heading"></a></h3>
 <p>Alternatively, you can download the source code from <a class="reference external" href="https://github.com/jfowkes/pycutest">Github</a> and unpack as follows:</p>
 <blockquote>
 <div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/jfowkes/pycutest
@@ -228,18 +276,15 @@ $ pip install .
 </div>
 </div></blockquote>
 </section>
-<section id="testing">
-<h2>Testing<a class="headerlink" href="#testing" title="Permalink to this headline"></a></h2>
-<p>This documentation provides some simple examples of how to run PyCUTEst.</p>
-</section>
-<section id="uninstallation">
-<h2>Uninstallation<a class="headerlink" href="#uninstallation" title="Permalink to this headline"></a></h2>
+<section id="uninstallation-of-pycutest">
+<h3>Uninstallation of PyCUTEst<a class="headerlink" href="#uninstallation-of-pycutest" title="Permalink to this heading"></a></h3>
 <p>You can uninstall PyCUTEst as follows:</p>
 <blockquote>
 <div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ pip uninstall pycutest
 </pre></div>
 </div>
 </div></blockquote>
+</section>
 </section>
 </section>
 

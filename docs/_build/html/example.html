@@ -14,11 +14,12 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Version History" href="history.html" />
+    <link rel="next" title="Contributing" href="contributing.html" />
     <link rel="prev" title="CUTEstProblem.gradsphess" href="methods/pycutest.CUTEstProblem.gradsphess.html" /> 
 </head>
 
@@ -40,12 +41,17 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="install.html">Installing PyCUTEst</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="building.html">Building Test Problems</a></li>
 <li class="toctree-l1"><a class="reference internal" href="interface.html">Problem Interface</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Example Usage</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Example Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#general-optimization">General optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#nonlinear-least-squares">Nonlinear least-squares</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="history.html">Version History</a></li>
 </ul>
 
@@ -65,7 +71,7 @@
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
       <li>Example Usage</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/example.rst.txt" rel="nofollow"> View page source</a>
+              <a href="https://github.com/jfowkes/pycutest/blob/master/docs/example.rst" class="fa fa-github"> Edit on GitHub</a>
       </li>
   </ul>
   <hr/>
@@ -74,12 +80,14 @@
            <div itemprop="articleBody">
              
   <section id="example-usage">
-<h1>Example Usage<a class="headerlink" href="#example-usage" title="Permalink to this headline"></a></h1>
+<h1>Example Usage<a class="headerlink" href="#example-usage" title="Permalink to this heading"></a></h1>
+<section id="general-optimization">
+<h2>General optimization<a class="headerlink" href="#general-optimization" title="Permalink to this heading"></a></h2>
 <p>The following code presents a simple use of PyCUTEst to minimize <a class="reference external" href="https://en.wikipedia.org/wiki/Rosenbrock_function">Rosenbrock’s function</a> in 2D (problem <code class="code docutils literal notranslate"><span class="pre">ROSENBR</span></code>) using Newton’s method.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">PyCUTEst example: minimize 2D Rosenbrock function using Newton&#39;s method.</span>
 
-<span class="sd">Jaroslav Fowkes and Lindon Roberts, 2020.</span>
+<span class="sd">Jaroslav Fowkes and Lindon Roberts, 2022.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="c1"># Ensure compatibility with Python 2</span>
@@ -123,13 +131,70 @@ Done
 </pre></div>
 </div>
 </section>
+<section id="nonlinear-least-squares">
+<h2>Nonlinear least-squares<a class="headerlink" href="#nonlinear-least-squares" title="Permalink to this heading"></a></h2>
+<p>In CUTEst nonlinear least-squares problems are encoded as nonlinear equations which have no objective function defined (as denoted by the <code class="code docutils literal notranslate"><span class="pre">N</span></code> in their classification).
+Instead, their residual(s) <code class="code docutils literal notranslate"><span class="pre">r(x)</span></code> and Jacobian <code class="code docutils literal notranslate"><span class="pre">J(x)</span></code> are accessed using <a class="reference external" href="methods/pycutest.CUTEstProblem.cons.html">CUTEstProblem.cons()</a>.
+Typically you will want to use them as nonlinear least-squares problems, in which case you can construct a standard objective function and gradient as:</p>
+<div class="highlight-latex notranslate"><div class="highlight"><pre><span></span>f(x) = 0.5*||r(x)||<span class="nb">^</span>2
+g(x) = J(x)<span class="nb">^</span>T r(x)
+</pre></div>
+</div>
+<p>The following code presents a simple use of PyCUTEst to minimize problem <code class="code docutils literal notranslate"><span class="pre">ARGLALE</span></code> using the <a class="reference external" href="https://en.wikipedia.org/wiki/Gauss–Newton_algorithm">Gauss-Newton algorithm</a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">PyCUTEst example: minimize 10D ALRGLALE problem using the Gauss-Newton algorithm.</span>
+
+<span class="sd">Jaroslav Fowkes and Lindon Roberts, 2022.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># Ensure compatibility with Python 2</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pycutest</span>
+
+<span class="c1"># Nonlinear least-squares problem in 10 dimensions with 20 residuals</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">pycutest</span><span class="o">.</span><span class="n">import_problem</span><span class="p">(</span><span class="s1">&#39;ARGLALE&#39;</span><span class="p">,</span> <span class="n">sifParams</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;N&#39;</span><span class="p">:</span><span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;M&#39;</span><span class="p">:</span><span class="mi">20</span><span class="p">})</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ARGLALE problem in </span><span class="si">%g</span><span class="s2">D with </span><span class="si">%g</span><span class="s2"> residuals&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">m</span><span class="p">))</span>
+
+<span class="n">iters</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">x0</span>
+<span class="n">r</span><span class="p">,</span> <span class="n">J</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">cons</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">gradient</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># residual and Jacobian</span>
+<span class="n">f</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>  <span class="c1"># objective</span>
+<span class="n">g</span> <span class="o">=</span> <span class="n">J</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>  <span class="c1"># gradient</span>
+<span class="n">H</span> <span class="o">=</span> <span class="n">J</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">J</span><span class="p">)</span>  <span class="c1"># Gauss-Newton Hessian approximation</span>
+
+<span class="k">while</span> <span class="n">iters</span> <span class="o">&lt;</span> <span class="mi">100</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">g</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">1e-10</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Iteration </span><span class="si">%g</span><span class="s2">: objective value is </span><span class="si">%g</span><span class="s2"> with norm of gradient </span><span class="si">%g</span><span class="s2"> at x = </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">iters</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">g</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="o">-</span><span class="n">g</span><span class="p">)</span>  <span class="c1"># Gauss-Newton step</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">s</span>  <span class="c1"># used fixed step length</span>
+    <span class="n">r</span><span class="p">,</span> <span class="n">J</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">cons</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">gradient</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+    <span class="n">g</span> <span class="o">=</span> <span class="n">J</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+    <span class="n">H</span> <span class="o">=</span> <span class="n">J</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">J</span><span class="p">)</span>
+    <span class="n">iters</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Found minimum x = </span><span class="si">%s</span><span class="s2"> after </span><span class="si">%g</span><span class="s2"> iterations&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">iters</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Done&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For this problem, the Gauss-Newton algorithm finds the unique local and global minimum <code class="code docutils literal notranslate"><span class="pre">f(-1,-1,-1,-1,-1,-1,-1,-1,-1,-1)=5</span></code> in one step:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>ARGLALE problem in 10D with 20 residuals
+Iteration 0: objective value is 25 with norm of gradient 6.32456 at x = [1. 1. 1. 1. 1. 1. 1. 1. 1. 1.]
+Found minimum x = [-1. -1. -1. -1. -1. -1. -1. -1. -1. -1.] after 1 iterations
+Done
+</pre></div>
+</div>
+</section>
+</section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="methods/pycutest.CUTEstProblem.gradsphess.html" class="btn btn-neutral float-left" title="CUTEstProblem.gradsphess" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="history.html" class="btn btn-neutral float-right" title="Version History" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="contributing.html" class="btn btn-neutral float-right" title="Contributing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
