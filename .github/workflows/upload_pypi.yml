@@ -1,0 +1,25 @@
+name: Package and upload to PyPI
+
+# Publish when a (published) GitHub Release is created
+on:
+  release:
+    types:
+      - published
+
+jobs:
+  build_publish:
+    name: Build and publish
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build sdist
+        run: python setup.py sdist
+
+      - name: Build universal wheel
+        run: python setup.py bdist_wheel
+
+      - uses: pypa/gh-action-pypi-publish@v1.5.0
+        with:
+          user: __token__
+          password: ${{ secrets.pypi_password }}
