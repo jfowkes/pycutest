@@ -2,6 +2,13 @@ Version History
 ===============
 This section lists the different versions of PyCUTEst and the updates between them.
 
+Version 1.3 (6 Sep 2022)
+------------------------
+* Use human-readable problem properties (breaking change)
+* Add guidelines for contributors
+* Simplify CUTEst installation
+* Add CUTEst docker install option
+
 Version 1.2 (21 Feb 2022)
 -------------------------
 * Use setuptools instead of distutils
