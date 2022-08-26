@@ -5,19 +5,19 @@ tags:
   - optimization
 authors:
   - name: Jaroslav Fowkes
-    affiliation: 2
-  - name: Lindon Roberts
-    affiliation: "3, 4"
-  - name: Árpád Bűrmen
     affiliation: 1
+  - name: Lindon Roberts
+    affiliation: "2, 3"
+  - name: Árpád Bűrmen
+    affiliation: 4
 affiliations:
-  - name: Faculty of Electrical Engineering, University of Ljubljana, Tržaška cesta 25, SI-1000 Ljubljana, Slovenia
-    index: 1
   - name: Science and Technology Facilities Council, Rutherford Appleton Laboratory, Harwell Campus, Didcot, Oxfordshire, OX11 0QX, UK
-    index: 2
+    index: 1
   - name: Mathematical Sciences Institute, Building 145, Science Road, Australian National University, Canberra ACT 2601, Australia
-    index: 3
+    index: 2
   - name: School of Mathematics and Statistics, Carslaw Building, University of Sydney, Camperdown NSW 2006, Australia
+    index: 3
+  - name: Faculty of Electrical Engineering, University of Ljubljana, Tržaška cesta 25, SI-1000 Ljubljana, Slovenia
     index: 4
 date: March 2022
 bibliography: paper.bib
