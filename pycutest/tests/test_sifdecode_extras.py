@@ -131,8 +131,8 @@ class TestClassification(unittest.TestCase):
             deg = int(true_properties[3])
             origin = true_properties[5]
             internal = true_properties[6] == 'Y'
-            n = None if true_properties[8] == 'V' else int(true_properties[8])
-            m = None if true_properties[10] == 'V' else int(true_properties[10])
+            n = 'variable' if true_properties[8] == 'V' else int(true_properties[8])
+            m = 'variable' if true_properties[10] == 'V' else int(true_properties[10])
             self.assertEqual(obj, properties['objective'], "Incorrect objective for %s" % p)
             self.assertEqual(cons, properties['constraints'], "Incorrect constraints for %s" % p)
             self.assertEqual(reg, properties['regular'], "Incorrect regularity for %s" % p)
