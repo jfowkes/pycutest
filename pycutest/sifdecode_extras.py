@@ -283,19 +283,19 @@ def find_problems(objective=None, constraints=None, regular=None,
             continue
         if internal is not None and data['internal']!=internal:
             continue
-        if n is not None and data['n'] is not None and (data['n']<n[0] or data['n']>n[1]):
+        if n is not None and data['n'] is not None and data['n'] != 'variable' and (data['n']<n[0] or data['n']>n[1]):
             continue
         if  userN is not None:
-            if userN and data['n'] is not None:
+            if userN and data['n'] is not None and data['n'] != 'variable':
                 continue
-            if not userN and data['n'] is None:
+            if not userN and data['n'] is None and data['n'] != 'variable':
                 continue
-        if m is not None and data['m'] is not None and (data['m']<m[0] or data['m']>m[1]):
+        if m is not None and data['m'] is not None and data['m'] != 'variable' and (data['m']<m[0] or data['m']>m[1]):
             continue
         if userM is not None:
-            if userM and data['m'] is not None:
+            if userM and data['m'] is not None and data['m'] != 'variable':
                 continue
-            if not userM and data['m'] is None:
+            if not userM and data['m'] is None and data['m'] != 'variable':
                 continue
 
         # Problem matches, append it to the list
