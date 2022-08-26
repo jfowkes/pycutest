@@ -190,8 +190,8 @@ def problem_properties(problemName):
     * degree -- highest degree of analytically available derivative
     * origin -- problem origin code
     * internal -- ``True`` if problem has internal variables
-    * n -- number of variables (``None`` = can be set by the user)
-    * m -- number of constraints (``None`` = can be set by the user)
+    * n -- number of variables ('variable' = can be set by the user)
+    * m -- number of constraints ('variable' = can be set by the user)
 
     :param problemName: problem name
     :return: dict
@@ -213,13 +213,13 @@ def problem_properties(problemName):
     parts=cfString.split("-")
 
     if parts[2] in "Vv":
-        data['n']=None
+        data['n']='variable'
     else:
         data['n']=int(parts[2])
 
     try:
         if parts[3] in "Vv":
-            data['m']=None
+            data['m']='variable'
         else:
             data['m']=int(parts[3])
     except IndexError:
