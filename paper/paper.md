@@ -4,12 +4,12 @@ tags:
   - Python
   - optimization
 authors:
-  - name: Árpád Bűrmen
-    affiliation: 1
   - name: Jaroslav Fowkes
     affiliation: 2
   - name: Lindon Roberts
-    affiliation: 3
+    affiliation: "3, 4"
+  - name: Árpád Bűrmen
+    affiliation: 1
 affiliations:
   - name: Faculty of Electrical Engineering, University of Ljubljana, Tržaška cesta 25, SI-1000 Ljubljana, Slovenia
     index: 1
@@ -17,6 +17,8 @@ affiliations:
     index: 2
   - name: Mathematical Sciences Institute, Building 145, Science Road, Australian National University, Canberra ACT 2601, Australia
     index: 3
+  - name: School of Mathematics and Statistics, Carslaw Building, University of Sydney, Camperdown NSW 2006, Australia
+    index: 4
 date: March 2022
 bibliography: paper.bib
 ---
