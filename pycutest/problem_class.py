@@ -457,10 +457,12 @@ class CUTEstProblem(object):
         :rtype: numpy.ndarray(n,n)
         """
         self.check_input_x(x)
-        self.check_input_v(v)
         if self.m > 0:
+            assert v is not None, "CUTEstProblem.hess: v must be specified for constrained problems. For the objective Hessian, use problem.ihess(x)"
+            self.check_input_v(v)
             H = self._module.hess(self.free_to_all(x), v)
         else:
+            assert v is None, "CUTEstProblem.hess: v must be None for unconstrained problems"
             H = self._module.hess(self.free_to_all(x))
         # 2d indexing with lists is a bit strange in Python
         # https://stackoverflow.com/questions/4257394/slicing-of-a-numpy-2d-array-or-how-do-i-extract-an-mxm-submatrix-from-an-nxn-ar
@@ -705,10 +707,12 @@ class CUTEstProblem(object):
         :rtype: scipy.sparse.coo_matrix(n,n)
         """
         self.check_input_x(x)
-        self.check_input_v(v)
         if self.m > 0:
+            assert v is not None, "CUTEstProblem.sphess: v must be specified for constrained problems. For the objective Hessian, use problem.isphess(x)"
+            self.check_input_v(v)
             H = self._module.sphess(self.free_to_all(x), v)
         else:
+            assert v is None, "CUTEstProblem.sphess: v must be None for unconstrained problems"
             H = self._module.sphess(self.free_to_all(x), v)
         return sparse_mat_extract_rows_and_columns(H, self.idx_free, self.idx_free)
 
