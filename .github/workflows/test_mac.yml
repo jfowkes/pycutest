@@ -25,6 +25,13 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
+        ls -lh /usr/local/bin/gcc*
+        ls -lh /usr/local/bin/gfortran*
+        ls -lh /usr/local/Cellar/gcc*
+        ls -lh /usr/local/opt/gcc*
+        sudo ln -s /usr/local/bin/gfortran-11 /usr/local/bin/gfortran
+        sudo mkdir /usr/local/gfortran
+        sudo ln -s /usr/local/Cellar/gcc@11/*/lib/gcc/11 /usr/local/gfortran/lib
         brew tap optimizers/cutest &&
         brew install cutest --without-single
         pip install -r requirements.txt --only-binary=numpy,scipy
