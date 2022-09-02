@@ -176,6 +176,31 @@ def update_classifications(verbose=False):
         fh.close()
 
 
+"""
+Dictionary of human-readable CUTEst problem classifications
+
+See http://www.cuter.rl.ac.uk/Problems/classification.shtml for details
+"""
+cfDict = {
+    'objective': {'N' : 'none',
+                  'C' : 'constant',
+                  'L' : 'linear',
+                  'Q' : 'quadratic',
+                  'S' : 'sum of squares',
+                  'O' : 'other'},
+    'constraints': {'U' : 'unconstrained',
+                    'X' : 'equality',
+                    'B' : 'bound',
+                    'N' : 'adjacency',
+                    'L' : 'linear',
+                    'Q' : 'quadratic',
+                    'O' : 'other'},
+    'origin': {'A' : 'academic',
+               'M' : 'modelling',
+               'R' : 'real-world'},
+}
+
+
 def problem_properties(problemName):
     """
     Returns problem properties (uses the CUTEst problem classification string).
@@ -184,11 +209,11 @@ def problem_properties(problemName):
 
     The output is a dictionary with the following members:
 
-    * objective -- objective type code
-    * constraints -- constraints type code
+    * objective -- objective type
+    * constraints -- constraints type
     * regular -- ``True`` if problem is regular
     * degree -- highest degree of analytically available derivative
-    * origin -- problem origin code
+    * origin -- problem origin
     * internal -- ``True`` if problem has internal variables
     * n -- number of variables ('variable' = can be set by the user)
     * m -- number of constraints ('variable' = can be set by the user)
@@ -202,11 +227,11 @@ def problem_properties(problemName):
     cfString=classification[problemName]
 
     data={
-        'objective': cfString[0].upper(),
-        'constraints': cfString[1].upper(),
+        'objective': cfDict['objective'][cfString[0].upper()],
+        'constraints': cfDict['constraints'][cfString[1].upper()],
         'regular': cfString[2] in "Rr",
         'degree': int(cfString[3]),
-        'origin': cfString[5].upper(),
+        'origin': cfDict['origin'][cfString[5].upper()],
         'internal': cfString[6] in "Yy",
     }
 
@@ -243,13 +268,13 @@ def find_problems(objective=None, constraints=None, regular=None,
 
     If a requirement is not given, it is not applied.
 
-    See http://www.cuter.rl.ac.uk/Problems/classification.shtml for details on the letters used in the requirements.
+    See http://www.cuter.rl.ac.uk/Problems/classification.shtml for details on the requirements.
 
-    :param objective: a string containing one or more letters (NCLQSO) specifying the type of the objective function
-    :param constraints: a string containing one or more letters (UXBNLQO) the type of the constraints
+    :param objective: a string containing one or more substrings ('none','constant','linear','quadratic','sum of squares','other') specifying the type of the objective function
+    :param constraints: a string containing one or more substrings ('unconstrained','equality','bound','adjacency','linear','quadratic','other') specifying the type of the constraints
     :param regular: a boolean, ``True`` if the problem must be regular, ``False`` if it must be irregular
     :param degree: list of the form ``[min, max]`` specifying the minimum and the maximum number of analytically available derivatives
-    :param origin: a string containing one or more letters (AMR) specifying the origin of the problem
+    :param origin: a string containing one or more substrings ('academic','modelling','real-world') specifying the origin of the problem
     :param internal: a boolean, ``True`` if the problem must have internal variables, ``False`` if internal variables are not allowed
     :param n: a list of the form ``[min, max]`` specifying the lowest and the highest allowed number of variables
     :param userN: ``True`` if the problems must have user settable number of variables, ``False`` if the number must be hardcoded
