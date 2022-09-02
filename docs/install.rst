@@ -114,6 +114,7 @@ CUTEst can be installed into its own Docker container. Create a file named :code
     ENV MYARCH "pc64.lnx.gfo"
 
     RUN wget https://raw.githubusercontent.com/jfowkes/pycutest/master/.install_cutest.sh
+    RUN chmod +x .install_cutest.sh
     RUN ./.install_cutest.sh
 
     ENTRYPOINT tail -f /dev/null
@@ -122,9 +123,9 @@ You can then build, launch, and login to the container in the usual way:
 
  .. code-block:: bash
 
-    $ docker build -t cutest .          # build the container
-    $ docker run -dt cutest             # launch the container
-    $ docker exec -it cutest /bin/bash  # login to the container
+    $ docker build -t cutest .               # build the container
+    $ docker run --name mycutest -dt cutest  # launch the container
+    $ docker exec -it mycutest /bin/bash     # login to the container
 
 Please see the `docker docs <https://docs.docker.com/get-started/>`_ for more details on using docker containers.
 
