@@ -121,26 +121,25 @@ class TestClassification(unittest.TestCase):
         probs['ARGLALE'] = 'NLR2-AN-V-V'
         probs['ROSENBR'] = 'SUR2-AN-2-0'
         probs['BRATU2D'] = 'NOR2-MN-V-V'
+        true_probs = {}
+        true_probs['ARGLALE'] = {'objective':'none', 'constraints':'linear', 'regular':True, 'degree':2,
+                                 'origin':'academic', 'internal':False, 'n':'variable', 'm':'variable'}
+        true_probs['ROSENBR'] = {'objective':'sum of squares', 'constraints':'unconstrained', 'regular':True,
+                                 'degree':2, 'origin':'academic', 'internal':False, 'n':2, 'm':0}
+        true_probs['BRATU2D'] = {'objective':'none', 'constraints':'other', 'regular':True, 'degree':2,
+                                 'origin':'modelling', 'internal':False, 'n':'variable', 'm':'variable'}
         for p in probs:
             properties = pycutest.problem_properties(p)
-            true_properties = probs[p]
+            true_properties = true_probs[p]
             print(properties)
-            obj = true_properties[0]
-            cons = true_properties[1]
-            reg = true_properties[2] == 'R'
-            deg = int(true_properties[3])
-            origin = true_properties[5]
-            internal = true_properties[6] == 'Y'
-            n = 'variable' if true_properties[8] == 'V' else int(true_properties[8])
-            m = 'variable' if true_properties[10] == 'V' else int(true_properties[10])
-            self.assertEqual(obj, properties['objective'], "Incorrect objective for %s" % p)
-            self.assertEqual(cons, properties['constraints'], "Incorrect constraints for %s" % p)
-            self.assertEqual(reg, properties['regular'], "Incorrect regularity for %s" % p)
-            self.assertEqual(deg, properties['degree'], "Incorrect degree for %s" % p)
-            self.assertEqual(origin, properties['origin'], "Incorrect origin for %s" % p)
-            self.assertEqual(internal, properties['internal'], "Incorrect internal for %s" % p)
-            self.assertEqual(n, properties['n'], "Incorrect n for %s" % p)
-            self.assertEqual(m, properties['m'], "Incorrect m for %s" % p)
+            self.assertEqual(true_properties['objective'], properties['objective'], "Incorrect objective for %s" % p)
+            self.assertEqual(true_properties['constraints'], properties['constraints'], "Incorrect constraints for %s" % p)
+            self.assertEqual(true_properties['regular'], properties['regular'], "Incorrect regularity for %s" % p)
+            self.assertEqual(true_properties['degree'], properties['degree'], "Incorrect degree for %s" % p)
+            self.assertEqual(true_properties['origin'], properties['origin'], "Incorrect origin for %s" % p)
+            self.assertEqual(true_properties['internal'], properties['internal'], "Incorrect internal for %s" % p)
+            self.assertEqual(true_properties['n'], properties['n'], "Incorrect n for %s" % p)
+            self.assertEqual(true_properties['m'], properties['m'], "Incorrect m for %s" % p)
 
 
 class TestFindProblems(unittest.TestCase):
@@ -154,11 +153,11 @@ class TestFindProblems(unittest.TestCase):
         for p in ['ARGLALE', 'ROSENBR', 'BRATU2D']:
             self.assertTrue(p in all_probs, msg="All problems doesn't contain %s" % p)
         # Now just find those with nonlinear objectives
-        nl = pycutest.find_problems(objective='N')
+        nl = pycutest.find_problems(objective='none')
         for p in ['ARGLALE', 'BRATU2D']:
             self.assertTrue(p in nl, msg="Nonlinear problems doesn't contain %s" % p)
         # Simple objectives (unconstrained & linear)
-        simple_cons = pycutest.find_problems(constraints='UL')
+        simple_cons = pycutest.find_problems(constraints='unconstrained linear')
         for p in ['ARGLALE', 'ROSENBR']:
             self.assertTrue(p in simple_cons, msg="Nonlinear problems doesn't contain %s" % p)
         # Regularity
@@ -170,7 +169,7 @@ class TestFindProblems(unittest.TestCase):
         for p in ['ARGLALE', 'ROSENBR', 'BRATU2D']:
             self.assertTrue(p in deg, msg="2nd order problems doesn't contain %s" % p)
         # Origin
-        academic = pycutest.find_problems(origin='A')
+        academic = pycutest.find_problems(origin='academic')
         for p in ['ARGLALE', 'ROSENBR']:
             self.assertTrue(p in academic, msg="Academic problems doesn't contain %s" % p)
         # Internal
