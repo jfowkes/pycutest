@@ -2,7 +2,7 @@
 
 Contributions to PyCUTEst are always welcome - thanks for your interest in getting this far!
 
-### Reporting Bugs/Feature Suggestions
+### Reporting Bugs / Feature Suggestions
 
 If you find a bug in PyCUTEst, or have a suggestion about how PyCUTEst can be improved, please
 [create a Github issue](https://docs.github.com/en/issues/tracking-your-work-with-issues/creating-an-issue).
@@ -12,9 +12,9 @@ rather than creating a new one.
 
 When reporting a bug, it would be helpful if you could include:
 
-* Informative title and clear description
+* An informative title and clear description
 * A code snippet showing how the error occurred
-* Relevant Python output messages
+* Any relevant Python output messages
 * Information about your installation (e.g. operating system, Python version/distribution, PyCUTEst version)
 
 ### Submitting code changes
