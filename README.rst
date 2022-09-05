@@ -47,20 +47,8 @@ Now we are ready to install CUTEst in double precision (requires :code:`gfortran
 
  .. code-block:: bash
 
-    $ cd /path/to/cutest/cutest/
-    $ ${ARCHDEFS}/install_optrove
-
-This requires answering some questions as follows:
-
-    * Install CUTEst? Yes
-    * Require CUTEst-Matlab interface? No
-    * Platform? PC with generic 64-bit processor
-    * Operating system? Linux
-    * Fortran compiler? GNU gfortran compiler
-    * C compiler? GCC
-    * Compile SIFDecode? Yes
-    * Compile CUTEst? Yes
-    * Precision required? Double
+    $ source ~/.bashrc # load above environment variables
+    $ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/jfowkes/pycutest/master/.install_cutest.sh)"
 
 And CUTEst should run from here. To test that the installation works, issue the commands:
 
@@ -69,7 +57,7 @@ And CUTEst should run from here. To test that the installation works, issue the 
     $ cd $SIFDECODE/src ; make -f $SIFDECODE/makefiles/$MYARCH test
     $ cd $CUTEST/src ; make -f $CUTEST/makefiles/$MYARCH test
 
-**Please Note:** *currently PyCUTEst only supports gfortran and uses the default version on your path (as returned by* :code:`gfortran -v` *). Please ensure this is the same version that you install CUTEst with above otherwise you may experience segmentation faults, this should be the case if you select the generic* :code:`GNU gfortran compiler` *as the fortran compiler in the installer above.*
+**Please Note:** *currently PyCUTEst only supports gfortran and uses the default version on your path (as returned by* :code:`gfortran -v` *). Please ensure this is the same version that you install CUTEst with above otherwise you may experience segmentation faults.*
 
 Installing CUTEst on Mac
 ------------------------

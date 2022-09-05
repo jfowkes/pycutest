@@ -33,11 +33,11 @@ Please ensure that:
 
 * Your description clearly explains your changes
 * You have updated the documentation in :code:`docs`.
-We use `Sphinx <https://www.sphinx-doc.org/en/master/>`_ to create our documentation.
-You will need to install both the Sphinx and sphinx-rtd-theme packages.
+  We use `Sphinx <https://www.sphinx-doc.org/en/master/>`_ to create our documentation.
+  You will need to install both the Sphinx and sphinx-rtd-theme packages.
 * You have included relevant unit tests in :code:`pycutest/tests`.
-We use `nose <https://nose.readthedocs.io/en/latest/>`_ to run our unit tests
-but we do also provide a :code:`tox.ini` for local testing using `tox <https://tox.wiki/en/latest/>`_.
+  We use `nose <https://nose.readthedocs.io/en/latest/>`_ to run our unit tests
+  but we do also provide a :code:`tox.ini` for local testing using `tox <https://tox.wiki/en/latest/>`_.
 
 If you are fixing an issue, please reference the issue number in the pull request.
 
