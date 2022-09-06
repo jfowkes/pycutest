@@ -203,7 +203,7 @@ cfDict = {
 
 def problem_properties(problemName):
     """
-    Returns problem properties (uses the CUTEst problem classification string).
+    Returns problem properties (based on the CUTEst problem classification string).
 
     See http://www.cuter.rl.ac.uk/Problems/classification.shtml for details on the properties.
 
@@ -260,15 +260,13 @@ def find_problems(objective=None, constraints=None, regular=None,
         n=None, userN=None, m=None, userM=None):
     """
     Returns the problem names of problems that match the given requirements.
-    The search is based on the CUTEst problem classification string.
+    The search is based on the CUTEst problem classification string (see http://www.cuter.rl.ac.uk/Problems/classification.shtml).
 
     Problems with a user-settable number of variables/constraints match any given n / m.
 
     Returns the problem names of problems that matched the given requirements.
 
-    If a requirement is not given, it is not applied.
-
-    See http://www.cuter.rl.ac.uk/Problems/classification.shtml for details on the requirements.
+    If a requirement is not given, it is not applied. See below for details on the requirements.
 
     :param objective: a string containing one or more substrings (``'none'``, ``'constant'``, ``'linear'``, ``'quadratic'``, ``'sum of squares'``, ``'other'``) specifying the type of the objective function
     :param constraints: a string containing one or more substrings (``'unconstrained'``, ``'equality'``, ``'bound'``, ``'adjacency'``, ``'linear'``, ``'quadratic'``, ``'other'``) specifying the type of the constraints

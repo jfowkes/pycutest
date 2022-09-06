@@ -56,7 +56,7 @@ For this problem, Newton's method finds the unique local and global minimum :cod
 
 Nonlinear least-squares
 -----------------------
-In CUTEst nonlinear least-squares problems are encoded as nonlinear equations which have no objective function defined (as denoted by the :code:`N` in their classification).
+In CUTEst nonlinear least-squares problems are encoded as nonlinear equations which have no objective function defined (as denoted by 'none' in their classification).
 Instead, their residual(s) :code:`r(x)` and Jacobian :code:`J(x)` are accessed using `CUTEstProblem.cons() <methods/pycutest.CUTEstProblem.cons.html>`_.
 Typically you will want to use them as nonlinear least-squares problems, in which case you can construct a standard objective function and gradient as:
 

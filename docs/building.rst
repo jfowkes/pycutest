@@ -28,7 +28,7 @@ Which produces the output:
       # List of unconstrained, variable-dimension problems
       ['ARGLINA', 'ARGLINB', 'ARGLINC', 'ARGTRIGLS', 'ARWHEAD']
       # Properties of problem 'ROSENBR'
-      {'internal': False, 'degree': 2, 'n': 2, 'm': 0, 'objective': 'sum of squares', 'origin': 'academic', 'constraints': 'unconstrained', 'regular': True}
+      {'objective': 'sum of squares', 'constraints': 'unconstrained', 'regular': True, 'degree': 2, 'origin': 'academic', 'internal': False, 'n': 2, 'm': 0}
 
 Full documentation for these functions is given below.
 
