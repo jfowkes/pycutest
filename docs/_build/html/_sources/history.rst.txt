@@ -5,9 +5,12 @@ This section lists the different versions of PyCUTEst and the updates between th
 Version 1.3 (6 Sep 2022)
 ------------------------
 * Use human-readable problem properties (breaking change)
+* Check v is/isn't None for hess and sphess
+* Add types to problem method docstrings
 * Add guidelines for contributors
 * Simplify CUTEst installation
 * Add CUTEst docker install option
+* Improve documentation
 
 Version 1.2 (21 Feb 2022)
 -------------------------
