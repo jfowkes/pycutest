@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CUTEstProblem.hess &mdash; PyCUTEst v1.2 documentation</title>
+  <title>CUTEstProblem.hess &mdash; PyCUTEst v1.3 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -31,7 +31,7 @@
             <a href="../index.html" class="icon icon-home"> PyCUTEst
           </a>
               <div class="version">
-                1.2
+                1.3
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -118,16 +118,16 @@ To evaluate the Hessian of the objective for constrained problems use ihess()</p
 <p>This calls CUTEst routine CUTEST_cdh or CUTEST_udh.</p>
 <p>Note: in CUTEst, the sign convention is such that the Lagrangian = objective + lagrange_multipliers * constraints</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>x</strong> (<em>numpy.ndarray with shape</em><em> (</em><em>n</em><em>,</em><em>)</em>) – input vector</p></li>
 <li><p><strong>v</strong> (<em>numpy.ndarray with shape</em><em> (</em><em>m</em><em>,</em><em>)</em><em>, </em><em>optional</em>) – vector of Lagrange multipliers (must be specified for constrained problems)</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Hessian of objective (unconstrained) or Lagrangian (constrained) at x</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>numpy.ndarray(n,n)</p>
 </dd>
 </dl>

@@ -15,7 +15,7 @@ We can check the properties of a specific problem with `problem_properties() <fu
       import pycutest
 
       # Find unconstrained, variable-dimension problems
-      probs = pycutest.find_problems(constraints='U', userN=True)
+      probs = pycutest.find_problems(constraints='unconstrained', userN=True)
       print(sorted(probs)[:5])
 
       # Properties of problem ROSENBR
@@ -28,7 +28,7 @@ Which produces the output:
       # List of unconstrained, variable-dimension problems
       ['ARGLINA', 'ARGLINB', 'ARGLINC', 'ARGTRIGLS', 'ARWHEAD']
       # Properties of problem 'ROSENBR'
-      {'internal': False, 'degree': 2, 'n': 2, 'm': 0, 'objective': 'S', 'origin': 'A', 'constraints': 'U', 'regular': True}
+      {'objective': 'sum of squares', 'constraints': 'unconstrained', 'regular': True, 'degree': 2, 'origin': 'academic', 'internal': False, 'n': 2, 'm': 0}
 
 Full documentation for these functions is given below.
 
