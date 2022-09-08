@@ -110,7 +110,7 @@ And set an environment variable to tell PyCUTEst about this directory, by adding
 
 If you do not set this environment variable, then PyCUTEst will create a cache folder of compiled problems inside your current working directory.
 
-Note that can uninstall PyCUTEst as follows:
+Note that you can uninstall PyCUTEst as follows:
 
  .. code-block:: bash
 
