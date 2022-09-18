@@ -137,4 +137,8 @@ with these commands:
     $ mkdir pycutest_cache
     $ export PYCUTEST_CACHE="/path/to/pycutest_cache"
 
+Note that you can uninstall PyCUTEst as follows:
 
+.. code-block:: bash
+
+   $ pip uninstall pycutest
