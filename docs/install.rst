@@ -126,31 +126,15 @@ For easy installation, use `pip <http://www.pip-installer.org/>`_:
  .. code-block:: bash
 
     $ pip install pycutest
+    $ pip install --upgrade pycutest  # if existing installation on system
 
-Note that if an older install of PyCUTEst is present on your system you can use:
-
- .. code-block:: bash
-
-    $ pip install --upgrade pycutest
-
-to upgrade PyCUTEst to the latest version.
-
-You will then need to create a folder which will store all your compiled problems:
+With this, PyCUTEst will create a cache folder inside your current working directory.
+This cache directory is used for compiled problems. You can set a custom cache directory
+with these commands:
 
  .. code-block:: bash
 
     $ mkdir pycutest_cache
+    $ export PYCUTEST_CACHE="/path/to/pycutest_cache"
 
-And set an environment variable to tell PyCUTEst about this directory, by adding to your :code:`~/.bashrc` file:
 
- .. code-block:: bash
-
-    export PYCUTEST_CACHE="/path/to/pycutest_cache"
-
-If you do not set this environment variable, then PyCUTEst will create a cache folder of compiled problems inside your current working directory.
-
-Note that you can uninstall PyCUTEst as follows:
-
- .. code-block:: bash
-
-    $ pip uninstall pycutest
