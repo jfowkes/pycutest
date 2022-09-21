@@ -40,6 +40,7 @@ Our aim is for PyCUTEst to make it easier for both optimization users and softwa
    building
    interface
    example
+   support
    contributing
    history
 
