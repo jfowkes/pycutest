@@ -5,8 +5,8 @@ Contributions to PyCUTEst are always welcome - thanks for your interest in getti
 ### Reporting Bugs / Feature Suggestions
 
 If you find a bug in PyCUTEst, or have a suggestion about how PyCUTEst can be improved, please
-[create a Github issue](https://docs.github.com/en/issues/tracking-your-work-with-issues/creating-an-issue).
-It would be helpful if you first check the [existing list of open issues](https://github.com/jfowkes/pycutest/issues)
+[create a GitHub issue](https://docs.github.com/en/issues/tracking-your-work-with-issues/creating-an-issue).
+It would be helpful if you could first check the [existing list of open issues](https://github.com/jfowkes/pycutest/issues)
 to see if someone else has reported the same thing - in this case it would be better to comment on the existing issue
 rather than creating a new one.
 
@@ -15,7 +15,7 @@ rather than creating a new one.
 We are happy to accept code contributions from the PyCUTEst community.
 If you have made a change (bugfix, new feature, documentation improvement, etc), then please
 [submit a pull request](https://github.com/jfowkes/pycutest/pulls).
-Github has [more information on pull requests](https://docs.github.com/en/pull-requests).
+GitHub has [more information on pull requests](https://docs.github.com/en/pull-requests).
 
 ### Code of Conduct
 We expect everyone in the PyCUTEst community to show respect to each other and behave appropriately at all times.

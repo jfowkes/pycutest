@@ -116,6 +116,10 @@ Note that you can uninstall PyCUTEst as follows:
 
     $ pip uninstall pycutest
 
+Support
+-------
+Please ask any questions or report problems using GitHub's issue tracker.
+
 Bugs
 ----
 Please report any bugs using GitHub's issue tracker.
