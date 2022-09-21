@@ -139,6 +139,6 @@ with these commands:
 
 Note that you can uninstall PyCUTEst as follows:
 
-.. code-block:: bash
+ .. code-block:: bash
 
-   $ pip uninstall pycutest
+    $ pip uninstall pycutest
