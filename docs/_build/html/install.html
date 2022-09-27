@@ -57,6 +57,7 @@
 <li class="toctree-l1"><a class="reference internal" href="building.html">Building Test Problems</a></li>
 <li class="toctree-l1"><a class="reference internal" href="interface.html">Problem Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="example.html">Example Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="support.html">Support</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="history.html">Version History</a></li>
 </ul>
@@ -208,29 +209,19 @@ $ docker <span class="nb">exec</span> -it mycutest /bin/bash     <span class="c1
 <p>For easy installation, use <a class="reference external" href="http://www.pip-installer.org/">pip</a>:</p>
 <blockquote>
 <div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ pip install pycutest
+$ pip install --upgrade pycutest  <span class="c1"># if existing installation on system</span>
 </pre></div>
 </div>
 </div></blockquote>
-<p>Note that if an older install of PyCUTEst is present on your system you can use:</p>
-<blockquote>
-<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ pip install --upgrade pycutest
-</pre></div>
-</div>
-</div></blockquote>
-<p>to upgrade PyCUTEst to the latest version.</p>
-<p>You will then need to create a folder which will store all your compiled problems:</p>
+<p>With this, PyCUTEst will create a cache folder inside your current working directory.
+This cache directory is used for compiled problems. You can set a custom cache directory
+with these commands:</p>
 <blockquote>
 <div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ mkdir pycutest_cache
+$ <span class="nb">export</span> <span class="nv">PYCUTEST_CACHE</span><span class="o">=</span><span class="s2">&quot;/path/to/pycutest_cache&quot;</span>
 </pre></div>
 </div>
 </div></blockquote>
-<p>And set an environment variable to tell PyCUTEst about this directory, by adding to your <code class="code docutils literal notranslate"><span class="pre">~/.bashrc</span></code> file:</p>
-<blockquote>
-<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">PYCUTEST_CACHE</span><span class="o">=</span><span class="s2">&quot;/path/to/pycutest_cache&quot;</span>
-</pre></div>
-</div>
-</div></blockquote>
-<p>If you do not set this environment variable, then PyCUTEst will create a cache folder of compiled problems inside your current working directory.</p>
 <p>Note that you can uninstall PyCUTEst as follows:</p>
 <blockquote>
 <div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ pip uninstall pycutest
