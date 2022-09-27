@@ -259,7 +259,6 @@ class CUTEstProblem(object):
         """
         self.check_input_x(x)
         f, c = self._module.objcons(self.free_to_all(x))
-        f = float(f)  # convert from 1x1 NumPy array to float
         if len(c) == 0:  # unconstrained problems
             c = None
         return f, c
@@ -287,11 +286,9 @@ class CUTEstProblem(object):
         self.check_input_x(x)
         if gradient:
             f, g = self._module.obj(self.free_to_all(x), 1)
-            f = float(f)  # convert from 1x1 NumPy array to float
             return f, self.all_to_free(g)
         else:
             f = self._module.obj(self.free_to_all(x))
-            f = float(f)  # convert from 1x1 NumPy array to float
             return f
 
     def cons(self, x, index=None, gradient=False):
