@@ -38,9 +38,9 @@ itf_c_source = r"""
 
 #define NPY_NO_DEPRECATED_API NPY_1_8_API_VERSION
 
-#include "Python.h"
-#include "cutest.h"
-#include "arrayobject.h"
+#include <Python.h>
+#include <cutest.h>
+#include <numpy/arrayobject.h>
 #include <math.h>
 #include <stdio.h>
 

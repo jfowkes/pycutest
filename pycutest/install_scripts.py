@@ -75,7 +75,7 @@ setup(
 #
 setupScriptLinux="""
 define_macros=[('LINUX', None)]
-include_dirs=[os.path.join(np.get_include(), 'numpy'),os.environ['CUTEST']+'/include/']
+include_dirs=[np.get_include(),os.environ['CUTEST']+'/include/']
 objFileList=glob('*.o')
 objFileList.append(os.environ['CUTEST']+'/objects/'+os.environ['MYARCH']+'/double/libcutest.a')
 libraries=['gfortran']
@@ -91,7 +91,7 @@ import subprocess
 # extract the homebrew prefix 
 homebrew_prefix = subprocess.check_output(['brew', '--prefix']).decode('utf-8')[:-1]
 define_macros=[('LINUX', None)]
-include_dirs=[os.path.join(np.get_include(), 'numpy'),os.environ['CUTEST']+'/include/']
+include_dirs=[np.get_include(),os.environ['CUTEST']+'/include/']
 objFileList=glob('*.o')
 objFileList.append('%s')
 libraries=['gfortran']
