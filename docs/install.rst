@@ -5,7 +5,7 @@ Requirements
 ------------
 PyCUTEst requires the following software to be installed:
 
-* Python 2.7 or Python 3 (http://www.python.org/)
+* Python 3 (http://www.python.org/)
 * CUTEst (see below)
 
 **Please Note:** Currently PyCUTEst only supports Mac and Linux. For Windows 10 (or later), PyCUTEst can be used through the `Windows Subsystem for Linux <https://docs.microsoft.com/en-us/windows/wsl/>`_, following the Linux installation instructions.
