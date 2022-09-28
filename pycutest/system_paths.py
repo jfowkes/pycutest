@@ -2,9 +2,6 @@
 Depending on the platform, find the correct paths to the CUTEst installation
 """
 
-# Ensure compatibility with Python 2
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 import os, sys
 
 __all__ = ['check_platform', 'get_cutest_path', 'get_sifdecoder_path', 'get_mastsif_path', 'get_cache_path']
@@ -13,7 +10,7 @@ __all__ = ['check_platform', 'get_cutest_path', 'get_sifdecoder_path', 'get_mast
 base_dir = os.getcwd()
 
 def check_platform():
-    if sys.platform not in ['linux', 'linux2', 'darwin']:
+    if sys.platform not in ['linux', 'darwin']:
         raise ImportError("Unsupported platform: " + sys.platform)
     return
 
