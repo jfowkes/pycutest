@@ -9,7 +9,7 @@ __all__ = ['get_init_script']
 
 initScript = """# PyCutest problem interface module initialization file
 # (C)2011 Arpad Buermen
-# (C)2018 Jaroslav Fowkes, Lindon Roberts
+# (C)2022 Jaroslav Fowkes, Lindon Roberts
 # Licensed under GNU GPL V3
 
 \"\"\"Interface module for CUTEst problem [problemName] with ordering
@@ -41,9 +41,6 @@ gradsphess -- gradient and sparse Hessian of objective (unconstrained probl.)
               constraints and sparse Hessian of Lagrangian (constrained probl.)
 report     -- get usage statistics
 \"\"\"
-
-# Ensure compatibility with Python 2
-from __future__ import absolute_import, division, print_function, unicode_literals
 
 from ._pycutestitf import *
 from . import _pycutestitf

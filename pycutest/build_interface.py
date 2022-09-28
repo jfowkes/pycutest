@@ -3,10 +3,6 @@
 """
 Main routines for building and managing interfaces
 """
-
-# Ensure compatibility with Python 2
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 import os, shutil, sys
 import subprocess
 from glob import glob

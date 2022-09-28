@@ -2,9 +2,6 @@
 Wrapper to other SIF information - classifications, available parameters
 """
 
-# Ensure compatibility with Python 2
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 import os, re
 import subprocess
 from glob import iglob
