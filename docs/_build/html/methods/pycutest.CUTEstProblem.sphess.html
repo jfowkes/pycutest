@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CUTEstProblem.sphess &mdash; PyCUTEst v1.3 documentation</title>
+  <title>CUTEstProblem.sphess &mdash; PyCUTEst v1.4 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -16,6 +16,7 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -31,7 +32,7 @@
             <a href="../index.html" class="icon icon-home"> PyCUTEst
           </a>
               <div class="version">
-                1.3
+                1.4
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -61,7 +62,10 @@
 <li class="toctree-l3"><a class="reference internal" href="pycutest.CUTEstProblem.report.html">CUTEstProblem.report</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pycutest.CUTEstProblem.scons.html">CUTEstProblem.scons</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pycutest.CUTEstProblem.slagjac.html">CUTEstProblem.slagjac</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">CUTEstProblem.sphess</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">CUTEstProblem.sphess</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pycutest.CUTEstProblem.sphess"><code class="docutils literal notranslate"><span class="pre">CUTEstProblem.sphess()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="pycutest.CUTEstProblem.isphess.html">CUTEstProblem.isphess</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pycutest.CUTEstProblem.gradsphess.html">CUTEstProblem.gradsphess</a></li>
 </ul>
@@ -120,16 +124,16 @@ To evaluate the Hessian of the objective for constrained problems use isphess()<
 <p>This calls CUTEst routine CUTEST_csh or CUTEST_ush.</p>
 <p>Note: in CUTEst, the sign convention is such that the Lagrangian = objective + lagrange_multipliers * constraints</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>x</strong> (<em>numpy.ndarray with shape</em><em> (</em><em>n</em><em>,</em><em>)</em>) – input vector</p></li>
 <li><p><strong>v</strong> (<em>numpy.ndarray with shape</em><em> (</em><em>m</em><em>,</em><em>)</em><em>, </em><em>optional</em>) – vector of Lagrange multipliers (must be specified for constrained problems)</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dt class="field-even">Returns</dt>
 <dd class="field-even"><p>sparse Hessian of objective (unconstrained) or Lagrangian (constrained) at x</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>scipy.sparse.coo_matrix(n,n)</p>
 </dd>
 </dl>

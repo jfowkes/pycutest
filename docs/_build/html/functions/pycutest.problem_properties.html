@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pycutest.problem_properties &mdash; PyCUTEst v1.3 documentation</title>
+  <title>pycutest.problem_properties &mdash; PyCUTEst v1.4 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -16,6 +16,7 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -31,7 +32,7 @@
             <a href="../index.html" class="icon icon-home"> PyCUTEst
           </a>
               <div class="version">
-                1.3
+                1.4
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -50,7 +51,10 @@
 <li class="toctree-l2"><a class="reference internal" href="../building.html#cache-management">Cache Management</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../building.html#full-function-documentation">Full function documentation</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="pycutest.find_problems.html">pycutest.find_problems</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">pycutest.problem_properties</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">pycutest.problem_properties</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pycutest.problem_properties"><code class="docutils literal notranslate"><span class="pre">problem_properties()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="pycutest.print_available_sif_params.html">pycutest.print_available_sif_params</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pycutest.import_problem.html">pycutest.import_problem</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pycutest.clear_cache.html">pycutest.clear_cache</a></li>
@@ -110,10 +114,10 @@
 <li><p>m – number of constraints (‘variable’ = can be set by the user)</p></li>
 </ul>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>problemName</strong> – problem name</p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dt class="field-even">Returns</dt>
 <dd class="field-even"><p>dict</p>
 </dd>
 </dl>

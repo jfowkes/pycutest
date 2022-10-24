@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pycutest.find_problems &mdash; PyCUTEst v1.3 documentation</title>
+  <title>pycutest.find_problems &mdash; PyCUTEst v1.4 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -16,6 +16,7 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -31,7 +32,7 @@
             <a href="../index.html" class="icon icon-home"> PyCUTEst
           </a>
               <div class="version">
-                1.3
+                1.4
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -49,7 +50,10 @@
 <li class="toctree-l2"><a class="reference internal" href="../building.html#building-problems">Building Problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../building.html#cache-management">Cache Management</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../building.html#full-function-documentation">Full function documentation</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">pycutest.find_problems</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">pycutest.find_problems</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pycutest.find_problems"><code class="docutils literal notranslate"><span class="pre">find_problems()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="pycutest.problem_properties.html">pycutest.problem_properties</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pycutest.print_available_sif_params.html">pycutest.print_available_sif_params</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pycutest.import_problem.html">pycutest.import_problem</a></li>
@@ -61,6 +65,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../interface.html">Problem Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../example.html">Example Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../support.html">Support</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../history.html">Version History</a></li>
 </ul>
@@ -101,7 +106,7 @@ The search is based on the CUTEst problem classification string (see <a class="r
 <p>Returns the problem names of problems that matched the given requirements.</p>
 <p>If a requirement is not given, it is not applied. See below for details on the requirements.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>objective</strong> – a string containing one or more substrings (<code class="docutils literal notranslate"><span class="pre">'none'</span></code>, <code class="docutils literal notranslate"><span class="pre">'constant'</span></code>, <code class="docutils literal notranslate"><span class="pre">'linear'</span></code>, <code class="docutils literal notranslate"><span class="pre">'quadratic'</span></code>, <code class="docutils literal notranslate"><span class="pre">'sum</span> <span class="pre">of</span> <span class="pre">squares'</span></code>, <code class="docutils literal notranslate"><span class="pre">'other'</span></code>) specifying the type of the objective function</p></li>
 <li><p><strong>constraints</strong> – a string containing one or more substrings (<code class="docutils literal notranslate"><span class="pre">'unconstrained'</span></code>, <code class="docutils literal notranslate"><span class="pre">'equality'</span></code>, <code class="docutils literal notranslate"><span class="pre">'bound'</span></code>, <code class="docutils literal notranslate"><span class="pre">'adjacency'</span></code>, <code class="docutils literal notranslate"><span class="pre">'linear'</span></code>, <code class="docutils literal notranslate"><span class="pre">'quadratic'</span></code>, <code class="docutils literal notranslate"><span class="pre">'other'</span></code>) specifying the type of the constraints</p></li>
@@ -115,7 +120,7 @@ The search is based on the CUTEst problem classification string (see <a class="r
 <li><p><strong>userM</strong> – <code class="docutils literal notranslate"><span class="pre">True</span></code> of the problems must have user settable number of variables, <code class="docutils literal notranslate"><span class="pre">False</span></code> if the number must be hardcoded</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dt class="field-even">Returns</dt>
 <dd class="field-even"><p>list of strings with problem names which satisfy the given requirements</p>
 </dd>
 </dl>

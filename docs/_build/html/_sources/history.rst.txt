@@ -2,6 +2,11 @@ Version History
 ===============
 This section lists the different versions of PyCUTEst and the updates between them.
 
+Version 1.4 (24 Oct 2022)
+-------------------------
+* Add guidelines for seeking support
+* Improve documentation
+
 Version 1.3 (6 Sep 2022)
 ------------------------
 * Use human-readable problem properties (breaking change)
