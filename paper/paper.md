@@ -37,7 +37,7 @@ of test problems that span small- and large-scale, constrained and unconstrained
 * is easy to install via `pip` and our detailed [documentation](https://jfowkes.github.io/pycutest/) provides instructions on
 how users can easily install the underlying `CUTEst` test collection.
 
-In short, our aim is that `PyCUTEst` will make it easier for users to test new and existing optimization algorithms and software in Python. With over 12,000 downloads we firmly believe that `PyCUTEst` is well on the way to achieving this aim.
+In short, our aim is that `PyCUTEst` will make it easier for users to test new and existing optimization algorithms and software in Python. With over 15,000 downloads at the time of writing, we firmly believe that `PyCUTEst` is well on the way to achieving this aim.
 
 # State of the field
 
@@ -67,7 +67,7 @@ The main benefits of the `PyCUTEst` package are:
 
 * Allowing simple benchmarking of optimization algorithms and software in Python against a widely used standard collection of test problems.
 
-Our aim is for `PyCUTEst` to make it easier for both optimization users and software developers to develop and test new and existing algorithms and software in Python. Since its inception just under four years ago, `PyCUTEst` has had over 12,000 downloads, and we believe is well on the way to achieving this aim.
+Our aim is for `PyCUTEst` to make it easier for both optimization users and software developers to develop and test new and existing algorithms and software in Python. Since its inception, just over four years ago at the time of writing, `PyCUTEst` has had over 15,000 downloads and we believe is well on the way to achieving this aim.
 
 # Acknowledgements
 
