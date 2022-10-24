@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: Fowkes
+    given-names: Jaroslav
+    orcid: https://orcid.org/0000-0002-8048-4572
+  - family-names: Roberts
+    given-names: Lindon
+    orcid: https://orcid.org/0000-0001-6438-9703
+  - family-names: Bűrmen
+    given-names: Árpád
+    orcid: https://orcid.org/0000-0002-3035-1376
+title: "PyCUTEst: an open source Python package of optimization test problems"
+version: 1.4
+doi: 10.5281/zenodo.7244291
+date-released: 2022-10-24
