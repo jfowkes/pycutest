@@ -30,9 +30,9 @@ Due to the inherent complexity of such problems, a plethora of different algorit
 nonlinear optimization test problems, long a standard test set for nonlinear optimization. In particular, `PyCUTEst`:
 
 * assists numerical algorithm and software developers in testing new ideas against a state-of-the-art collection
-of test problems that span small- and large-scale, constrained and unconstrained, nonlinear optimization problems.
+of test problems that span small- and large-scale, constrained and unconstrained, nonlinear optimization problems;
 
-* allows scientists and other users of optimization software to compare candidate algorithms and software on standard test problems, helping them select the tools best suited to their needs.
+* allows scientists and other users of optimization software to compare candidate algorithms and software on standard test problems, helping them select the tools best suited to their needs; and
 
 * is easy to install via `pip` and our detailed [documentation](https://jfowkes.github.io/pycutest/) provides instructions on
 how users can easily install the underlying `CUTEst` test collection.
@@ -44,7 +44,7 @@ In short, our aim is that `PyCUTEst` will make it easier for users to test new a
 The `CUTEst` [@cutest] library is a widely used collection of nonlinear optimization test problems, based on the original
 `CUTE` [@cute] and `CUTEr` [@cuter] packages.
 It has a collection of over 1,500 problems, many of which are parametrized to allow for variable dimensions through user-selectable parameters.
-However, despite the popularity of `CUTEst`, it is currently only accessible through Fortran, C or MATLAB interfaces
+However, despite the popularity of `CUTEst`, it is currently only accessible through Fortran, C, or MATLAB interfaces
 provided with the main package, or through the Julia interface `CUTEst.jl` [@cutestjl].
 In particular, it is not possible to use `CUTEst` in Python, even though Python is widely used in numerical
 computing and has a large ecosystem of open source software for nonlinear optimization.
@@ -53,7 +53,7 @@ The other widely used packages that encode optimization test problems are the mo
 and `GAMS` [@gams].
 Although both provide Python interfaces, and in fact many `CUTEst` problems have been translated into `AMPL` [@cuteampl],
 they are proprietary packages.
-An open source alternative to `AMPL` and `GAMS` is the Julia package `JuMP` [@jump].
+An open-source alternative to `AMPL` and `GAMS` is the Julia package `JuMP` [@jump].
 
 # Statement of need
 
@@ -61,11 +61,11 @@ An open source alternative to `AMPL` and `GAMS` is the Julia package `JuMP` [@ju
 compiling problems (that automatically generates a C interface to the underlying Fortran package).
 To the best of our knowledge, this is the only available Python package for accessing the `CUTEst` library that is stable and maintained.
 
-The main benefits of the `PyCUTEst` package are:
+The main benefits of the `PyCUTEst` package are that it:
 
-* Enabling the use of the `CUTEst` test collection by the sizeable community of Python optimization software developers and users.
+* enables the use of the `CUTEst` test collection by the sizeable community of Python optimization software developers and users; and
 
-* Allowing simple benchmarking of optimization algorithms and software in Python against a widely used standard collection of test problems.
+* allows simple benchmarking of optimization algorithms and software in Python against a widely used standard collection of test problems.
 
 Our aim is for `PyCUTEst` to make it easier for both optimization users and software developers to develop and test new and existing algorithms and software in Python. Since its inception, just over four years ago at the time of writing, `PyCUTEst` has had over 15,000 downloads and we believe is well on the way to achieving this aim.
 
