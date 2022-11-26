@@ -87,12 +87,15 @@ extra_link_args=[]
 # Mac-specific part of setup.py
 #
 setupScriptMac="""
+import subprocess
+# extract the homebrew prefix 
+homebrew_prefix = subprocess.check_output(['brew', '--prefix']).decode('utf-8')[:-1]
 define_macros=[('LINUX', None)]
 include_dirs=[os.path.join(np.get_include(), 'numpy'),os.environ['CUTEST']+'/include/']
 objFileList=glob('*.o')
 objFileList.append('%s')
 libraries=['gfortran']
-library_dirs=[max(glob('/usr/local/Cellar/gcc/*/lib/gcc/*/'),key=os.path.getmtime)]
+library_dirs=[max(glob(homebrew_prefix + '/Cellar/gcc/*/lib/gcc/*/'),key=os.path.getmtime)]
 extra_link_args=['-Wl,-no_compact_unwind']
 """ % get_cutest_path()  # will probably get the homebrew location, but may revert to environment variables
 
