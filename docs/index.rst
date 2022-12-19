@@ -32,6 +32,30 @@ The main benefits of the PyCUTEst package are:
 
 Our aim is for PyCUTEst to make it easier for both optimization users and software developers to develop and test new and existing algorithms and software in Python.
 
+Citing PyCUTEst
+---------------
+To cite PyCUTEst, please use the following reference: 
+
+`J. Fowkes, L. Roberts, and Á. Bűrmen, (2022). PyCUTEst: an open source Python package of optimization test problems. Journal of Open Source Software, 7(78), 4377, https://doi.org/10.21105/joss.04377`
+
+In BibTeX, the citation is:
+
+.. code-block:: 
+
+    @article{PyCUTEst2022, 
+        doi = {10.21105/joss.04377}, 
+        url = {https://doi.org/10.21105/joss.04377}, 
+        year = {2022}, 
+        publisher = {The Open Journal}, 
+        volume = {7}, 
+        number = {78}, 
+        pages = {4377}, 
+        author = {Jaroslav Fowkes and Lindon Roberts and Árpád Bűrmen}, 
+        title = {PyCUTEst: an open source Python package of optimization test problems}, 
+        journal = {Journal of Open Source Software}
+    }
+
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents
