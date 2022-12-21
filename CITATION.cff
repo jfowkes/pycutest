@@ -12,5 +12,5 @@ authors:
     orcid: https://orcid.org/0000-0002-3035-1376
 title: "PyCUTEst: an open source Python package of optimization test problems"
 version: 1.4
-doi: 10.5281/zenodo.7244291
+doi: 10.21105/joss.04377
 date-released: 2022-10-24
