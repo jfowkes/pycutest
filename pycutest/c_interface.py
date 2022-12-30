@@ -2076,6 +2076,9 @@ static PyObject *cutest_terminate(PyObject *self, PyObject *args) {
     else
         CUTEST_uterminate((integer *)&status);
 
+    /* Problem is no longer set up */
+    setupCalled = 0;
+
     /* Return None boilerplate */
     Py_INCREF(Py_None);
     return Py_None;
