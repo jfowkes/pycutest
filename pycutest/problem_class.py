@@ -834,3 +834,10 @@ class CUTEstProblem(object):
                 stats[s] = stats[s] - self.init_stats[s]
 
         return stats
+
+    def __del__(self):
+        """
+        Clear CUTEst problem memory on exit.
+        """
+        self._module.terminate()
+

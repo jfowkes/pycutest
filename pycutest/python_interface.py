@@ -40,6 +40,7 @@ gradsphess -- gradient and sparse Hessian of objective (unconstrained probl.)
               or gradient of objective/Lagrangian, sparse Jacobian of
               constraints and sparse Hessian of Lagrangian (constrained probl.)
 report     -- get usage statistics
+terminate  -- clear problem memory
 \"\"\"
 
 # Ensure compatibility with Python 2

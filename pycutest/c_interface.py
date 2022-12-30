@@ -80,6 +80,7 @@ static PyObject *cutest__sphess(PyObject *self, PyObject *args);
 static PyObject *cutest__isphess(PyObject *self, PyObject *args);
 static PyObject *cutest__gradsphess(PyObject *self, PyObject *args);
 static PyObject *cutest_report(PyObject *self, PyObject *args);
+static PyObject *cutest_terminate(PyObject *self, PyObject *args);
 
 /* Persistent data */
 #define STR_LEN 10
@@ -2052,6 +2053,34 @@ static PyObject *cutest_report(PyObject *self, PyObject *args) {
     return decRefDict(dict);
 }
 
+PyDoc_STRVAR(cutest_terminate_doc,
+"Deallocate all internal private storage.\n"
+"\n"
+"terminate()\n"
+"\n"
+"CUTEst tools used: CUTEST_cterminate, CUTEST_uterminate\n"
+);
+
+static PyObject *cutest_terminate(PyObject *self, PyObject *args) {
+
+    if (!check_setup())
+        return NULL;
+
+    if (PyObject_Length(args)!=0) {
+        PyErr_SetString(PyExc_Exception, "terminate() takes no arguments");
+        return NULL;
+    }
+
+    if (CUTEst_ncon>0)
+        CUTEST_cterminate((integer *)&status);
+    else
+        CUTEST_uterminate((integer *)&status);
+
+    /* Return None boilerplate */
+    Py_INCREF(Py_None);
+    return Py_None;
+}
+
 /* Methods table */
 static PyMethodDef _methods[] = {
     {"_dims", cutest__dims, METH_VARARGS, cutest__dims_doc},
@@ -2073,6 +2102,7 @@ static PyMethodDef _methods[] = {
     {"_isphess", cutest__isphess, METH_VARARGS, cutest__isphess_doc},
     {"_gradsphess", cutest__gradsphess, METH_VARARGS, cutest__gradsphess_doc},
     {"report", cutest_report, METH_VARARGS, cutest_report_doc},
+    {"terminate", cutest_terminate, METH_VARARGS, cutest_terminate_doc},
     {NULL, NULL}     /* Marks the end of this structure */
 };
 
