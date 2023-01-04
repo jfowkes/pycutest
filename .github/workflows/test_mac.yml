@@ -26,9 +26,7 @@ jobs:
     - name: Install dependencies
       run: |
         sudo ln -s /usr/local/bin/gfortran-11 /usr/local/bin/gfortran
-        sudo mkdir /usr/local/gfortran
-        sudo ln -s /usr/local/Cellar/gcc@11/*/lib/gcc/11 /usr/local/gfortran/lib
-        sudo ln -s /usr/local/Cellar/gcc@11/*/lib/gcc/11 /usr/local/opt/gcc/lib/gcc/11
+        sudo ln -s /usr/local/Cellar/gcc@11/*/lib/gcc/11/*.dylib /usr/local/lib/
         brew tap optimizers/cutest &&
         brew install cutest --without-single
         pip install -r requirements.txt --only-binary=numpy,scipy
