@@ -17,11 +17,11 @@ initScript = """# PyCutest problem interface module initialization file
 sifdecode parameters : [sifParamsStr]
 sifdecode options    : [sifOptionsStr]
 
-Available interface functions (those starting with an underscore should be wrapped)
+Available interface functions
 setup       -- setup problem and get problem information
-_dims       -- get problem dimensions
-_varnames   -- get names of problem's variables
-_connames   -- get names of problem's constraints
+dims       -- get problem dimensions
+varnames   -- get names of problem's variables
+connames   -- get names of problem's constraints
 objcons     -- objective and constraints
 obj         -- objective and objective gradient
 cons        -- constraints and constraints gradients/Jacobian
@@ -33,11 +33,11 @@ hprod       -- product of Hessian of objective/Lagrangian with a vector
 gradhess    -- gradient and Hessian of objective (unconstrained problems) or
                gradient of objective/Lagrangian, Jacobian of constraints and
                Hessian of Lagrangian (constrained problems)
-_scons      -- constraints and sparse Jacobian of constraints
-_slagjac    -- gradient of objective/Lagrangian and sparse Jacobian
-_sphess     -- sparse Hessian of objective/Lagrangian
-_isphess    -- sparse Hessian of objective/constraint
-_gradsphess -- gradient and sparse Hessian of objective (unconstrained probl.)
+scons      -- constraints and sparse Jacobian of constraints
+slagjac    -- gradient of objective/Lagrangian and sparse Jacobian
+sphess     -- sparse Hessian of objective/Lagrangian
+isphess    -- sparse Hessian of objective/constraint
+gradsphess -- gradient and sparse Hessian of objective (unconstrained probl.)
                or gradient of objective/Lagrangian, sparse Jacobian of
                constraints and sparse Hessian of Lagrangian (constrained probl.)
 report      -- get usage statistics
@@ -78,10 +78,10 @@ def setup():
     os.chdir(_directory)
 
     # Get problem dimension
-    (n, m)=_pycutestitf._dims()
+    (n, m)=_pycutestitf.dims()
 
     # Set up the problem and get basic information
-    info=_pycutestitf._setup(efirst, lfirst, nvfirst)
+    info=_pycutestitf.setup(efirst, lfirst, nvfirst)
 
     # Store constraint and variable ordering information
     if m>0:
