@@ -49,7 +49,6 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from ._pycutestitf import *
 from . import _pycutestitf
-import os
 
 def setup():
     \"\"\"
@@ -59,6 +58,7 @@ def setup():
 
     info -- dictionary with the summary of test function's properties (see getinfo())
     \"\"\"
+    import os
 
     # Get the directory where the binary module (and OUTSDIF.d) are found.
     (_directory, _module)=os.path.split(_pycutestitf.__file__)
@@ -98,8 +98,6 @@ def setup():
 
     return info
 
-# Clean up
-del os
 """
 
 
