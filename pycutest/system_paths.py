@@ -12,6 +12,7 @@ __all__ = ['check_platform', 'get_cutest_path', 'get_sifdecoder_path', 'get_mast
 
 base_dir = os.getcwd()
 
+homebrew_prefix = None
 if sys.platform == 'darwin':  # Mac
     import subprocess
     homebrew_prefix = subprocess.check_output(['brew', '--prefix']).decode('utf-8')[:-1]
