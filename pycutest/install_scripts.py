@@ -51,7 +51,7 @@ module = Extension(
 # Settings
 setup(
     name='PyCUTEst automatic test function interface builder',
-    version='1.3',
+    version='1.5.0',
     description='Builds a CUTEst test function interface for Python.',
     long_description='Builds a CUTEst test function interface for Python.',
     author='Arpad Buermen, Jaroslav Fowkes, Lindon Roberts',
@@ -82,7 +82,7 @@ extra_link_args=[]
 #
 setupScriptMac="""
 import subprocess
-# extract the homebrew prefix 
+# extract the homebrew prefix
 homebrew_prefix = subprocess.check_output(['brew', '--prefix']).decode('utf-8')[:-1]
 define_macros=[('LINUX', None)]
 include_dirs=[np.get_include(),os.environ['CUTEST']+'/include/']
