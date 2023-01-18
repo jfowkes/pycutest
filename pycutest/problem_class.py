@@ -174,50 +174,6 @@ class CUTEstProblem(object):
         # Save the initial stats, so we can make sure they don't get counted in the final tally
         self.init_stats = self._module.report()
 
-    # Return problem info
-    def getinfo(self):
-        """
-        Return the problem info dictionary.
-
-        info=geinfo()
-
-        Output
-        info -- dictionary with the summary of test function's properties
-
-        The dictionary has the following members:
-        name       -- problem name
-        n          -- number of variables
-        m          -- number of constraints (excluding bounds)
-        x          -- initial point (1D array of length n)
-        bl         -- 1D array of length n with lower bounds on variables
-        bu         -- 1D array of length n with upper bounds on variables
-        nnzh       -- number of nonzero elements in the diagonal and upper triangle of
-                    sparse Hessian
-        vartype    -- 1D integer array of length n storing variable type
-                    0=real,  1=boolean (0 or 1), 2=integer
-        nvfirst    -- boolean flag indicating that nonlinear variables were placed
-                    before linear variables
-        sifparams  -- parameters passed to sifdecode with the -param option
-                    None if no parameters were given
-        sifoptions -- additional options passed to sifdecode
-                    None if no additional options were given.
-
-        For constrained problems the following additional members are available
-        nnzj    -- number of nonzero elements in sparse Jacobian of constraints
-        v       -- 1D array of length m with initial values of Lagrange multipliers
-        cl      -- 1D array of length m with lower bounds on constraint functions
-        cu      -- 1D array of length m with upper bounds on constraint functions
-        equatn  -- 1D boolean array of length m indicating whether a constraint
-                is an equation constraint
-        linear  -- 1D boolean array of length m indicating whether a constraint
-                is a linear constraint
-        efirst  -- boolean flag indicating that equation constraints were places
-                before inequation constraints
-        lfirst  -- boolean flag indicating that linear constraints were placed
-                before nonlinear constraints
-        """
-        return self._module.info
-
     def __str__(self):
         if self.sifParams is None:
             return "CUTEst problem %s (default params) with %g variables and %g constraints" % (self.name, self.n, self.m)

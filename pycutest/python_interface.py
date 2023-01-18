@@ -17,7 +17,7 @@ initScript = """# PyCutest problem interface module initialization file
 sifdecode parameters : [sifParamsStr]
 sifdecode options    : [sifOptionsStr]
 
-Available interface functions
+Available interface functions (should not be called directly):
 setup       -- setup problem and get problem information
 dims       -- get problem dimensions
 varnames   -- get names of problem's variables
