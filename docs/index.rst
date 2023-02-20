@@ -8,6 +8,9 @@ PyCUTEst
 Python interface to the CUTEst optimization test environment
 ------------------------------------------------------------
 
+.. warning::
+    PyCUTEst v1.5.0 broke existing cached problems, when upgrading to v1.5.0 please clear out your cache.
+
 **Release:** |version|
 
 **Date:** 24 October 2022

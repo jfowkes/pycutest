@@ -2,6 +2,8 @@
 PyCUTEst: A Python interface to the CUTEst Optimization Test Environment |License| |Build Status| |PyPI Version| |Downloads| |Paper|
 ====================================================================================================================================
 
+**Warning: PyCUTEst v1.5.0 broke existing cached problems, when upgrading to v1.5.0 please clear out your cache.**
+
 PyCUTEst is a Python interface to `CUTEst <https://github.com/ralna/CUTEst>`_, a Fortran package for testing optimization software. It is based on the `interface originally developed for CUTEr <http://fides.fe.uni-lj.si/~arpadb/software-pycuter.html>`_ by `Prof. Arpad Buermen <http://www.fe.uni-lj.si/en/the_faculty/staff/alphabetically/55/>`_.
 
 Full details on how to use PyCUTEst are available in the `documentation <https://jfowkes.github.io/pycutest/>`_, and a brief summary of the package's goals is available in the `PyCUTEst journal article <https://doi.org/10.21105/joss.04377>`_.
@@ -128,24 +130,24 @@ Please report any bugs using GitHub's issue tracker.
 
 Citing
 ------
-To cite PyCUTEst, please use the following reference: 
+To cite PyCUTEst, please use the following reference:
 
 `J. Fowkes, L. Roberts, and Á. Bűrmen, (2022). PyCUTEst: an open source Python package of optimization test problems. Journal of Open Source Software, 7(78), 4377, https://doi.org/10.21105/joss.04377`
 
 In BibTeX, the citation is:
 
-.. code-block:: 
+.. code-block::
 
-    @article{PyCUTEst2022, 
-        doi = {10.21105/joss.04377}, 
-        url = {https://doi.org/10.21105/joss.04377}, 
-        year = {2022}, 
-        publisher = {The Open Journal}, 
-        volume = {7}, 
-        number = {78}, 
-        pages = {4377}, 
-        author = {Jaroslav Fowkes and Lindon Roberts and Árpád Bűrmen}, 
-        title = {PyCUTEst: an open source Python package of optimization test problems}, 
+    @article{PyCUTEst2022,
+        doi = {10.21105/joss.04377},
+        url = {https://doi.org/10.21105/joss.04377},
+        year = {2022},
+        publisher = {The Open Journal},
+        volume = {7},
+        number = {78},
+        pages = {4377},
+        author = {Jaroslav Fowkes and Lindon Roberts and Árpád Bűrmen},
+        title = {PyCUTEst: an open source Python package of optimization test problems},
         journal = {Journal of Open Source Software}
     }
 
