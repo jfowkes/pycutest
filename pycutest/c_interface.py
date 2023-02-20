@@ -1,21 +1,14 @@
 """
-C source code of the CUTEst interface
-
-Note that for Python 2 and 3 compatibility, we need to make some modifications to itf_c_source (see end of this file).
+C source code of the CUTEst problem interface
 """
 __all__ = ['itf_c_source']
 
 # Because we dont want backslashes to be interpreted as escape characters, the string must be a raw string.
 itf_c_source = r"""
-/* CUTEst interface to Python and NumPy */
+/* CUTEst problem interface to Python and NumPy */
 /* (c)2011 Arpad Buermen */
-/* (c)2018 Jaroslav Fowkes, Lindon Roberts */
+/* (c)2022 Jaroslav Fowkes, Lindon Roberts */
 /* Licensed under GNU GPL V3 */
-
-/* Note that in Windows we do not use Debug compile because we don't have the debug version
-   of Python libraries and interpreter. We use Release version instead where optimizations
-   are disabled. Such a Release version can be debugged.
- */
 
 /* Unused CUTEst tools - sparse finite element matrices and banded matrices
      cdimse
@@ -35,32 +28,16 @@ itf_c_source = r"""
      cscfg		... obsolete
      cscifg		... obsolete
 */
+#define NPY_NO_DEPRECATED_API NPY_1_20_API_VERSION
 
-#define NPY_NO_DEPRECATED_API NPY_1_8_API_VERSION
-
-#include "Python.h"
-#include "cutest.h"
-#include "arrayobject.h"
+#include <Python.h>
+#include <cutest.h>
+#include <numpy/arrayobject.h>
 #include <math.h>
 #include <stdio.h>
 
-/* Debug switch - uncomment to enable debug messages */
-/* #define PYDEBUG */
 
-/* Debug file */
-#define df stdout
-
-#ifndef WIN32
-#define __declspec(a)
-#endif
-
-/* Safeguard against C++ symbol mangling */
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-
-/* Prototypes */
+/* Module function prototypes */
 static PyObject *cutest_dims(PyObject *self, PyObject *args);
 static PyObject *cutest_setup(PyObject *self, PyObject *args);
 static PyObject *cutest_varnames(PyObject *self, PyObject *args);
@@ -82,7 +59,7 @@ static PyObject *cutest_gradsphess(PyObject *self, PyObject *args);
 static PyObject *cutest_report(PyObject *self, PyObject *args);
 static PyObject *cutest_terminate(PyObject *self, PyObject *args);
 
-/* Persistent data */
+/* Module global variables */
 #define STR_LEN 10
 static npy_int status = 0;    /* output status */
 static npy_int CUTEst_nvar = 0;		/* number of variables */
@@ -101,14 +78,12 @@ static char  fName[] = "OUTSDIF.d"; 	/* Data file name */
 static logical somethingFalse = FALSE_, somethingTrue = TRUE_;
 
 
-/* Helper functions */
+/* Module helper functions */
 
 /* Open data file, return 0 on error. */
 int open_datafile(void) {
     npy_int  ioErr;					/* Exit flag from OPEN and CLOSE */
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst: opening data file\n");
-#endif
+
     ioErr = 0;
     if (! dataFileOpen)
         FORTRAN_open((integer *)&funit, fName, (integer *)&ioErr);
@@ -153,7 +128,7 @@ void trim_string(char *s, int n) {
     s[i+1]=0;
 }
 
-/* Decrese reference counf for newly created dictionary members */
+/* Decrease reference count for newly created dictionary members */
 PyObject *decRefDict(PyObject *dict) {
     PyObject *key, *value;
     Py_ssize_t pos;
@@ -162,15 +137,6 @@ PyObject *decRefDict(PyObject *dict) {
         Py_XDECREF(value);
     }
     return dict;
-}
-
-/* Decrease reference count for newly created tuple members */
-PyObject *decRefTuple(PyObject *tuple) {
-    Py_ssize_t pos;
-    for(pos=0;pos<PyTuple_Size(tuple);pos++) {
-        Py_XDECREF(PyTuple_GetItem(tuple, pos));
-    }
-    return tuple;
 }
 
 /* Extract sparse gradient and Jacobian in form of NumPy arrays */
@@ -259,9 +225,9 @@ void extract_sparse_hessian(npy_int nnzho, npy_int *si, npy_int *sj, npy_double 
 }
 
 
-/* Functions */
+/* Module Python Functions */
 
-static char cutest_dims_doc[]=
+PyDoc_STRVAR(cutest_dims_doc,
 "Returns the dimension of the problem and the number of constraints.\n"
 "\n"
 "(n, m)=dims()\n"
@@ -275,7 +241,8 @@ static char cutest_dims_doc[]=
 "If you decide to call it anyway, the working directory at the time of call\n"
 "must be the one where the file OUTSIF.d can be found.\n"
 "\n"
-"CUTEst tools used: CUTEST_cdimen\n";
+"CUTEst tools used: CUTEST_cdimen\n"
+);
 
 static PyObject *cutest_dims(PyObject *self, PyObject *args) {
     if (PyObject_Length(args)!=0)
@@ -284,19 +251,13 @@ static PyObject *cutest_dims(PyObject *self, PyObject *args) {
     if (!open_datafile())
         return NULL;
 
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst: Calling CUTEST_cdimen\n");
-#endif
     CUTEST_cdimen((integer *)&status, (integer *)&funit, (integer *)&CUTEst_nvar, (integer *)&CUTEst_ncon);
-#ifdef PYDEBUG
-        fprintf(df, "PyCUTEst:   n = %-d, m = %-d\n", CUTEst_nvar, CUTEst_ncon);
-#endif
 
-    return decRefTuple(PyTuple_Pack(2, PyInt_FromLong((long)CUTEst_nvar), PyInt_FromLong((long)CUTEst_ncon)));
+    return Py_BuildValue("ii", CUTEst_nvar, CUTEst_ncon);
 }
 
 
-static char cutest_setup_doc[]=
+PyDoc_STRVAR(cutest_setup_doc,
 "Sets up the problem.\n"
 "\n"
 "data=setup(efirst, lfirst, nvfirst)\n"
@@ -349,7 +310,8 @@ static char cutest_setup_doc[]=
 "must be the one where the file OUTSIF.d can be found.\n"
 "\n"
 "CUTEst tools used: CUTEST_cdimen, CUTEST_csetup, CUTEST_usetup, CUTEST_cvartype, CUTEST_uvartype, \n"
-"                  CUTEST_cdimsh, CUTEST_udimsh, CUTEST_cdimsj, CUTEST_probname\n";
+"                  CUTEST_cdimsh, CUTEST_udimsh, CUTEST_cdimsj, CUTEST_probname\n"
+);
 
 static PyObject *cutest_setup(PyObject *self, PyObject *args) {
     npy_bool  efirst = FALSE_, lfirst = FALSE_, nvfrst = FALSE_;
@@ -381,17 +343,8 @@ static PyObject *cutest_setup(PyObject *self, PyObject *args) {
     if (!open_datafile())
         return NULL;
 
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst: Calling CUTEST_cdimen\n");
-#endif
     CUTEST_cdimen((integer *)&status, (integer *)&funit, (integer *)&CUTEst_nvar, (integer *)&CUTEst_ncon);
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst:   n = %-d, m = %-d\n", CUTEst_nvar, CUTEst_ncon);
-#endif
 
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst: Allocating space\n");
-#endif
     /* Numpy arrays */
     dims[0]=CUTEst_nvar;
     Mx=(PyArrayObject *)PyArray_SimpleNew(1, dims, NPY_DOUBLE);
@@ -423,22 +376,13 @@ static PyObject *cutest_setup(PyObject *self, PyObject *args) {
     }
     vartypes=(npy_int *)malloc(CUTEst_nvar*sizeof(npy_int));
 
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst: Calling CUTEST_[uc]setup\n");
-#endif
     if (CUTEst_ncon > 0)
         CUTEST_csetup((integer *)&status, (integer *)&funit, (integer *)&iout, (integer *)&io_buffer, (integer *)&CUTEst_nvar, (integer *)&CUTEst_ncon, x, bl, bu,
                 v, cl, cu, (logical *)equatn, (logical *)linear,
                 (integer *)&efirst, (integer *)&lfirst, (integer *)&nvfrst);
     else
         CUTEST_usetup((integer *)&status, (integer *)&funit, (integer *)&iout, (integer *)&io_buffer, (integer *)&CUTEst_nvar, x, bl, bu);
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst:   n = %-d, m = %-d\n", CUTEst_nvar, CUTEst_ncon);
-#endif
 
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst: Calling CUTEST_[uc]vartype\n");
-#endif
     if (CUTEst_ncon > 0)
         CUTEST_cvartype((integer *)&status, (integer *)&CUTEst_nvar, (integer *)vartypes);
     else
@@ -460,49 +404,32 @@ static PyObject *cutest_setup(PyObject *self, PyObject *args) {
     }
     free(vartypes);
 
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst: Calling CUTEST_[cu]dimsh\n");
-#endif
     if (CUTEst_ncon>0)
         CUTEST_cdimsh((integer *)&status, (integer *)&CUTEst_nnzh);
     else
         CUTEST_udimsh((integer *)&status, (integer *)&CUTEst_nnzh);
 
     if (CUTEst_ncon > 0) {
-#ifdef PYDEBUG
-        fprintf(df, "PyCUTEst: Calling CUTEST_cdimsj\n");
-#endif
         CUTEST_cdimsj((integer *)&status, (integer *)&CUTEst_nnzj);
         CUTEst_nnzj -= CUTEst_nvar;
     }
 
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst:   nnzh = %-d, nnzj = %-d\n", CUTEst_nnzh, CUTEst_nnzj);
-    fprintf(df, "PyCUTEst: Finding out problem name\n");
-#endif
     CUTEST_probname((integer *)&status, CUTEst_probName);
     trim_string(CUTEst_probName, STR_LEN-1);
 
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst:   %-s\n", CUTEst_probName);
-    fprintf(df, "PyCUTEst: Closing data file\n");
-#endif
     close_datafile();
 
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst: Building structure\n");
-#endif
     dict=PyDict_New();
-    PyDict_SetItemString(dict, "n", PyInt_FromLong((long)CUTEst_nvar));
-    PyDict_SetItemString(dict, "m", PyInt_FromLong((long)CUTEst_ncon));
-    PyDict_SetItemString(dict, "nnzh", PyInt_FromLong((long)CUTEst_nnzh));
+    PyDict_SetItemString(dict, "n", PyLong_FromLong((long)CUTEst_nvar));
+    PyDict_SetItemString(dict, "m", PyLong_FromLong((long)CUTEst_ncon));
+    PyDict_SetItemString(dict, "nnzh", PyLong_FromLong((long)CUTEst_nnzh));
     PyDict_SetItemString(dict, "x", (PyObject *)Mx);
     PyDict_SetItemString(dict, "bl", (PyObject *)Mbl);
     PyDict_SetItemString(dict, "bu", (PyObject *)Mbu);
-    PyDict_SetItemString(dict, "name", PyString_FromString(CUTEst_probName));
+    PyDict_SetItemString(dict, "name", PyUnicode_FromString(CUTEst_probName));
     PyDict_SetItemString(dict, "vartype", (PyObject *)Mvt);
     if (CUTEst_ncon > 0) {
-        PyDict_SetItemString(dict, "nnzj", PyInt_FromLong((long)CUTEst_nnzj));
+        PyDict_SetItemString(dict, "nnzj", PyLong_FromLong((long)CUTEst_nnzj));
         PyDict_SetItemString(dict, "v", (PyObject*)Mv);
         PyDict_SetItemString(dict, "cl", (PyObject*)Mcl);
         PyDict_SetItemString(dict, "cu", (PyObject*)Mcu);
@@ -516,7 +443,7 @@ static PyObject *cutest_setup(PyObject *self, PyObject *args) {
 }
 
 
-static char cutest_varnames_doc[]=
+PyDoc_STRVAR(cutest_varnames_doc,
 "Returns the names of variables in the problem.\n"
 "\n"
 "namelist=varnames()\n"
@@ -529,16 +456,14 @@ static char cutest_varnames_doc[]=
 "This function is not supposed to be called by the user. It is called by the\n"
 "__init__.py script when the test function interface is loaded.\n"
 "\n"
-"CUTEst tools used: CUTEST_varnames\n";
+"CUTEst tools used: CUTEST_varnames\n"
+);
 
 static PyObject *cutest_varnames(PyObject *self, PyObject *args) {
     char *Fvnames, Fvname[STR_LEN+1], *ptr;
     PyObject *list;
     int i, j;
 
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst: checking arguments\n");
-#endif
     if (!check_setup())
         return NULL;
 
@@ -547,20 +472,11 @@ static PyObject *cutest_varnames(PyObject *self, PyObject *args) {
         return NULL;
     }
 
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst: allocating space\n");
-#endif
     Fvnames=(char *)malloc(CUTEst_nvar*STR_LEN*sizeof(char));
     list=PyList_New(0);
 
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst: calling CUTEST_varnames\n");
-#endif
     CUTEST_varnames((integer *)&status, (integer *)&CUTEst_nvar, Fvnames);
 
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst: building results\n");
-#endif
     for(i=0;i<CUTEst_nvar;i++) {
         ptr=Fvnames+i*STR_LEN;
         for(j=0;j<STR_LEN;j++) {
@@ -568,7 +484,7 @@ static PyObject *cutest_varnames(PyObject *self, PyObject *args) {
             ptr++;
         }
         trim_string(Fvname, STR_LEN-1);
-        PyList_Append(list, PyString_FromString(Fvname));
+        PyList_Append(list, PyUnicode_FromString(Fvname));
     }
 
     free(Fvnames);
@@ -577,7 +493,7 @@ static PyObject *cutest_varnames(PyObject *self, PyObject *args) {
 }
 
 
-static char cutest_connames_doc[]=
+PyDoc_STRVAR(cutest_connames_doc,
 "Returns the names of constraints in the problem.\n"
 "\n"
 "namelist=connames()\n"
@@ -591,16 +507,14 @@ static char cutest_connames_doc[]=
 "This function is not supposed to be called by the user. It is called by the\n"
 "__init__.py script when the test function interface is loaded.\n"
 "\n"
-"CUTEst tools used: CUTEST_connames\n";
+"CUTEst tools used: CUTEST_connames\n"
+);
 
 static PyObject *cutest_connames(PyObject *self, PyObject *args) {
     char *Fcnames, Fcname[STR_LEN+1], *ptr;
     PyObject *list;
     int i, j;
 
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst: checking arguments\n");
-#endif
     if (!check_setup())
         return NULL;
 
@@ -613,19 +527,10 @@ static PyObject *cutest_connames(PyObject *self, PyObject *args) {
 
     if (CUTEst_ncon>0) {
 
-#ifdef PYDEBUG
-        fprintf(df, "PyCUTEst: allocating space\n");
-#endif
         Fcnames=(char *)malloc(CUTEst_ncon*STR_LEN*sizeof(char));
 
-#ifdef PYDEBUG
-        fprintf(df, "PyCUTEst: calling CUTEST_connames\n");
-#endif
         CUTEST_connames((integer *)&status, (integer *)&CUTEst_ncon, Fcnames);
 
-#ifdef PYDEBUG
-        fprintf(df, "PyCUTEst: building results\n");
-#endif
         for(i=0;i<CUTEst_ncon;i++) {
             ptr=Fcnames+i*STR_LEN;
             for(j=0;j<STR_LEN;j++) {
@@ -633,7 +538,7 @@ static PyObject *cutest_connames(PyObject *self, PyObject *args) {
                 ptr++;
             }
             trim_string(Fcname, STR_LEN-1);
-            PyList_Append(list, PyString_FromString(Fcname));
+            PyList_Append(list, PyUnicode_FromString(Fcname));
         }
 
         free(Fcnames);
@@ -643,7 +548,7 @@ static PyObject *cutest_connames(PyObject *self, PyObject *args) {
 }
 
 
-static char cutest_objcons_doc[]=
+PyDoc_STRVAR(cutest_objcons_doc,
 "Returns the value of objective and constraints at x.\n"
 "\n"
 "(f, c)=objcons(x)\n"
@@ -652,19 +557,18 @@ static char cutest_objcons_doc[]=
 "x -- 1D array of length n with the values of variables\n"
 "\n"
 "Output\n"
-"f -- 1D array of length 1 holding the value of the function at x\n"
+"f -- float holding the value of the function at x\n"
 "c -- 1D array of length m holding the values of constraints at x\n"
 "\n"
-"CUTEst tools used: CUTEST_cfn\n";
+"CUTEst tools used: CUTEST_cfn\n"
+);
 
 static PyObject *cutest_objcons(PyObject *self, PyObject *args) {
-    PyArrayObject *arg1, *Mf, *Mc;
-    doublereal *x, *f, *c;
+    PyArrayObject *arg1, *Mc;
+    doublereal *x, *c;
+    doublereal f;
     npy_intp dims[1];
 
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst: checking arguments\n");
-#endif
     if (!check_setup())
         return NULL;
 
@@ -677,27 +581,18 @@ static PyObject *cutest_objcons(PyObject *self, PyObject *args) {
         return NULL;
     }
 
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst: preparing for evaluation\n");
-#endif
     x=(npy_double *)PyArray_DATA(arg1);
-    dims[0]=1;
-    Mf=(PyArrayObject *)PyArray_SimpleNew(1, dims, NPY_DOUBLE);
-    f=(npy_double *)PyArray_DATA(Mf);
     dims[0]=CUTEst_ncon;
     Mc=(PyArrayObject *)PyArray_SimpleNew(1, dims, NPY_DOUBLE);
     c=(npy_double *)PyArray_DATA(Mc);
 
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst: calling CUTEST_cfn\n");
-#endif
-    CUTEST_cfn((integer *)&status, (integer *)&CUTEst_nvar, (integer *)&CUTEst_ncon, x, f, c);
+    CUTEST_cfn((integer *)&status, (integer *)&CUTEst_nvar, (integer *)&CUTEst_ncon, x, &f, c);
 
-    return decRefTuple(PyTuple_Pack(2, Mf, Mc));
+    return Py_BuildValue("dO", f, Mc);
 }
 
 
-static char cutest_obj_doc[]=
+PyDoc_STRVAR(cutest_obj_doc,
 "Returns the value of objective and its gradient at x.\n"
 "\n"
 "f=obj(x)\n"
@@ -708,21 +603,20 @@ static char cutest_obj_doc[]=
 "gradFlag -- if given the function returns f and g; can be anything\n"
 "\n"
 "Output\n"
-"f -- 1D array of length 1 holding the value of the function at x\n"
+"f -- float holding the value of the function at x\n"
 "g -- 1D array of length n holding the value of the gradient of f at x\n"
 "\n"
-"CUTEst tools used: CUTEST_uofg, CUTEST_cofg\n";
+"CUTEst tools used: CUTEST_uofg, CUTEST_cofg\n"
+);
 
 static PyObject *cutest_obj(PyObject *self, PyObject *args) {
     PyArrayObject *arg1;
     PyObject *arg2;
-    PyArrayObject *Mf, *Mg=NULL;
-    doublereal *x, *f, *g=NULL;
+    PyArrayObject *Mg=NULL;
+    doublereal *x, *g=NULL;
+    doublereal f;
     npy_intp dims[1];
 
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst: checking arguments\n");
-#endif
     if (!check_setup())
         return NULL;
 
@@ -735,43 +629,34 @@ static PyObject *cutest_obj(PyObject *self, PyObject *args) {
         return NULL;
     }
 
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst: preparing for evaluation\n");
-#endif
     x=(npy_double *)PyArray_DATA(arg1);
-    dims[0]=1;
-    Mf=(PyArrayObject *)PyArray_SimpleNew(1, dims, NPY_DOUBLE);
-    f=(npy_double *)PyArray_DATA(Mf);
     if (PyObject_Length(args)>1) {
         dims[0]=CUTEst_nvar;
         Mg=(PyArrayObject *)PyArray_SimpleNew(1, dims, NPY_DOUBLE);
         g=(npy_double *)PyArray_DATA(Mg);
     }
 
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst: calling [UC]OFG\n");
-#endif
     if (CUTEst_ncon == 0) {
         if (PyObject_Length(args)==1) {
-            CUTEST_uofg((integer *)&status, (integer *)&CUTEst_nvar, x, f, NULL, &somethingFalse);
-            return (PyObject *)Mf;
+            CUTEST_uofg((integer *)&status, (integer *)&CUTEst_nvar, x, &f, NULL, &somethingFalse);
+            return Py_BuildValue("d", f);
         } else {
-            CUTEST_uofg((integer *)&status, (integer *)&CUTEst_nvar, x, f, g, &somethingTrue);
-            return decRefTuple(PyTuple_Pack(2, Mf, Mg));
+            CUTEST_uofg((integer *)&status, (integer *)&CUTEst_nvar, x, &f, g, &somethingTrue);
+            return Py_BuildValue("dO", f, Mg);
         }
     } else {
         if (PyObject_Length(args)==1) {
-            CUTEST_cofg((integer *)&status, (integer *)&CUTEst_nvar, x, f, NULL, &somethingFalse);
-            return (PyObject *)Mf;
+            CUTEST_cofg((integer *)&status, (integer *)&CUTEst_nvar, x, &f, NULL, &somethingFalse);
+            return Py_BuildValue("d", f);
         } else {
-            CUTEST_cofg((integer *)&status, (integer *)&CUTEst_nvar, x, f, g, &somethingTrue);
-            return decRefTuple(PyTuple_Pack(2, Mf, Mg));
+            CUTEST_cofg((integer *)&status, (integer *)&CUTEst_nvar, x, &f, g, &somethingTrue);
+            return Py_BuildValue("dO", f, Mg);
         }
     }
 }
 
 
-static char cutest_cons_doc[]=
+PyDoc_STRVAR(cutest_cons_doc,
 "Returns the value of constraints and the Jacobian of constraints at x.\n"
 "\n"
 "c=cons(x)                 -- constraints\n"
@@ -790,7 +675,8 @@ static char cutest_cons_doc[]=
 "Ji -- 1D array of length n holding the gradient of i-th constraintn"
 "      (also equal to the i-th row of Jacobian)\n"
 "\n"
-"CUTEst tools used: CUTEST_ccfg, CUTEST_ccifg\n";
+"CUTEst tools used: CUTEST_ccfg, CUTEST_ccifg\n"
+);
 
 static PyObject *cutest_cons(PyObject *self, PyObject *args) {
     PyArrayObject *arg1, *Mc, *MJ;
@@ -801,9 +687,6 @@ static PyObject *cutest_cons(PyObject *self, PyObject *args) {
     npy_int zero = 0;
     npy_intp dims[2];
 
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst: checking arguments\n");
-#endif
     if (!check_setup())
         return NULL;
 
@@ -836,9 +719,6 @@ static PyObject *cutest_cons(PyObject *self, PyObject *args) {
         wantSingle=0;
     }
 
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst: preparing for evaluation\n");
-#endif
     x=(npy_double *)PyArray_DATA(arg1);
     if (!wantSingle) {
         dims[0]=CUTEst_ncon;
@@ -862,9 +742,6 @@ static PyObject *cutest_cons(PyObject *self, PyObject *args) {
         }
     }
 
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst: calling CUTEST_ccfg/CUTEST_ccifg\n");
-#endif
     if (!wantSingle) {
         if (!derivs) {
             CUTEST_ccfg((integer *)&status, (integer *)&CUTEst_nvar, (integer *)&CUTEst_ncon, x, c,
@@ -874,7 +751,7 @@ static PyObject *cutest_cons(PyObject *self, PyObject *args) {
             CUTEST_ccfg((integer *)&status, (integer *)&CUTEst_nvar, (integer *)&CUTEst_ncon, x, c,
                     &somethingFalse, (integer *)&CUTEst_ncon, (integer *)&CUTEst_nvar, J,
                     &somethingTrue);
-            return decRefTuple(PyTuple_Pack(2, Mc, MJ));
+            return Py_BuildValue("OO", Mc, MJ);
         }
     } else {
         if (!derivs) {
@@ -882,13 +759,13 @@ static PyObject *cutest_cons(PyObject *self, PyObject *args) {
             return (PyObject *)Mc;
         } else {
             CUTEST_ccifg((integer *)&status, (integer *)&CUTEst_nvar, (integer *)&icon, x, c, J, &somethingTrue);
-            return decRefTuple(PyTuple_Pack(2, Mc, MJ));
+            return Py_BuildValue("OO", Mc, MJ);
         }
     }
 }
 
 
-static char cutest_lagjac_doc[]=
+PyDoc_STRVAR(cutest_lagjac_doc,
 "Returns the gradient of the objective or Lagrangian, and the Jacobian of\n"
 "constraints at x. The gradient is the gradient with respect to the problem's\n"
 "variables (has n components).\n"
@@ -904,7 +781,8 @@ static char cutest_lagjac_doc[]=
 "g  -- 1D array of length n holding the gradient at x\n"
 "J  -- 2D array with m rows of n columns holding Jacobian of constraints at x\n"
 "\n"
-"CUTEst tools used: CUTEST_cgr\n";
+"CUTEst tools used: CUTEST_cgr\n"
+);
 
 static PyObject *cutest_lagjac(PyObject *self, PyObject *args) {
     PyArrayObject *arg1, *arg2, *Mg, *MJ;
@@ -912,9 +790,6 @@ static PyObject *cutest_lagjac(PyObject *self, PyObject *args) {
     int lagrangian;
     npy_intp dims[2];
 
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst: checking arguments\n");
-#endif
     if (!check_setup())
         return NULL;
 
@@ -939,9 +814,6 @@ static PyObject *cutest_lagjac(PyObject *self, PyObject *args) {
         lagrangian=0;
     }
 
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst: preparing for evaluation\n");
-#endif
     x=(npy_double *)PyArray_DATA(arg1);
     if (lagrangian)
         v=(npy_double *)PyArray_DATA(arg2);
@@ -954,9 +826,6 @@ static PyObject *cutest_lagjac(PyObject *self, PyObject *args) {
     MJ=(PyArrayObject *)PyArray_New(&PyArray_Type, 2, dims, NPY_DOUBLE, NULL, NULL, 0, NPY_ARRAY_F_CONTIGUOUS, NULL);
     J=(npy_double *)PyArray_DATA(MJ);
 
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst: calling CUTEST_cgr\n");
-#endif
     if (!lagrangian) {
         CUTEST_cgr((integer *)&status, (integer *)&CUTEst_nvar, (integer *)&CUTEst_ncon, x, NULL, &somethingFalse,
             g, &somethingFalse, (integer *)&CUTEst_ncon, (integer *)&CUTEst_nvar, J);
@@ -965,11 +834,11 @@ static PyObject *cutest_lagjac(PyObject *self, PyObject *args) {
             g, &somethingFalse, (integer *)&CUTEst_ncon, (integer *)&CUTEst_nvar, J);
     }
 
-    return decRefTuple(PyTuple_Pack(2, Mg, MJ));
+    return Py_BuildValue("OO", Mg, MJ);
 }
 
 
-static char cutest_jprod_doc[]=
+PyDoc_STRVAR(cutest_jprod_doc,
 "Returns the product of constraints Jacobian at x with vector p\n"
 "\n"
 "r=jprod(transpose, p, x) -- computes Jacobian at x before product calculation\n"
@@ -987,7 +856,8 @@ static char cutest_jprod_doc[]=
 "r  -- 1D array of length m if transpose=False (or n if transpose=True)\n"
 "      with the result\n"
 "\n"
-"CUTEst tools used: CUTEST_cjprod\n";
+"CUTEst tools used: CUTEST_cjprod\n"
+);
 
 static PyObject *cutest_jprod(PyObject *self, PyObject *args) {
     PyArrayObject *arg2, *arg3, *Mr;
@@ -996,9 +866,6 @@ static PyObject *cutest_jprod(PyObject *self, PyObject *args) {
     int transpose;
     npy_intp dims[1];
 
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst: checking arguments\n");
-#endif
     if (!check_setup())
         return NULL;
 
@@ -1038,9 +905,6 @@ static PyObject *cutest_jprod(PyObject *self, PyObject *args) {
         }
     }
 
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst: preparing for evaluation\n");
-#endif
     p=(npy_double *)PyArray_DATA(arg2);
     if (arg3!=NULL)
         x=(npy_double *)PyArray_DATA(arg3);
@@ -1054,9 +918,6 @@ static PyObject *cutest_jprod(PyObject *self, PyObject *args) {
     Mr=(PyArrayObject *)PyArray_SimpleNew(1, dims, NPY_DOUBLE);
     r=(npy_double *)PyArray_DATA(Mr);
 
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst: calling CUTEST_cjprod\n");
-#endif
     if (!transpose) {
         if (arg3==NULL) {
             CUTEST_cjprod((integer *)&status, (integer *)&CUTEst_nvar, (integer *)&CUTEst_ncon, &somethingTrue,
@@ -1079,7 +940,7 @@ static PyObject *cutest_jprod(PyObject *self, PyObject *args) {
 }
 
 
-static char cutest_hess_doc[]=
+PyDoc_STRVAR(cutest_hess_doc,
 "Returns the Hessian of the objective (for unconstrained problems) or the\n"
 "Hessian of the Lagrangian (for constrained problems) at x.\n"
 "\n"
@@ -1099,16 +960,14 @@ static char cutest_hess_doc[]=
 "Output\n"
 "H  -- 2D array with n rows of n columns holding the Hessian at x (or (x, v))\n"
 "\n"
-"CUTEst tools used: CUTEST_cdh, CUTEST_udh\n";
+"CUTEst tools used: CUTEST_cdh, CUTEST_udh\n"
+);
 
 static PyObject *cutest_hess(PyObject *self, PyObject *args) {
     PyArrayObject *arg1, *arg2, *MH;
     doublereal *x, *v=NULL, *H;
     npy_intp dims[2];
 
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst: checking arguments\n");
-#endif
     if (!check_setup())
         return NULL;
 
@@ -1135,9 +994,6 @@ static PyObject *cutest_hess(PyObject *self, PyObject *args) {
         }
     }
 
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst: preparing for evaluation\n");
-#endif
     x=(npy_double *)PyArray_DATA(arg1);
     if (CUTEst_ncon>0)
         v=(npy_double *)PyArray_DATA(arg2);
@@ -1147,9 +1003,6 @@ static PyObject *cutest_hess(PyObject *self, PyObject *args) {
     MH=(PyArrayObject *)PyArray_New(&PyArray_Type, 2, dims, NPY_DOUBLE, NULL, NULL, 0, NPY_ARRAY_F_CONTIGUOUS, NULL);
     H=(npy_double *)PyArray_DATA(MH);
 
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst: calling CUTEST_[cu]dh\n");
-#endif
     if (CUTEst_ncon>0) {
         CUTEST_cdh((integer *)&status, (integer *)&CUTEst_nvar, (integer *)&CUTEst_ncon, x, v, (integer *)&CUTEst_nvar, H);
     } else {
@@ -1160,7 +1013,7 @@ static PyObject *cutest_hess(PyObject *self, PyObject *args) {
 }
 
 
-static char cutest_ihess_doc[]=
+PyDoc_STRVAR(cutest_ihess_doc,
 "Returns the Hessian of the objective or the Hessian of i-th constraint at x.\n"
 "\n"
 "H=ihess(x)    -- Hessian of the objective\n"
@@ -1175,7 +1028,8 @@ static char cutest_ihess_doc[]=
 "Output\n"
 "H  -- 2D array with n rows of n columns holding the Hessian at x\n"
 "\n"
-"CUTEst tools used: CUTEST_cidh, CUTEST_udh\n";
+"CUTEst tools used: CUTEST_cidh, CUTEST_udh\n"
+);
 
 static PyObject *cutest_ihess(PyObject *self, PyObject *args) {
     PyArrayObject *arg1, *MH;
@@ -1184,9 +1038,6 @@ static PyObject *cutest_ihess(PyObject *self, PyObject *args) {
     int i;
     npy_int icon;
 
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst: checking arguments\n");
-#endif
     if (!check_setup())
         return NULL;
 
@@ -1209,9 +1060,6 @@ static PyObject *cutest_ihess(PyObject *self, PyObject *args) {
         return NULL;
     }
 
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst: preparing for evaluation\n");
-#endif
     x=(npy_double *)PyArray_DATA(arg1);
     dims[0]=CUTEst_nvar;
     dims[1]=CUTEst_nvar;
@@ -1219,9 +1067,6 @@ static PyObject *cutest_ihess(PyObject *self, PyObject *args) {
     MH=(PyArrayObject *)PyArray_New(&PyArray_Type, 2, dims, NPY_DOUBLE, NULL, NULL, 0, NPY_ARRAY_F_CONTIGUOUS, NULL);
     H=(npy_double *)PyArray_DATA(MH);
 
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst: calling CUTEST_cidh/CUTEST_udh\n");
-#endif
     if (CUTEst_ncon>0) {
         CUTEST_cidh((integer *)&status, (integer *)&CUTEst_nvar, x, (integer *)&icon, (integer *)&CUTEst_nvar, H);
     } else {
@@ -1232,7 +1077,7 @@ static PyObject *cutest_ihess(PyObject *self, PyObject *args) {
 }
 
 
-static char cutest_hprod_doc[]=
+PyDoc_STRVAR(cutest_hprod_doc,
 "Returns the product of Hessian at x and vector p.\n"
 "The Hessian is either the Hessian of objective or the Hessian of Lagrangian.\n"
 "\n"
@@ -1253,16 +1098,14 @@ static char cutest_hprod_doc[]=
 "Output\n"
 "r  -- 1D array of length n holding the result\n"
 "\n"
-"CUTEst tools used: CUTEST_chprod, CUTEST_uhprod\n";
+"CUTEst tools used: CUTEST_chprod, CUTEST_uhprod\n"
+);
 
 static PyObject *cutest_hprod(PyObject *self, PyObject *args) {
     PyArrayObject *arg1, *arg2, *arg3, *Mr;
     doublereal *p, *x=NULL, *v=NULL, *r;
     npy_intp dims[1];
 
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst: checking arguments\n");
-#endif
     if (!check_setup())
         return NULL;
 
@@ -1300,9 +1143,6 @@ static PyObject *cutest_hprod(PyObject *self, PyObject *args) {
         return NULL;
     }
 
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst: preparing for evaluation\n");
-#endif
     p=(npy_double *)PyArray_DATA(arg1);
     if (arg2!=NULL)
         x=(npy_double *)PyArray_DATA(arg2);
@@ -1312,9 +1152,6 @@ static PyObject *cutest_hprod(PyObject *self, PyObject *args) {
     Mr=(PyArrayObject *)PyArray_SimpleNew(1, dims, NPY_DOUBLE);
     r=(npy_double *)PyArray_DATA(Mr);
 
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst: calling [CU]PROD\n");
-#endif
     if (CUTEst_ncon>0) {
         if (arg2==NULL)
             CUTEST_chprod((integer *)&status, (integer *)&CUTEst_nvar, (integer *)&CUTEst_ncon, &somethingTrue, NULL, NULL, p, r);
@@ -1331,7 +1168,7 @@ static PyObject *cutest_hprod(PyObject *self, PyObject *args) {
 }
 
 
-static char cutest_gradhess_doc[]=
+PyDoc_STRVAR(cutest_gradhess_doc,
 "Returns the Hessian of the Lagrangian, the Jacobian of constraints, and the\n"
 "gradient of the objective or the gradient of the Lagrangian at x.\n"
 "\n"
@@ -1359,7 +1196,8 @@ static char cutest_gradhess_doc[]=
 "      the Hessian of the objective (for unconstrained problems) or\n"
 "      the Hessian of the Lagrangian (for constrained problems)\n"
 "\n"
-"CUTEst tools used: CUTEST_cgrdh, CUTEST_ugrdh\n";
+"CUTEst tools used: CUTEST_cgrdh, CUTEST_ugrdh\n"
+);
 
 static PyObject *cutest_gradhess(PyObject *self, PyObject *args) {
     PyArrayObject *arg1, *arg2, *Mg, *MH, *MJ;
@@ -1368,9 +1206,6 @@ static PyObject *cutest_gradhess(PyObject *self, PyObject *args) {
     npy_bool grlagf;
     npy_intp dims[2];
 
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst: checking arguments\n");
-#endif
     if (!check_setup())
         return NULL;
 
@@ -1410,9 +1245,6 @@ static PyObject *cutest_gradhess(PyObject *self, PyObject *args) {
         grlagf=FALSE_;
     }
 
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst: preparing for evaluation\n");
-#endif
     x=(npy_double *)PyArray_DATA(arg1);
     if (arg2!=NULL)
         v=(npy_double *)PyArray_DATA(arg2);
@@ -1430,21 +1262,18 @@ static PyObject *cutest_gradhess(PyObject *self, PyObject *args) {
     MJ=(PyArrayObject *)PyArray_New(&PyArray_Type, 2, dims, NPY_DOUBLE, NULL, NULL, 0, NPY_ARRAY_F_CONTIGUOUS, NULL);
     J=(npy_double *)PyArray_DATA(MJ);
 
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst: calling CUTEST_[cu]grdh\n");
-#endif
     if (CUTEst_ncon>0) {
         CUTEST_cgrdh((integer *)&status, (integer *)&CUTEst_nvar, (integer *)&CUTEst_ncon, x, v, (logical *)&grlagf,
                 g, &somethingFalse, (integer *)&CUTEst_ncon, (integer *)&CUTEst_nvar, J, (integer *)&CUTEst_nvar, H);
-        return decRefTuple(PyTuple_Pack(3, Mg, MJ, MH));
+        return Py_BuildValue("OOO", Mg, MJ, MH);
     } else {
         CUTEST_ugrdh((integer *)&status, (integer *)&CUTEst_nvar, x, g, (integer *)&CUTEst_nvar, H);
-        return decRefTuple(PyTuple_Pack(2, Mg, MH));
+        return Py_BuildValue("OO", Mg, MH);
     }
 }
 
 
-static char cutest_scons_doc[]=
+PyDoc_STRVAR(cutest_scons_doc,
 "Returns the value of constraints and the sparse Jacobian of constraints at x.\n"
 "\n"
 "(c, Jvi, Jfi, Jv)=scons(x) -- Jacobian of constraints\n"
@@ -1473,7 +1302,8 @@ static char cutest_scons_doc[]=
 "This function is not supposed to be called by the user. It is called by the\n"
 "wrapper function scons().\n"
 "\n"
-"CUTEst tools used: CUTEST_ccfsg, CUTEST_ccifsg\n";
+"CUTEst tools used: CUTEST_ccfsg, CUTEST_ccifsg\n"
+);
 
 static PyObject *cutest_scons(PyObject *self, PyObject *args) {
     PyArrayObject *arg1, *Mc, *MJi, *MJfi, *MJv, *Mgi, *Mgv;
@@ -1483,9 +1313,6 @@ static PyObject *cutest_scons(PyObject *self, PyObject *args) {
     int i;
     npy_intp dims[1];
 
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst: checking arguments\n");
-#endif
     if (!check_setup())
         return NULL;
 
@@ -1507,9 +1334,6 @@ static PyObject *cutest_scons(PyObject *self, PyObject *args) {
     }
 
     if (PyObject_Length(args)==1) {
-#ifdef PYDEBUG
-        fprintf(df, "PyCUTEst: preparing for evaluation\n");
-#endif
         x=(npy_double *)PyArray_DATA(arg1);
         dims[0]=CUTEst_nnzj;
         MJi=(PyArrayObject *)PyArray_SimpleNew(1, dims, NPY_INT);
@@ -1523,9 +1347,6 @@ static PyObject *cutest_scons(PyObject *self, PyObject *args) {
         c=(npy_double *)PyArray_DATA(Mc);
         lj=CUTEst_nnzj;
 
-#ifdef PYDEBUG
-        fprintf(df, "PyCUTEst: calling CUTEST_ccfsg\n");
-#endif
         CUTEST_ccfsg((integer *)&status, (integer *)&CUTEst_nvar, (integer *)&CUTEst_ncon, x, c, (integer *)&CUTEst_nnzj,
               (integer *)&lj, Jv, (integer *)Ji, (integer *)Jfi, &somethingTrue);
 
@@ -1535,11 +1356,8 @@ static PyObject *cutest_scons(PyObject *self, PyObject *args) {
             Jfi[i]--;
         }
 
-        return decRefTuple(PyTuple_Pack(4, Mc, MJi, MJfi, MJv));
+        return Py_BuildValue("OOOO", Mc, MJi, MJfi, MJv);
     } else {
-#ifdef PYDEBUG
-        fprintf(df, "PyCUTEst: preparing for evaluation\n");
-#endif
         x=(npy_double *)PyArray_DATA(arg1);
         si=(npy_int *)malloc(CUTEst_nvar*sizeof(npy_int));
         sv=(npy_double *)malloc(CUTEst_nvar*sizeof(npy_double));
@@ -1547,9 +1365,6 @@ static PyObject *cutest_scons(PyObject *self, PyObject *args) {
         Mc=(PyArrayObject *)PyArray_SimpleNew(1, dims, NPY_DOUBLE);
         c=(npy_double *)PyArray_DATA(Mc);
 
-#ifdef PYDEBUG
-        fprintf(df, "PyCUTEst: calling CUTEST_ccifsg\n");
-#endif
         CUTEST_ccifsg((integer *)&status, (integer *)&CUTEst_nvar, (integer *)&index, x, c, (integer *)&nnzsgc, (integer *)&CUTEst_nvar, sv, (integer *)si, &somethingTrue);
 
         /* Allocate and copy results, convert indices from FORTRAN to C, free storage */
@@ -1565,12 +1380,12 @@ static PyObject *cutest_scons(PyObject *self, PyObject *args) {
         free(si);
         free(sv);
 
-        return decRefTuple(PyTuple_Pack(3, Mc, Mgi, Mgv));
+        return Py_BuildValue("OOO", Mc, Mgi, Mgv);
     }
 }
 
 
-static char cutest_slagjac_doc[]=
+PyDoc_STRVAR(cutest_slagjac_doc,
 "Returns the sparse gradient of objective at x or Lagrangian at (x, v), \n"
 "and the sparse Jacobian of constraints at x.\n"
 "\n"
@@ -1596,7 +1411,8 @@ static char cutest_slagjac_doc[]=
 "This function is not supposed to be called by the user. It is called by the\n"
 "wrapper function slagjac().\n"
 "\n"
-"CUTEst tools used: CUTEST_csgr\n";
+"CUTEst tools used: CUTEST_csgr\n"
+);
 
 static PyObject *cutest_slagjac(PyObject *self, PyObject *args) {
     PyArrayObject *arg1, *arg2, *Mgi, *Mgv, *MJi, *MJfi, *MJv;
@@ -1605,9 +1421,6 @@ static PyObject *cutest_slagjac(PyObject *self, PyObject *args) {
     npy_int nnzjplusn, nnzjplusno;
     int lagrangian;
 
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst: checking arguments\n");
-#endif
     if (!check_setup())
         return NULL;
 
@@ -1632,9 +1445,6 @@ static PyObject *cutest_slagjac(PyObject *self, PyObject *args) {
         lagrangian=0;
     }
 
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst: preparing for evaluation\n");
-#endif
     x=(npy_double *)PyArray_DATA(arg1);
     if (lagrangian)
         v=(npy_double *)PyArray_DATA(arg2);
@@ -1643,9 +1453,6 @@ static PyObject *cutest_slagjac(PyObject *self, PyObject *args) {
     sfi=(npy_int *)malloc(nnzjplusn*sizeof(npy_int));
     sv=(npy_double *)malloc(nnzjplusn*sizeof(npy_double));
 
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst: calling CUTEST_csgr\n");
-#endif
     /* Must use different variable for output NNZJ and input LCJAC */
     if (!lagrangian) {
         CUTEST_csgr((integer *)&status, (integer *)&CUTEst_nvar, (integer *)&CUTEst_ncon, x, NULL, &somethingFalse,
@@ -1662,11 +1469,11 @@ static PyObject *cutest_slagjac(PyObject *self, PyObject *args) {
     free(sfi);
     free(sv);
 
-    return decRefTuple(PyTuple_Pack(5, Mgi, Mgv, MJi, MJfi, MJv));
+    return Py_BuildValue("OOOOO", Mgi, Mgv, MJi, MJfi, MJv);
 }
 
 
-static char cutest_sphess_doc[]=
+PyDoc_STRVAR(cutest_sphess_doc,
 "Returns the sparse Hessian of the objective at x (unconstrained problems) or\n"
 "the sparse Hessian of the Lagrangian (constrained problems) at (x, v).\n"
 "\n"
@@ -1692,16 +1499,14 @@ static char cutest_sphess_doc[]=
 "This function is not supposed to be called by the user. It is called by the\n"
 "wrapper function sphess().\n"
 "\n"
-"CUTEst tools used: CUTEST_csh, CUTEST_ush\n";
+"CUTEst tools used: CUTEST_csh, CUTEST_ush\n"
+);
 
 static PyObject *cutest_sphess(PyObject *self, PyObject *args) {
     PyArrayObject *arg1, *arg2, *MHi, *MHj, *MHv;
     doublereal *x, *v=NULL, *sv;
     npy_int *si, *sj, nnzho;
 
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst: checking arguments\n");
-#endif
     if (!check_setup())
         return NULL;
 
@@ -1728,9 +1533,6 @@ static PyObject *cutest_sphess(PyObject *self, PyObject *args) {
         }
     }
 
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst: preparing for evaluation\n");
-#endif
     x=(npy_double *)PyArray_DATA(arg1);
     if (CUTEst_ncon>0)
         v=(npy_double *)PyArray_DATA(arg2);
@@ -1738,9 +1540,6 @@ static PyObject *cutest_sphess(PyObject *self, PyObject *args) {
     sj=(npy_int *)malloc(CUTEst_nnzh*sizeof(npy_int));
     sv=(npy_double *)malloc(CUTEst_nnzh*sizeof(npy_double));
 
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst: calling [CU]SH\n");
-#endif
     if (CUTEst_ncon>0) {
         CUTEST_csh((integer *)&status, (integer *)&CUTEst_nvar, (integer *)&CUTEst_ncon, x, v, (integer *)&nnzho, (integer *)&CUTEst_nnzh,
             sv, (integer *)si, (integer *)sj);
@@ -1756,11 +1555,11 @@ static PyObject *cutest_sphess(PyObject *self, PyObject *args) {
     free(sj);
     free(sv);
 
-    return decRefTuple(PyTuple_Pack(3, MHi, MHj, MHv));
+    return Py_BuildValue("OOO", MHi, MHj, MHv);
 }
 
 
-static char cutest_isphess_doc[]=
+PyDoc_STRVAR(cutest_isphess_doc,
 "Returns the sparse Hessian of the objective or the sparse Hessian of i-th\n"
 "constraint at x.\n"
 "\n"
@@ -1785,7 +1584,8 @@ static char cutest_isphess_doc[]=
 "This function is not supposed to be called by the user. It is called by the\n"
 "wrapper function isphess().\n"
 "\n"
-"CUTEst tools used: CUTEST_cish, CUTEST_ush\n";
+"CUTEst tools used: CUTEST_cish, CUTEST_ush\n"
+);
 
 static PyObject *cutest_isphess(PyObject *self, PyObject *args) {
     PyArrayObject *arg1, *MHi, *MHj, *MHv;
@@ -1793,9 +1593,6 @@ static PyObject *cutest_isphess(PyObject *self, PyObject *args) {
     npy_int *si, *sj, nnzho, i;
     npy_int icon;
 
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst: checking arguments\n");
-#endif
     if (!check_setup())
         return NULL;
 
@@ -1818,17 +1615,11 @@ static PyObject *cutest_isphess(PyObject *self, PyObject *args) {
         return NULL;
     }
 
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst: preparing for evaluation\n");
-#endif
     x=(npy_double *)PyArray_DATA(arg1);
     si=(npy_int *)malloc(CUTEst_nnzh*sizeof(npy_int));
     sj=(npy_int *)malloc(CUTEst_nnzh*sizeof(npy_int));
     sv=(npy_double *)malloc(CUTEst_nnzh*sizeof(npy_double));
 
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst: calling CUTEST_cish/CUTEST_ush\n");
-#endif
     if (CUTEst_ncon>0) {
         CUTEST_cish((integer *)&status, (integer *)&CUTEst_nvar, x, (integer *)&icon, (integer *)&nnzho, (integer *)&CUTEst_nnzh, sv, (integer *)si, (integer *)sj);
     } else {
@@ -1842,11 +1633,11 @@ static PyObject *cutest_isphess(PyObject *self, PyObject *args) {
     free(sj);
     free(sv);
 
-    return decRefTuple(PyTuple_Pack(3, MHi, MHj, MHv));
+    return Py_BuildValue("OOO", MHi, MHj, MHv);
 }
 
 
-static char cutest_gradsphess_doc[]=
+PyDoc_STRVAR(cutest_gradsphess_doc,
 "Returns the sparse Hessian of the Lagrangian, the sparse Jacobian of\n"
 "constraints, and the gradient of the objective or Lagrangian.\n"
 "\n"
@@ -1887,7 +1678,8 @@ static char cutest_gradsphess_doc[]=
 "This function is not supposed to be called by the user. It is called by the\n"
 "wrapper function gradsphess().\n"
 "\n"
-"CUTEst tools used: CUTEST_csgrsh, CUTEST_ugrsh\n";
+"CUTEst tools used: CUTEST_csgrsh, CUTEST_ugrsh\n"
+);
 
 static PyObject *cutest_gradsphess(PyObject *self, PyObject *args) {
     PyArrayObject *arg1, *arg2, *Mg=NULL, *Mgi, *Mgv, *MJi, *MJfi, *MJv, *MHi, *MHj, *MHv;
@@ -1897,9 +1689,6 @@ static PyObject *cutest_gradsphess(PyObject *self, PyObject *args) {
     npy_int *si, *sj, *sji, *sjfi, nnzho, nnzjplusn, nnzjplusno;
     npy_intp dims[1];
 
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst: checking arguments\n");
-#endif
     if (!check_setup())
         return NULL;
 
@@ -1934,9 +1723,6 @@ static PyObject *cutest_gradsphess(PyObject *self, PyObject *args) {
         }
     }
 
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst: preparing for evaluation\n");
-#endif
     x=(npy_double *)PyArray_DATA(arg1);
     si=(npy_int *)malloc(CUTEst_nnzh*sizeof(npy_int));
     sj=(npy_int *)malloc(CUTEst_nnzh*sizeof(npy_int));
@@ -1949,9 +1735,6 @@ static PyObject *cutest_gradsphess(PyObject *self, PyObject *args) {
         sjfi=(npy_int *)malloc(nnzjplusn*sizeof(npy_int));
         sjv=(npy_double *)malloc(nnzjplusn*sizeof(npy_double));
 
-#ifdef PYDEBUG
-        fprintf(df, "PyCUTEst: calling CUTEST_csgrsh\n");
-#endif
         if (lagrangian) {
             CUTEST_csgrsh((integer *)&status, (integer *)&CUTEst_nvar, (integer *)&CUTEst_ncon, x, v, &somethingTrue,
                     (integer *)&nnzjplusno, (integer *)&nnzjplusn, sjv, (integer *)sji, (integer *)sjfi,
@@ -1973,9 +1756,6 @@ static PyObject *cutest_gradsphess(PyObject *self, PyObject *args) {
         Mg=(PyArrayObject *)PyArray_SimpleNew(1, dims, NPY_DOUBLE);
         g=(npy_double *)PyArray_DATA(Mg);
 
-#ifdef PYDEBUG
-        fprintf(df, "PyCUTEst: calling CUTEST_ugrsh\n");
-#endif
         CUTEST_ugrsh((integer *)&status, (integer *)&CUTEst_nvar, x, g, (integer *)&nnzho, (integer *)&CUTEst_nnzh, sv, (integer *)si, (integer *)sj);
     }
 
@@ -1987,14 +1767,14 @@ static PyObject *cutest_gradsphess(PyObject *self, PyObject *args) {
     free(sv);
 
     if (CUTEst_ncon>0) {
-        return decRefTuple(PyTuple_Pack(8, Mgi, Mgv, MJi, MJfi, MJv, MHi, MHj, MHv));
+        return Py_BuildValue("OOOOOOOO", Mgi, Mgv, MJi, MJfi, MJv, MHi, MHj, MHv);
     } else {
-        return decRefTuple(PyTuple_Pack(4, Mg, MHi, MHj, MHv));
+        return Py_BuildValue("OOOO", Mg, MHi, MHj, MHv);
     }
 }
 
 
-static char cutest_report_doc[]=
+PyDoc_STRVAR(cutest_report_doc,
 "Reports usage statistics.\n"
 "\n"
 "stat=report()\n"
@@ -2015,15 +1795,13 @@ static char cutest_report_doc[]=
 "cg     -- number of constraint gradient evaluations\n"
 "cH     -- number of constraint Hessian evaluations\n"
 "\n"
-"CUTEst tools used: CUTEST_creport, CUTEST_ureport\n";
+"CUTEst tools used: CUTEST_creport, CUTEST_ureport\n"
+);
 
 static PyObject *cutest_report(PyObject *self, PyObject *args) {
     doublereal calls[7], time[2];
     PyObject *dict;
 
-#ifdef PYDEBUG
-    fprintf(df, "PyCUTEst: checking arguments\n");
-#endif
     if (!check_setup())
         return NULL;
 
@@ -2038,20 +1816,21 @@ static PyObject *cutest_report(PyObject *self, PyObject *args) {
         CUTEST_ureport((integer *)&status, calls, time);
 
     dict=PyDict_New();
-    PyDict_SetItemString(dict, "f", PyInt_FromLong((long)(calls[0])));
-    PyDict_SetItemString(dict, "g", PyInt_FromLong((long)(calls[1])));
-    PyDict_SetItemString(dict, "H", PyInt_FromLong((long)(calls[2])));
-    PyDict_SetItemString(dict, "Hprod", PyInt_FromLong((long)(calls[3])));
+    PyDict_SetItemString(dict, "f", PyLong_FromLong((long)(calls[0])));
+    PyDict_SetItemString(dict, "g", PyLong_FromLong((long)(calls[1])));
+    PyDict_SetItemString(dict, "H", PyLong_FromLong((long)(calls[2])));
+    PyDict_SetItemString(dict, "Hprod", PyLong_FromLong((long)(calls[3])));
     if (CUTEst_ncon>0) {
-        PyDict_SetItemString(dict, "c", PyInt_FromLong((long)(calls[4])));
-        PyDict_SetItemString(dict, "cg", PyInt_FromLong((long)(calls[5])));
-        PyDict_SetItemString(dict, "cH", PyInt_FromLong((long)(calls[6])));
+        PyDict_SetItemString(dict, "c", PyLong_FromLong((long)(calls[4])));
+        PyDict_SetItemString(dict, "cg", PyLong_FromLong((long)(calls[5])));
+        PyDict_SetItemString(dict, "cH", PyLong_FromLong((long)(calls[6])));
     }
     PyDict_SetItemString(dict, "tsetup", PyFloat_FromDouble((long)(time[0])));
     PyDict_SetItemString(dict, "trun", PyFloat_FromDouble((long)(time[1])));
 
     return decRefDict(dict);
 }
+
 
 PyDoc_STRVAR(cutest_terminate_doc,
 "Deallocate all internal private storage.\n"
@@ -2084,7 +1863,10 @@ static PyObject *cutest_terminate(PyObject *self, PyObject *args) {
     return Py_None;
 }
 
-/* Methods table */
+
+/* Python Module */
+
+/* Module method table */
 static PyMethodDef _methods[] = {
     {"dims", cutest_dims, METH_VARARGS, cutest_dims_doc},
     {"setup", cutest_setup, METH_VARARGS, cutest_setup_doc},
@@ -2106,48 +1888,23 @@ static PyMethodDef _methods[] = {
     {"gradsphess", cutest_gradsphess, METH_VARARGS, cutest_gradsphess_doc},
     {"report", cutest_report, METH_VARARGS, cutest_report_doc},
     {"terminate", cutest_terminate, METH_VARARGS, cutest_terminate_doc},
-    {NULL, NULL}     /* Marks the end of this structure */
+    {NULL, NULL, 0, NULL}  /* Sentinel, marks the end of this structure */
 };
 
-/* MODULE INIT CODE HERE */
-
-#ifdef __cplusplus
-}
-#endif
-"""
-
-module_init_py2 = r"""
-/* Module initialization
-   Module name must be _rawfile in compile and link */
-__declspec(dllexport) void init_pycutestitf(void)  {
-    (void) Py_InitModule("_pycutestitf", _methods);
-    import_array();  /* Must be present for NumPy.  Called first after above line. */
-}
-"""
-
-module_init_py3 = r"""
-/* Module initialization (Python3) */
+/* Python module definition */
 static struct PyModuleDef module = {
    PyModuleDef_HEAD_INIT,
-   "_pycutestitf",   /* name of module */
-   0, /* module documentation, may be NULL */
-   -1,       /* size of per-interpreter state of the module,
-                or -1 if the module keeps state in global variables. */
-   _methods
+   "_pycutestitf",  /* name of module */
+   NULL,           /* module documentation, may be NULL */
+   -1,              /* size of per-interpreter state of the module,
+                       or -1 if the module keeps state in global variables */
+   _methods         /* module methods */
 };
 
-PyMODINIT_FUNC PyInit__pycutestitf(void) {
-    import_array();  // for NumPy
+/* Python module initialization */
+PyMODINIT_FUNC PyInit__pycutestitf(void) { // must be same as module name above
+    import_array();  // for NumPy arrays
     return PyModule_Create(&module);
 }
 """
-
-import sys
-
-if sys.version_info[0] >= 3:
-    # The above is written for Python 2, there are a couple of methods which need replacing
-    itf_c_source = itf_c_source.replace('PyInt_FromLong', 'PyLong_FromLong')
-    itf_c_source = itf_c_source.replace('PyString_FromString', 'PyUnicode_FromString')
-    itf_c_source = itf_c_source.replace('/* MODULE INIT CODE HERE */', module_init_py3)
-else:
-    itf_c_source = itf_c_source.replace('/* MODULE INIT CODE HERE */', module_init_py2)
+# end of raw string

@@ -2,9 +2,6 @@
 Installation scripts for individual problems
 """
 
-# Ensure compatibility with Python 2
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 import sys
 
 from .system_paths import get_cutest_path
@@ -16,15 +13,12 @@ __all__ = ['get_setup_script']
 #
 setupScript="""#!/usr/bin/env python
 # (C)2011 Arpad Buermen
-# (C)2018 Jaroslav Fowkes, Lindon Roberts
+# (C)2022 Jaroslav Fowkes, Lindon Roberts
 # Licensed under GNU GPL V3
 
 #
 # Do not edit. This is a computer-generated file.
 #
-
-# Ensure compatibility with Python 2
-from __future__ import absolute_import, division, print_function, unicode_literals
 
 import os
 
@@ -57,7 +51,7 @@ module = Extension(
 # Settings
 setup(
     name='PyCUTEst automatic test function interface builder',
-    version='1.0',
+    version='1.3',
     description='Builds a CUTEst test function interface for Python.',
     long_description='Builds a CUTEst test function interface for Python.',
     author='Arpad Buermen, Jaroslav Fowkes, Lindon Roberts',
@@ -75,7 +69,7 @@ setup(
 #
 setupScriptLinux="""
 define_macros=[('LINUX', None)]
-include_dirs=[os.path.join(np.get_include(), 'numpy'),os.environ['CUTEST']+'/include/']
+include_dirs=[np.get_include(),os.environ['CUTEST']+'/include/']
 objFileList=glob('*.o')
 objFileList.append(os.environ['CUTEST']+'/objects/'+os.environ['MYARCH']+'/double/libcutest.a')
 libraries=['gfortran']
@@ -91,7 +85,7 @@ import subprocess
 # extract the homebrew prefix 
 homebrew_prefix = subprocess.check_output(['brew', '--prefix']).decode('utf-8')[:-1]
 define_macros=[('LINUX', None)]
-include_dirs=[os.path.join(np.get_include(), 'numpy'),os.environ['CUTEST']+'/include/']
+include_dirs=[np.get_include(),os.environ['CUTEST']+'/include/']
 objFileList=glob('*.o')
 objFileList.append('%s')
 libraries=['gfortran']
@@ -101,7 +95,7 @@ extra_link_args=['-Wl,-no_compact_unwind']
 
 
 def get_setup_script():
-    if sys.platform in ["linux", "linux2"]:
+    if sys.platform == "linux":
         return setupScript % setupScriptLinux
     else:
         return setupScript % setupScriptMac

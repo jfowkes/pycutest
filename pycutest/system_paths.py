@@ -2,9 +2,6 @@
 Depending on the platform, find the correct paths to the CUTEst installation
 """
 
-# Ensure compatibility with Python 2
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 import os, sys
 
 __all__ = ['check_platform', 'get_cutest_path', 'get_sifdecoder_path', 'get_mastsif_path', 'get_cache_path']
@@ -12,8 +9,13 @@ __all__ = ['check_platform', 'get_cutest_path', 'get_sifdecoder_path', 'get_mast
 
 base_dir = os.getcwd()
 
+homebrew_prefix = None
+if sys.platform == 'darwin':  # Mac
+    import subprocess
+    homebrew_prefix = subprocess.check_output(['brew', '--prefix']).decode('utf-8')[:-1]
+
 def check_platform():
-    if sys.platform not in ['linux', 'linux2', 'darwin']:
+    if sys.platform not in ['linux', 'darwin']:
         raise ImportError("Unsupported platform: " + sys.platform)
     return
 
@@ -33,7 +35,7 @@ def get_cutest_path():
             cutest_path = os.path.join(os.environ['CUTEST'], 'objects', os.environ['MYARCH'], 'double', 'libcutest.a')
             if os.path.isfile(cutest_path):
                 return cutest_path
-        homebrew_path = os.path.join('usr', 'local', 'opt', 'cutest', 'lib', 'libcutest.a')  # /usr/local/opt/cutest/lib/libcutest.a
+        homebrew_path = os.path.join(homebrew_prefix, 'opt', 'cutest', 'lib', 'libcutest.a')  # HOMEBREW_PREFIX/opt/cutest/lib/libcutest.a
         if os.path.isfile(homebrew_path):
             return homebrew_path
         else:
@@ -54,7 +56,7 @@ def get_sifdecoder_path():
             sifdecoder_path = os.path.join(os.environ['SIFDECODE'], 'bin', 'sifdecoder')
             if os.path.isfile(sifdecoder_path):
                 return sifdecoder_path
-        homebrew_path = os.path.join('usr', 'local', 'opt', 'sifdecode', 'bin', 'sifdecoder')  # /usr/local/opt/sifdecode/bin/sifdecoder
+        homebrew_path = os.path.join(homebrew_prefix, 'opt', 'sifdecode', 'bin', 'sifdecoder')  # HOMEBREW_PREFIX/opt/sifdecode/bin/sifdecoder
         if os.path.isfile(homebrew_path):
             return homebrew_path
         else:
@@ -75,7 +77,7 @@ def get_mastsif_path():
             mastsif_path = os.environ['MASTSIF']
             if os.path.isdir(mastsif_path):
                 return mastsif_path
-        homebrew_path = os.path.join('usr', 'local', 'opt', 'mastsif', 'share', 'mastsif')  # /usr/local/opt/mastsif/share/mastsif
+        homebrew_path = os.path.join(homebrew_prefix, 'opt', 'mastsif', 'share', 'mastsif')  # HOMEBREW_PREFIX/opt/mastsif/share/mastsif
         if os.path.isdir(homebrew_path):
             return homebrew_path
         else:

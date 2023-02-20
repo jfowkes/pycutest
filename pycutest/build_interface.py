@@ -3,12 +3,9 @@
 """
 Main routines for building and managing interfaces
 """
-
-# Ensure compatibility with Python 2
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 import os, shutil, sys
 import subprocess
+import importlib
 from glob import glob
 
 from .system_paths import get_cache_path, get_sifdecoder_path
@@ -345,11 +342,11 @@ def import_problem(problemName, destination=None, sifParams=None, sifOptions=Non
         problemDir = destination
     # Import the module CACHE_SUBFOLDER.problemDir, and return a wrapper
     try:
-        return CUTEstProblem(__import__('%s.%s' % (CACHE_SUBFOLDER, problemDir), globals(), locals(), [str(problemDir)]),
+        return CUTEstProblem(importlib.import_module('%s.%s' % (CACHE_SUBFOLDER, problemDir)),
                              drop_fixed_variables=drop_fixed_variables)
     except ImportError as error:
         try: # check if cache folder is on python path
-            __import__(CACHE_SUBFOLDER)
+            importlib.import_module(CACHE_SUBFOLDER)
         except ImportError:
             raise ImportError('cannot import PYCUTEST_CACHE folder, have you added it to your python path?')
         else: # else raise original error
