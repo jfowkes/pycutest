@@ -38,10 +38,10 @@ itf_c_source = r"""
 
 
 /* Module function prototypes */
-static PyObject *cutest__dims(PyObject *self, PyObject *args);
-static PyObject *cutest__setup(PyObject *self, PyObject *args);
-static PyObject *cutest__varnames(PyObject *self, PyObject *args);
-static PyObject *cutest__connames(PyObject *self, PyObject *args);
+static PyObject *cutest_dims(PyObject *self, PyObject *args);
+static PyObject *cutest_setup(PyObject *self, PyObject *args);
+static PyObject *cutest_varnames(PyObject *self, PyObject *args);
+static PyObject *cutest_connames(PyObject *self, PyObject *args);
 static PyObject *cutest_objcons(PyObject *self, PyObject *args);
 static PyObject *cutest_obj(PyObject *self, PyObject *args);
 static PyObject *cutest_cons(PyObject *self, PyObject *args);
@@ -51,12 +51,13 @@ static PyObject *cutest_hess(PyObject *self, PyObject *args);
 static PyObject *cutest_ihess(PyObject *self, PyObject *args);
 static PyObject *cutest_hprod(PyObject *self, PyObject *args);
 static PyObject *cutest_gradhess(PyObject *self, PyObject *args);
-static PyObject *cutest__scons(PyObject *self, PyObject *args);
-static PyObject *cutest__slagjac(PyObject *self, PyObject *args);
-static PyObject *cutest__sphess(PyObject *self, PyObject *args);
-static PyObject *cutest__isphess(PyObject *self, PyObject *args);
-static PyObject *cutest__gradsphess(PyObject *self, PyObject *args);
+static PyObject *cutest_scons(PyObject *self, PyObject *args);
+static PyObject *cutest_slagjac(PyObject *self, PyObject *args);
+static PyObject *cutest_sphess(PyObject *self, PyObject *args);
+static PyObject *cutest_isphess(PyObject *self, PyObject *args);
+static PyObject *cutest_gradsphess(PyObject *self, PyObject *args);
 static PyObject *cutest_report(PyObject *self, PyObject *args);
+static PyObject *cutest_terminate(PyObject *self, PyObject *args);
 
 /* Module global variables */
 #define STR_LEN 10
@@ -226,10 +227,10 @@ void extract_sparse_hessian(npy_int nnzho, npy_int *si, npy_int *sj, npy_double 
 
 /* Module Python Functions */
 
-PyDoc_STRVAR(cutest__dims_doc,
+PyDoc_STRVAR(cutest_dims_doc,
 "Returns the dimension of the problem and the number of constraints.\n"
 "\n"
-"(n, m)=_dims()\n"
+"(n, m)=dims()\n"
 "\n"
 "Output\n"
 "n -- number of variables\n"
@@ -243,9 +244,9 @@ PyDoc_STRVAR(cutest__dims_doc,
 "CUTEst tools used: CUTEST_cdimen\n"
 );
 
-static PyObject *cutest__dims(PyObject *self, PyObject *args) {
+static PyObject *cutest_dims(PyObject *self, PyObject *args) {
     if (PyObject_Length(args)!=0)
-        PyErr_SetString(PyExc_Exception, "_dims() takes no arguments");
+        PyErr_SetString(PyExc_Exception, "dims() takes no arguments");
 
     if (!open_datafile())
         return NULL;
@@ -256,10 +257,10 @@ static PyObject *cutest__dims(PyObject *self, PyObject *args) {
 }
 
 
-PyDoc_STRVAR(cutest__setup_doc,
+PyDoc_STRVAR(cutest_setup_doc,
 "Sets up the problem.\n"
 "\n"
-"data=_setup(efirst, lfirst, nvfirst)\n"
+"data=setup(efirst, lfirst, nvfirst)\n"
 "\n"
 "Input\n"
 "efirst  -- if True, equation constraints are ordered before inequations.\n"
@@ -301,7 +302,7 @@ PyDoc_STRVAR(cutest__setup_doc,
 "-1e+20 and 1e+20 in bl, bu, cl, and cu stand for -infinity and +infinity.\n"
 "\n"
 "This function must be called before any other CUTEst function is called.\n"
-"The only exception is the _dims() function.\n"
+"The only exception is the dims() function.\n"
 "\n"
 "This function is not supposed to be called by the user. It is called by the\n"
 "__init__.py script when the test function interface is loaded.\n"
@@ -312,7 +313,7 @@ PyDoc_STRVAR(cutest__setup_doc,
 "                  CUTEST_cdimsh, CUTEST_udimsh, CUTEST_cdimsj, CUTEST_probname\n"
 );
 
-static PyObject *cutest__setup(PyObject *self, PyObject *args) {
+static PyObject *cutest_setup(PyObject *self, PyObject *args) {
     npy_bool  efirst = FALSE_, lfirst = FALSE_, nvfrst = FALSE_;
     int eFirst, lFirst, nvFirst;
     PyObject *dict;
@@ -325,7 +326,7 @@ static PyObject *cutest__setup(PyObject *self, PyObject *args) {
     int i;
 
     if (PyObject_Length(args)!=0 && PyObject_Length(args)!=3) {
-        PyErr_SetString(PyExc_Exception, "_setup() takes 0 or 3 arguments");
+        PyErr_SetString(PyExc_Exception, "setup() takes 0 or 3 arguments");
         return NULL;
     }
 
@@ -442,15 +443,15 @@ static PyObject *cutest__setup(PyObject *self, PyObject *args) {
 }
 
 
-PyDoc_STRVAR(cutest__varnames_doc,
+PyDoc_STRVAR(cutest_varnames_doc,
 "Returns the names of variables in the problem.\n"
 "\n"
-"namelist=_varnames()\n"
+"namelist=varnames()\n"
 "\n"
 "Output\n"
 "namelist -- list of length n holding strings holding names of variables\n"
 "\n"
-"The list reflects the ordering imposed by the nvfirst argument to _setup().\n"
+"The list reflects the ordering imposed by the nvfirst argument to setup().\n"
 "\n"
 "This function is not supposed to be called by the user. It is called by the\n"
 "__init__.py script when the test function interface is loaded.\n"
@@ -458,7 +459,7 @@ PyDoc_STRVAR(cutest__varnames_doc,
 "CUTEst tools used: CUTEST_varnames\n"
 );
 
-static PyObject *cutest__varnames(PyObject *self, PyObject *args) {
+static PyObject *cutest_varnames(PyObject *self, PyObject *args) {
     char *Fvnames, Fvname[STR_LEN+1], *ptr;
     PyObject *list;
     int i, j;
@@ -467,7 +468,7 @@ static PyObject *cutest__varnames(PyObject *self, PyObject *args) {
         return NULL;
 
     if (PyObject_Length(args)!=0) {
-        PyErr_SetString(PyExc_Exception, "_varnames() takes 0 arguments");
+        PyErr_SetString(PyExc_Exception, "varnames() takes 0 arguments");
         return NULL;
     }
 
@@ -492,16 +493,16 @@ static PyObject *cutest__varnames(PyObject *self, PyObject *args) {
 }
 
 
-PyDoc_STRVAR(cutest__connames_doc,
+PyDoc_STRVAR(cutest_connames_doc,
 "Returns the names of constraints in the problem.\n"
 "\n"
-"namelist=_connames()\n"
+"namelist=connames()\n"
 "\n"
 "Output\n"
 "namelist -- list of length m holding strings holding names of constraints\n"
 "\n"
 "The list is ordered in the way specified by efirst and lfirst arguments to\n"
-"_setup().\n"
+"setup().\n"
 "\n"
 "This function is not supposed to be called by the user. It is called by the\n"
 "__init__.py script when the test function interface is loaded.\n"
@@ -509,7 +510,7 @@ PyDoc_STRVAR(cutest__connames_doc,
 "CUTEst tools used: CUTEST_connames\n"
 );
 
-static PyObject *cutest__connames(PyObject *self, PyObject *args) {
+static PyObject *cutest_connames(PyObject *self, PyObject *args) {
     char *Fcnames, Fcname[STR_LEN+1], *ptr;
     PyObject *list;
     int i, j;
@@ -518,7 +519,7 @@ static PyObject *cutest__connames(PyObject *self, PyObject *args) {
         return NULL;
 
     if (PyObject_Length(args)!=0) {
-        PyErr_SetString(PyExc_Exception, "_connames() takes 0 arguments");
+        PyErr_SetString(PyExc_Exception, "connames() takes 0 arguments");
         return NULL;
     }
 
@@ -1272,11 +1273,11 @@ static PyObject *cutest_gradhess(PyObject *self, PyObject *args) {
 }
 
 
-PyDoc_STRVAR(cutest__scons_doc,
+PyDoc_STRVAR(cutest_scons_doc,
 "Returns the value of constraints and the sparse Jacobian of constraints at x.\n"
 "\n"
-"(c, Jvi, Jfi, Jv)=_scons(x) -- Jacobian of constraints\n"
-"(ci, gi, gv)=_scons(x, i)   -- i-th constraint and its gradient\n"
+"(c, Jvi, Jfi, Jv)=scons(x) -- Jacobian of constraints\n"
+"(ci, gi, gv)=scons(x, i)   -- i-th constraint and its gradient\n"
 "\n"
 "Input\n"
 "x -- 1D array of length n with the values of variables\n"
@@ -1304,7 +1305,7 @@ PyDoc_STRVAR(cutest__scons_doc,
 "CUTEst tools used: CUTEST_ccfsg, CUTEST_ccifsg\n"
 );
 
-static PyObject *cutest__scons(PyObject *self, PyObject *args) {
+static PyObject *cutest_scons(PyObject *self, PyObject *args) {
     PyArrayObject *arg1, *Mc, *MJi, *MJfi, *MJv, *Mgi, *Mgv;
     doublereal *c, *Jv, *gv, *x, *sv;
     npy_int *Ji, *Jfi, *gi, *si;
@@ -1384,12 +1385,12 @@ static PyObject *cutest__scons(PyObject *self, PyObject *args) {
 }
 
 
-PyDoc_STRVAR(cutest__slagjac_doc,
+PyDoc_STRVAR(cutest_slagjac_doc,
 "Returns the sparse gradient of objective at x or Lagrangian at (x, v), \n"
 "and the sparse Jacobian of constraints at x.\n"
 "\n"
-"(gi, gv, Jvi, Jfi, Jv)=_slagjac(x)    -- objective gradient and Jacobian\n"
-"(gi, gv, Jvi, Jfi, Jv)=_slagjac(x, v) -- Lagrangian gradient and Jacobian\n"
+"(gi, gv, Jvi, Jfi, Jv)=slagjac(x)    -- objective gradient and Jacobian\n"
+"(gi, gv, Jvi, Jfi, Jv)=slagjac(x, v) -- Lagrangian gradient and Jacobian\n"
 "\n"
 "Input\n"
 "x -- 1D array of length n with the values of variables\n"
@@ -1413,7 +1414,7 @@ PyDoc_STRVAR(cutest__slagjac_doc,
 "CUTEst tools used: CUTEST_csgr\n"
 );
 
-static PyObject *cutest__slagjac(PyObject *self, PyObject *args) {
+static PyObject *cutest_slagjac(PyObject *self, PyObject *args) {
     PyArrayObject *arg1, *arg2, *Mgi, *Mgv, *MJi, *MJfi, *MJv;
     doublereal *x, *v=NULL, *sv;
     npy_int *si, *sfi;
@@ -1472,12 +1473,12 @@ static PyObject *cutest__slagjac(PyObject *self, PyObject *args) {
 }
 
 
-PyDoc_STRVAR(cutest__sphess_doc,
+PyDoc_STRVAR(cutest_sphess_doc,
 "Returns the sparse Hessian of the objective at x (unconstrained problems) or\n"
 "the sparse Hessian of the Lagrangian (constrained problems) at (x, v).\n"
 "\n"
-"(Hi, Hj, Hv)=_sphess(x)    -- Hessian of objective (unconstrained problems)\n"
-"(Hi, Hj, Hv)=_sphess(x, v) -- Hessian of Lagrangian (constrained problems)\n"
+"(Hi, Hj, Hv)=sphess(x)    -- Hessian of objective (unconstrained problems)\n"
+"(Hi, Hj, Hv)=sphess(x, v) -- Hessian of Lagrangian (constrained problems)\n"
 "\n"
 "Input\n"
 "x -- 1D array of length n with the values of variables\n"
@@ -1493,7 +1494,7 @@ PyDoc_STRVAR(cutest__sphess_doc,
 "\n"
 "Hi, Hj, and Hv represent the full Hessian and not only the diagonal and the\n"
 "upper triangle. To obtain the Hessian of the objective of constrained\n"
-"problems use _isphess().\n"
+"problems use isphess().\n"
 "\n"
 "This function is not supposed to be called by the user. It is called by the\n"
 "wrapper function sphess().\n"
@@ -1501,7 +1502,7 @@ PyDoc_STRVAR(cutest__sphess_doc,
 "CUTEst tools used: CUTEST_csh, CUTEST_ush\n"
 );
 
-static PyObject *cutest__sphess(PyObject *self, PyObject *args) {
+static PyObject *cutest_sphess(PyObject *self, PyObject *args) {
     PyArrayObject *arg1, *arg2, *MHi, *MHj, *MHv;
     doublereal *x, *v=NULL, *sv;
     npy_int *si, *sj, nnzho;
@@ -1527,7 +1528,7 @@ static PyObject *cutest__sphess(PyObject *self, PyObject *args) {
                 return NULL;
             }
         } else {
-            PyErr_SetString(PyExc_Exception, "Argument 2 must be specified for constrained problems. Use _isphess().");
+            PyErr_SetString(PyExc_Exception, "Argument 2 must be specified for constrained problems. Use isphess().");
             return NULL;
         }
     }
@@ -1558,12 +1559,12 @@ static PyObject *cutest__sphess(PyObject *self, PyObject *args) {
 }
 
 
-PyDoc_STRVAR(cutest__isphess_doc,
+PyDoc_STRVAR(cutest_isphess_doc,
 "Returns the sparse Hessian of the objective or the sparse Hessian of i-th\n"
 "constraint at x.\n"
 "\n"
-"(Hi, Hj, Hv)=_isphess(x)    -- Hessian of objective\n"
-"(Hi, Hj, Hv)=_isphess(x, i) -- Hessian of i-th constraint\n"
+"(Hi, Hj, Hv)=isphess(x)    -- Hessian of objective\n"
+"(Hi, Hj, Hv)=isphess(x, i) -- Hessian of i-th constraint\n"
 "\n"
 "Input\n"
 "x -- 1D array of length n with the values of variables\n"
@@ -1586,7 +1587,7 @@ PyDoc_STRVAR(cutest__isphess_doc,
 "CUTEst tools used: CUTEST_cish, CUTEST_ush\n"
 );
 
-static PyObject *cutest__isphess(PyObject *self, PyObject *args) {
+static PyObject *cutest_isphess(PyObject *self, PyObject *args) {
     PyArrayObject *arg1, *MHi, *MHj, *MHv;
     doublereal *x, *sv;
     npy_int *si, *sj, nnzho, i;
@@ -1636,12 +1637,12 @@ static PyObject *cutest__isphess(PyObject *self, PyObject *args) {
 }
 
 
-PyDoc_STRVAR(cutest__gradsphess_doc,
+PyDoc_STRVAR(cutest_gradsphess_doc,
 "Returns the sparse Hessian of the Lagrangian, the sparse Jacobian of\n"
 "constraints, and the gradient of the objective or Lagrangian.\n"
 "\n"
-"(g, Hi, Hj, Hv)=_gradsphess(x) -- unconstrained problems\n"
-"(gi, gv, Jvi, Jfi, Jv, Hi, Hj, Hv)=_gradsphess(x, v, gradl)\n"
+"(g, Hi, Hj, Hv)=gradsphess(x) -- unconstrained problems\n"
+"(gi, gv, Jvi, Jfi, Jv, Hi, Hj, Hv)=gradsphess(x, v, gradl)\n"
 "                               -- constrained problems\n"
 "\n"
 "Input\n"
@@ -1680,7 +1681,7 @@ PyDoc_STRVAR(cutest__gradsphess_doc,
 "CUTEst tools used: CUTEST_csgrsh, CUTEST_ugrsh\n"
 );
 
-static PyObject *cutest__gradsphess(PyObject *self, PyObject *args) {
+static PyObject *cutest_gradsphess(PyObject *self, PyObject *args) {
     PyArrayObject *arg1, *arg2, *Mg=NULL, *Mgi, *Mgv, *MJi, *MJfi, *MJv, *MHi, *MHj, *MHv;
     PyObject *arg3;
     doublereal *x, *v, *g, *sv, *sjv;
@@ -1830,14 +1831,47 @@ static PyObject *cutest_report(PyObject *self, PyObject *args) {
     return decRefDict(dict);
 }
 
+
+PyDoc_STRVAR(cutest_terminate_doc,
+"Deallocate all internal private storage.\n"
+"\n"
+"terminate()\n"
+"\n"
+"CUTEst tools used: CUTEST_cterminate, CUTEST_uterminate\n"
+);
+
+static PyObject *cutest_terminate(PyObject *self, PyObject *args) {
+
+    if (!check_setup())
+        return NULL;
+
+    if (PyObject_Length(args)!=0) {
+        PyErr_SetString(PyExc_Exception, "terminate() takes no arguments");
+        return NULL;
+    }
+
+    if (CUTEst_ncon>0)
+        CUTEST_cterminate((integer *)&status);
+    else
+        CUTEST_uterminate((integer *)&status);
+
+    /* Problem is no longer set up */
+    setupCalled = 0;
+
+    /* Return None boilerplate */
+    Py_INCREF(Py_None);
+    return Py_None;
+}
+
+
 /* Python Module */
 
 /* Module method table */
 static PyMethodDef _methods[] = {
-    {"_dims", cutest__dims, METH_VARARGS, cutest__dims_doc},
-    {"_setup", cutest__setup, METH_VARARGS, cutest__setup_doc},
-    {"_varnames", cutest__varnames, METH_VARARGS, cutest__varnames_doc},
-    {"_connames", cutest__connames, METH_VARARGS, cutest__connames_doc},
+    {"dims", cutest_dims, METH_VARARGS, cutest_dims_doc},
+    {"setup", cutest_setup, METH_VARARGS, cutest_setup_doc},
+    {"varnames", cutest_varnames, METH_VARARGS, cutest_varnames_doc},
+    {"connames", cutest_connames, METH_VARARGS, cutest_connames_doc},
     {"objcons", cutest_objcons, METH_VARARGS, cutest_objcons_doc},
     {"obj", cutest_obj, METH_VARARGS, cutest_obj_doc},
     {"cons", cutest_cons, METH_VARARGS, cutest_cons_doc},
@@ -1847,12 +1881,13 @@ static PyMethodDef _methods[] = {
     {"ihess", cutest_ihess, METH_VARARGS, cutest_ihess_doc},
     {"hprod", cutest_hprod, METH_VARARGS, cutest_hprod_doc},
     {"gradhess", cutest_gradhess, METH_VARARGS, cutest_gradhess_doc},
-    {"_scons", cutest__scons, METH_VARARGS, cutest__scons_doc},
-    {"_slagjac", cutest__slagjac, METH_VARARGS, cutest__slagjac_doc},
-    {"_sphess", cutest__sphess, METH_VARARGS, cutest__sphess_doc},
-    {"_isphess", cutest__isphess, METH_VARARGS, cutest__isphess_doc},
-    {"_gradsphess", cutest__gradsphess, METH_VARARGS, cutest__gradsphess_doc},
+    {"scons", cutest_scons, METH_VARARGS, cutest_scons_doc},
+    {"slagjac", cutest_slagjac, METH_VARARGS, cutest_slagjac_doc},
+    {"sphess", cutest_sphess, METH_VARARGS, cutest_sphess_doc},
+    {"isphess", cutest_isphess, METH_VARARGS, cutest_isphess_doc},
+    {"gradsphess", cutest_gradsphess, METH_VARARGS, cutest_gradsphess_doc},
     {"report", cutest_report, METH_VARARGS, cutest_report_doc},
+    {"terminate", cutest_terminate, METH_VARARGS, cutest_terminate_doc},
     {NULL, NULL, 0, NULL}  /* Sentinel, marks the end of this structure */
 };
 

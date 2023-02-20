@@ -3,6 +3,7 @@ A class to store problem info, where we can set up the interface exactly how we 
 """
 
 import numpy as np
+from scipy.sparse import coo_matrix
 
 __all__ = ['CUTEstProblem']
 
@@ -73,6 +74,9 @@ class CUTEstProblem(object):
         """
         self._module = module
         self.drop_fixed_vars = drop_fixed_variables
+
+        # Initialise CUTEst problem
+        self._module.info = self._module.setup()
 
         # Extract useful problem info
 
@@ -580,6 +584,34 @@ class CUTEstProblem(object):
             g, H = self._module.gradhess(self.free_to_all(x))
             return self.all_to_free(g), H[self.idx_free][:, self.idx_free]
 
+    # scons() wrapper (private)
+    def __scons(self, x, i=None):
+        """Returns the value of constraints and
+        the sparse Jacobian of constraints at x.
+
+        (c, J)=__scons(x)      -- Jacobian of constraints
+        (ci, gi)=__scons(x, i) -- i-th constraint and its gradient
+
+        Input
+        x -- 1D array of length n with the values of variables
+        i -- integer index of constraint (between 0 and m-1)
+
+        Output
+        c  -- 1D array of length m holding the values of constraints at x
+        J  -- a scipy.sparse.coo_matrix of size m-by-n holding the Jacobian at x
+        ci -- 1D array of length 1 holding the value of i-th constraint at x
+        gi -- a scipy.sparse.coo_matrix of size 1-by-n holding the gradient of i-th constraint at x
+
+        This function is a wrapper for scons().
+        """
+
+        if i is None:
+            (c, Ji, Jif, Jv)=self._module.scons(x)
+            return (c, coo_matrix((Jv, (Jif, Ji)), shape=(self.m, self.n)))
+        else:
+            (c, gi, gv)=self._module.scons(x, i)
+            return (c, coo_matrix((gv, (np.zeros(len(gv)), gi)), shape=(1, self.n)))
+
     def scons(self, x, index=None, gradient=False):
         """
         Evaluate the constraints (and optionally their sparse Jacobian or gradient).
@@ -616,19 +648,49 @@ class CUTEstProblem(object):
             return None
         self.check_input_x(x)
         if index is None:
-            c, J = self._module.scons(self.free_to_all(x))
+            c, J = self.__scons(self.free_to_all(x))
             if gradient:
                 return c, sparse_mat_extract_columns(J, self.idx_free)
             else:
                 return c
         else:
             assert 0 <= index <= self.m - 1, "Invalid constraint index %g (must be in 0..%g)" % (index, self.m - 1)
-            ci, Ji = self._module.scons(self.free_to_all(x), index)
+            ci, Ji = self.__scons(self.free_to_all(x), index)
             ci = float(ci)  # convert from 1x1 NumPy array to float
             if gradient:
                 return ci, sparse_vec_extract_indices(Ji, self.idx_free)
             else:
                 return ci
+
+    # slagjac() wrapper
+    def __slagjac(self, x, v=None):
+        """Returns the sparse gradient of objective at x or Lagrangian at (x, v),
+        and the sparse Jacobian of constraints at x.
+
+        (g, J)=__slagjac(x)    -- objective gradient and Jacobian
+        (g, J)=__slagjac(x, v) -- Lagrangian gradient and Jacobian
+
+        Input
+        x -- 1D array of length n with the values of variables
+        v -- 1D array of length m with the values of Lagrange multipliers
+
+        Output
+        g -- a scipy.sparse.coo_matrix of size 1-by-n holding the gradient of objective at x or
+            the gradient of Lagrangian at (x, v)
+        J -- a scipy.sparse.coo_matrix of size m-by-n holding the sparse Jacobian
+            of constraints at x
+
+        This function is a wrapper for slagjac().
+        """
+
+        if v is None:
+            (gi, gv, Ji, Jfi, Jv)=self._module.slagjac(x)
+        else:
+            (gi, gv, Ji, Jfi, Jv)=self._module.slagjac(x, v)
+        return (
+            coo_matrix((gv, (np.zeros(len(gv)), gi)), shape=(1, self.n)),
+            coo_matrix((Jv, (Jfi, Ji)), shape=(self.m, self.n))
+        )
 
     def slagjac(self, x, v=None):
         """
@@ -660,14 +722,39 @@ class CUTEstProblem(object):
         """
         self.check_input_x(x)
         if v is None:
-            g, J = self._module.slagjac(self.free_to_all(x))
+            g, J = self.__slagjac(self.free_to_all(x))
         else:
             self.check_input_v(v)
-            g, J = self._module.slagjac(self.free_to_all(x), v)
+            g, J = self.__slagjac(self.free_to_all(x), v)
         if self.m > 0:
             return sparse_vec_extract_indices(g, self.idx_free), sparse_mat_extract_columns(J, self.idx_free)
         else:
             return sparse_vec_extract_indices(g, self.idx_free), None
+
+    # sphess() wrapper (private)
+    def __sphess(self, x, v=None):
+        """Returns the sparse Hessian of the objective at x (unconstrained problems)
+        or the sparse Hessian of the Lagrangian (constrained problems) at (x, v).
+
+        H=__sphess(x)    -- Hessian of objective (unconstrained problems)
+        H=__sphess(x, v) -- Hessian of Lagrangian (constrained problems)
+
+        Input
+        x -- 1D array of length n with the values of variables
+        v -- 1D array of length m with the values of Lagrange multipliers
+
+        Output
+        H -- a scipy.sparse.coo_matrix of size n-by-n holding the sparse Hessian
+            of objective at x or the sparse Hessian of the Lagrangian at (x, v)
+
+        This function is a wrapper for sphess().
+        """
+
+        if v is None:
+            (Hi, Hj, Hv)=self._module.sphess(x)
+        else:
+            (Hi, Hj, Hv)=self._module.sphess(x, v)
+        return coo_matrix((Hv, (Hi, Hj)), shape=(self.n, self.n))
 
     def sphess(self, x, v=None):
         """
@@ -704,11 +791,36 @@ class CUTEstProblem(object):
         if self.m > 0:
             assert v is not None, "CUTEstProblem.sphess: v must be specified for constrained problems. For the objective Hessian, use problem.isphess(x)"
             self.check_input_v(v)
-            H = self._module.sphess(self.free_to_all(x), v)
+            H = self.__sphess(self.free_to_all(x), v)
         else:
             assert v is None, "CUTEstProblem.sphess: v must be None for unconstrained problems"
-            H = self._module.sphess(self.free_to_all(x), v)
+            H = self.__sphess(self.free_to_all(x), v)
         return sparse_mat_extract_rows_and_columns(H, self.idx_free, self.idx_free)
+
+    # isphess() wrapper (private)
+    def __isphess(self, x, i=None):
+        """Returns the sparse Hessian of the objective or the sparse Hessian of i-th
+        constraint at x.
+
+        H=__isphess(x)    -- Hessian of objective
+        H=__isphess(x, i) -- Hessian of i-th constraint
+
+        Input
+        x -- 1D array of length n with the values of variables
+        i -- integer holding the index of constraint (between 0 and m-1)
+
+        Output
+        H -- a scipy.sparse.coo_matrix of size n-by-n holding the sparse Hessian
+            of objective or the sparse Hessian i-th constraint at x
+
+        This function is a wrapper for isphess().
+        """
+
+        if i is None:
+            (Hi, Hj, Hv)=self._module.isphess(x)
+        else:
+            (Hi, Hj, Hv)=self._module.isphess(x, i)
+        return coo_matrix((Hv, (Hi, Hj)), shape=(self.n, self.n))
 
     def isphess(self, x, cons_index=None):
         """
@@ -736,12 +848,49 @@ class CUTEstProblem(object):
         """
         self.check_input_x(x)
         if cons_index is None:
-            H = self._module.isphess(self.free_to_all(x))
+            H = self.__isphess(self.free_to_all(x))
         else:
             assert 0 <= cons_index <= self.m - 1, "Invalid constraint index %g (must be in 0..%g)" % (
             cons_index, self.m - 1)
-            H = self._module.isphess(self.free_to_all(x), cons_index)
+            H = self.__isphess(self.free_to_all(x), cons_index)
         return sparse_mat_extract_rows_and_columns(H, self.idx_free, self.idx_free)
+
+    # gradsphess() wrapper (private)
+    def __gradsphess(self, x, v=None, lagrFlag=False):
+        """Returns the sparse Hessian of the Lagrangian, the sparse Jacobian of
+        constraints, and the gradient of the objective or Lagrangian.
+
+        (g, H)=__gradsphess(x)              -- unconstrained problems
+        (g, J, H)=__gradsphess(x, v, gradl) -- constrained problems
+
+        Input
+        x     -- 1D array of length n with the values of variables
+        v     -- 1D array of length m with the values of Lagrange multipliers
+        gradl -- boolean flag. If False the gradient of the objective is returned,
+                if True the gradient of the Lagrangian is returned.
+                Default is False
+
+        Output
+        g -- a scipy.sparse.coo_matrix of size 1-by-n holding the gradient of objective at x or
+            the gradient of Lagrangian at (x, v)
+        J -- a scipy.sparse.coo_matrix of size m-by-n holding the sparse Jacobian
+            of constraints at x
+        H -- a scipy.sparse.coo_matrix of size n-by-n holding the sparse Hessian
+            of objective at x or the sparse Hessian of the Lagrangian at (x, v)
+
+        This function is a wrapper for gradsphess().
+        """
+
+        if v is None:
+            (g, Hi, Hj, Hv)=self._module.gradsphess(x)
+            return (coo_matrix(g), coo_matrix((Hv, (Hi, Hj)), shape=(self.n, self.n)))
+        else:
+            (gi, gv, Ji, Jfi, Jv, Hi, Hj, Hv)=self._module.gradsphess(x, v, lagrFlag)
+            return (
+                coo_matrix((gv, (np.zeros(len(gv)), gi)), shape=(1, self.n)),
+                coo_matrix((Jv, (Jfi, Ji)), shape=(self.m, self.n)),
+                coo_matrix((Hv, (Hi, Hj)), shape=(self.n, self.n))
+            )
 
     def gradsphess(self, x, v=None, gradient_of_lagrangian=True):
         """
@@ -780,12 +929,12 @@ class CUTEstProblem(object):
         self.check_input_x(x)
         self.check_input_v(v)
         if self.m > 0:
-            g, J, H = self._module.gradsphess(self.free_to_all(x), v, gradient_of_lagrangian)
+            g, J, H = self.__gradsphess(self.free_to_all(x), v, gradient_of_lagrangian)
             return sparse_vec_extract_indices(g, self.idx_free), \
                    sparse_mat_extract_columns(J, self.idx_free), \
                    sparse_mat_extract_rows_and_columns(H, self.idx_free, self.idx_free)
         else:
-            g, H = self._module.gradsphess(self.free_to_all(x))
+            g, H = self.__gradsphess(self.free_to_all(x))
             return sparse_vec_extract_indices(g, self.idx_free), sparse_mat_extract_rows_and_columns(H, self.idx_free, self.idx_free)
 
     def report(self):
@@ -828,3 +977,10 @@ class CUTEstProblem(object):
                 stats[s] = stats[s] - self.init_stats[s]
 
         return stats
+
+    def __del__(self):
+        """
+        Clear CUTEst problem memory on exit.
+        """
+        self._module.terminate()
+
