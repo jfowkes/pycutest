@@ -18,19 +18,19 @@ sifdecode parameters : [sifParamsStr]
 sifdecode options    : [sifOptionsStr]
 
 Available interface functions (should not be called directly):
-setup       -- setup problem and get problem information
+setup      -- setup problem and get problem information
 dims       -- get problem dimensions
 varnames   -- get names of problem's variables
 connames   -- get names of problem's constraints
-objcons     -- objective and constraints
-obj         -- objective and objective gradient
-cons        -- constraints and constraints gradients/Jacobian
-lagjac      -- gradient of objective/Lagrangian and constraints Jacobian
-jprod       -- product of constraints Jacobian with a vector
-hess        -- Hessian of objective/Lagrangian
-ihess       -- Hessian of objective/constraint
-hprod       -- product of Hessian of objective/Lagrangian with a vector
-gradhess    -- gradient and Hessian of objective (unconstrained problems) or
+objcons    -- objective and constraints
+obj        -- objective and objective gradient
+cons       -- constraints and constraints gradients/Jacobian
+lagjac     -- gradient of objective/Lagrangian and constraints Jacobian
+jprod      -- product of constraints Jacobian with a vector
+hess       -- Hessian of objective/Lagrangian
+ihess      -- Hessian of objective/constraint
+hprod      -- product of Hessian of objective/Lagrangian with a vector
+gradhess   -- gradient and Hessian of objective (unconstrained problems) or
                gradient of objective/Lagrangian, Jacobian of constraints and
                Hessian of Lagrangian (constrained problems)
 scons      -- constraints and sparse Jacobian of constraints
@@ -40,8 +40,8 @@ isphess    -- sparse Hessian of objective/constraint
 gradsphess -- gradient and sparse Hessian of objective (unconstrained probl.)
                or gradient of objective/Lagrangian, sparse Jacobian of
                constraints and sparse Hessian of Lagrangian (constrained probl.)
-report      -- get usage statistics
-terminate   -- clear problem memory
+report     -- get usage statistics
+terminate  -- clear problem memory
 \"\"\"
 
 from ._pycutestitf import *
