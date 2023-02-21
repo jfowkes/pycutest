@@ -343,6 +343,7 @@ def import_problem(problemName, destination=None, sifParams=None, sifOptions=Non
     # Import the module CACHE_SUBFOLDER.problemDir, and return a wrapper
     try:
         return CUTEstProblem(importlib.import_module('%s.%s' % (CACHE_SUBFOLDER, problemDir)),
+                             problemDir,
                              drop_fixed_variables=drop_fixed_variables)
     except ImportError as error:
         try: # check if cache folder is on python path
