@@ -7,7 +7,6 @@ from scipy.sparse import coo_matrix
 
 __all__ = ['CUTEstProblem']
 
-
 def pad_vector(x, idx_free, idx_eq, val_eq):
     # Pad a vector x using values from val_eq (i.e. fixed variables)
     xfull = np.zeros((len(idx_free) + len(idx_eq),))
@@ -37,7 +36,24 @@ def sparse_mat_extract_rows_and_columns(A, row_idx, col_idx):
 
 
 class CUTEstProblem(object):
-    def __init__(self, module, drop_fixed_variables=True):
+    # CUTEstProblem instances
+    _instances = {}
+
+    def __new__(cls, module, instname, drop_fixed_variables=True):
+        """
+        Create new CUTEstProblem instance or return existing one if present,
+        ensuring that CUTEST_[u|c]setup is only called once on the C module.
+
+        We consider a CUTEstProblem to be the same instance if it has the same
+        name and parameters, e.g. ARGLALE_N10 here called 'instname'.
+        """
+        # Check if CUTEstProblem instance already exists
+        if instname not in cls._instances:
+            module.info = module.setup() # setup CUTEst problem
+            cls._instances[instname] = object.__new__(cls)
+        return cls._instances[instname]
+
+    def __init__(self, module, instname, drop_fixed_variables=True):
         """
         Build a wrapper for a Python module containing the compiled CUTEst problem.
 
@@ -72,11 +88,9 @@ class CUTEstProblem(object):
         :param module: the module containing the Python interface
         :param drop_fixed_variables: a flag for whether to ignore fixed variables (i.e. n is smaller, etc.) [default=True]
         """
+        self._instname = instname
         self._module = module
         self.drop_fixed_vars = drop_fixed_variables
-
-        # Initialise CUTEst problem
-        self._module.info = self._module.setup()
 
         # Extract useful problem info
 
@@ -980,7 +994,8 @@ class CUTEstProblem(object):
 
     def __del__(self):
         """
-        Clear CUTEst problem memory on exit.
+        Delete CUTEstProblem instance and clear CUTEst problem memory.
         """
+        del self._instances[self._instname]
         self._module.terminate()
 
