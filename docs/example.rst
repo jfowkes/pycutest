@@ -13,8 +13,6 @@ The following code presents a simple use of PyCUTEst to minimize `Rosenbrock's f
     Jaroslav Fowkes and Lindon Roberts, 2022.
     """
 
-    # Ensure compatibility with Python 2
-    from __future__ import print_function
     import numpy as np
     import pycutest
 
@@ -75,8 +73,6 @@ The following code presents a simple use of PyCUTEst to minimize problem :code:`
     Jaroslav Fowkes and Lindon Roberts, 2022.
     """
 
-    # Ensure compatibility with Python 2
-    from __future__ import print_function
     import numpy as np
     import pycutest
 

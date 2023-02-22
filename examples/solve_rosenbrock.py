@@ -4,8 +4,6 @@ PyCUTEst example: minimize 2D Rosenbrock function using Newton's method.
 Jaroslav Fowkes and Lindon Roberts, 2022.
 """
 
-# Ensure compatibility with Python 2
-from __future__ import print_function
 import numpy as np
 import pycutest
 
