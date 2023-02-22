@@ -2,7 +2,7 @@ Version History
 ===============
 This section lists the different versions of PyCUTEst and the updates between them.
 
-Version 1.5.0 (21 February 2023)
+Version 1.5.0 (22 Feb 2023)
 --------------------------------
 * Fix memory leak in C interface (cache-breaking change)
 * Modernise C interface (cache-breaking change)
