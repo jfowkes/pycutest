@@ -2,6 +2,15 @@ Version History
 ===============
 This section lists the different versions of PyCUTEst and the updates between them.
 
+Version 1.5.0 (22 Feb 2023)
+--------------------------------
+* Fix memory leak in C interface (cache-breaking change)
+* Modernise C interface (cache-breaking change)
+* Drop Python 2.7 support as it is EOL
+* Fix installs on non-default homebrew paths
+* Use homebrew prefix for fallback paths on macOS
+* Switch to semantic versioning
+
 Version 1.4 (24 Oct 2022)
 -------------------------
 * Add guidelines for seeking support
