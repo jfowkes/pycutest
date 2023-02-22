@@ -5,6 +5,7 @@ Installation scripts for individual problems
 import sys
 
 from .system_paths import get_cutest_path
+from .version import __version__
 
 __all__ = ['get_setup_script']
 
@@ -51,7 +52,7 @@ module = Extension(
 # Settings
 setup(
     name='PyCUTEst automatic test function interface builder',
-    version='1.5.0',
+    version='%s',
     description='Builds a CUTEst test function interface for Python.',
     long_description='Builds a CUTEst test function interface for Python.',
     author='Arpad Buermen, Jaroslav Fowkes, Lindon Roberts',
@@ -96,6 +97,6 @@ extra_link_args=['-Wl,-no_compact_unwind']
 
 def get_setup_script():
     if sys.platform == "linux":
-        return setupScript % setupScriptLinux
+        return setupScript % (setupScriptLinux,__version__)
     else:
-        return setupScript % setupScriptMac
+        return setupScript % (setupScriptMac,__version__)
