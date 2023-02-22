@@ -8,9 +8,12 @@ PyCUTEst
 Python interface to the CUTEst optimization test environment
 ------------------------------------------------------------
 
+.. warning::
+    PyCUTEst v1.5.0 broke existing cached problems, when upgrading to v1.5.0 please clear out your cache by deleting the $PYCUTEST_CACHE/pycutest_cache_holder directory.
+
 **Release:** |version|
 
-**Date:** 24 October 2022
+**Date:** 22 February 2023
 
 **Author:** `Jaroslav Fowkes <jaroslav.fowkes@maths.ox.ac.uk>`_ and `Lindon Roberts <https://lindonroberts.github.io/>`_
 
@@ -34,24 +37,24 @@ Our aim is for PyCUTEst to make it easier for both optimization users and softwa
 
 Citing PyCUTEst
 ---------------
-To cite PyCUTEst, please use the following reference: 
+To cite PyCUTEst, please use the following reference:
 
 `J. Fowkes, L. Roberts, and Á. Bűrmen, (2022). PyCUTEst: an open source Python package of optimization test problems. Journal of Open Source Software, 7(78), 4377, https://doi.org/10.21105/joss.04377`
 
 In BibTeX, the citation is:
 
-.. code-block:: 
+.. code-block::
 
-    @article{PyCUTEst2022, 
-        doi = {10.21105/joss.04377}, 
-        url = {https://doi.org/10.21105/joss.04377}, 
-        year = {2022}, 
-        publisher = {The Open Journal}, 
-        volume = {7}, 
-        number = {78}, 
-        pages = {4377}, 
-        author = {Jaroslav Fowkes and Lindon Roberts and Árpád Bűrmen}, 
-        title = {PyCUTEst: an open source Python package of optimization test problems}, 
+    @article{PyCUTEst2022,
+        doi = {10.21105/joss.04377},
+        url = {https://doi.org/10.21105/joss.04377},
+        year = {2022},
+        publisher = {The Open Journal},
+        volume = {7},
+        number = {78},
+        pages = {4377},
+        author = {Jaroslav Fowkes and Lindon Roberts and Árpád Bűrmen},
+        title = {PyCUTEst: an open source Python package of optimization test problems},
         journal = {Journal of Open Source Software}
     }
 
