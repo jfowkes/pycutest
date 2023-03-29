@@ -137,12 +137,6 @@ def decode_and_compile_problem(problemName, destination=None, sifParams=None, si
     *destination* must not contain dots because it is a part of a Python module name.
     """
 
-    # Define FileNotFoundError on Python 2
-    try:
-        FileNotFoundError
-    except NameError:
-        FileNotFoundError = OSError
-
     # Default destination
     if destination is None:
         destination=problemName
@@ -163,14 +157,18 @@ def decode_and_compile_problem(problemName, destination=None, sifParams=None, si
     # Handle params
     if sifParams is not None:
         for (key, value) in sifParams.items():
-            if type(key) is not str and type(key) is not unicode:
+            if type(key) is not str:
+                if fromDir is not None:
+                    os.chdir(fromDir) # Go back to original work directory
                 raise Exception("sifParams keys must be strings")
             args+=['-param', key+"="+str(value)]
 
     # Handle options
     if sifOptions is not None:
         for opt in sifOptions:
-            if type(opt) is not str and type(key) is not unicode:
+            if type(opt) is not str:
+                if fromDir is not None:
+                    os.chdir(fromDir) # Go back to original work directory
                 raise Exception("sifOptions must consist of strings")
             args+=[str(opt)]
 
@@ -208,9 +206,13 @@ def decode_and_compile_problem(problemName, destination=None, sifParams=None, si
             print(l)
     if not spawnOK:
         clear_cache(problemName, sifParams=sifParams)
+        if fromDir is not None:
+            os.chdir(fromDir) # Go back to original work directory
         raise RuntimeError('SIFDECODE failed, check output printed above')
     if param_error is not None:
         clear_cache(problemName, sifParams=sifParams)
+        if fromDir is not None:
+            os.chdir(fromDir) # Go back to original work directory
         raise RuntimeError('SIFDECODE error: %s' % param_error)
 
     # Collect all .f files
@@ -224,6 +226,8 @@ def decode_and_compile_problem(problemName, destination=None, sifParams=None, si
                 print(s, end=' ')
             print()
         if subprocess.call(cmd)!=0:
+            if fromDir is not None:
+                os.chdir(fromDir) # Go back to original work directory
             raise RuntimeError("gfortran call failed for "+filename)
 
     # Collect list of all object files (.o)
@@ -293,10 +297,12 @@ def compile_and_install_interface(problemName, destination=None, sifParams=None,
 
     # Call 'python setup.py build'
     if subprocess.call([sys.executable, 'setup.py']+quietopt+['build'])!=0:
+        os.chdir(fromDir) # Go back to original work directory
         raise RuntimeError("Failed to build the Python interface module")
 
     # Call 'python setup.py build_ext --inplace'
     if subprocess.call([sys.executable, 'setup.py']+quietopt+['build_ext', '--inplace'])!=0:
+        os.chdir(fromDir) # Go back to original work directory
         raise RuntimeError("Failed to install the Python interface module")
 
     # Create __init__.py
