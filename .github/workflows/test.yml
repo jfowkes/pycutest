@@ -40,6 +40,7 @@ jobs:
       run: |
         source ./.cutest.env
         export PYCUTEST_CACHE="$GITHUB_WORKSPACE/pycutest_cache"
+        export TERM=xterm
         python -m unittest pycutest.tests.test_sifdecode_extras
         python -m unittest pycutest.tests.test_basic_functionality
         python -m unittest pycutest.tests.test_sparse_functionality

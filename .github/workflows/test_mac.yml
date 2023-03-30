@@ -41,6 +41,7 @@ jobs:
         source /usr/local/opt/cutest/cutest.bashrc
         export PYCUTEST_CACHE="$GITHUB_WORKSPACE/pycutest_cache"
         export MACOSX_DEPLOYMENT_TARGET=12.5
+        export TERM=xterm
         python -m unittest pycutest.tests.test_sifdecode_extras
         python -m unittest pycutest.tests.test_basic_functionality
         python -m unittest pycutest.tests.test_sparse_functionality
