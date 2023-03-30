@@ -1,0 +1,125 @@
+***************************
+* SET UP THE INITIAL DATA *
+***************************
+
+NAME          SCURLY20
+
+*   Problem :
+*   --------
+
+*   A banded function with semi-bandwidth 10 and
+*   negative curvature near the starting point.
+*   NB: scaled version of CURLY20
+
+*   Source: Nick Gould
+
+*   SIF input: Nick Gould, September 1997.
+
+*   classification OUR2-AN-V-0
+
+*   Number of variables
+
+*IE N                   10             $-PARAMETER
+*IE N                   100            $-PARAMETER
+*IE N                   1000           $-PARAMETER     original value
+ IE N                   10000          $-PARAMETER
+*IE N                   100000         $-PARAMETER
+*IE N                   1000000        $-PARAMETER
+
+*  Semi-bandwidth
+
+ IE K                   20
+
+*  ratio of smallest to largest scale factors will be exp(scal)
+
+ RE SCAL                12.0
+
+*   other parameter definitions
+
+ IE 1                   1
+ I- N-K       N                        K
+ IA N-K+1     N-K       1
+ RI RN        N
+ RA RN-1      RN        -1
+ RA RN+1      RN        1
+
+VARIABLES
+
+ DO I         1                        N
+ IA I-1       I         -1
+ RI RI-1      I-1
+ R/ RAT       RI-1                     RN-1
+ R* ARG       RAT                      SCAL
+ A( S(I)      EXP                      ARG
+ Z  X(I)
+ ND
+
+GROUPS
+
+ DO I         1                        N-K
+ I+ I+K       I                        K
+ DO J         I                        I+K
+ ZN Q(I)      X(J)                     S(J)
+ ND
+
+ DO I         N-K+1                    N
+ DO J         I                        N
+ ZN Q(I)      X(J)                     S(J)
+ ND
+
+BOUNDS
+
+ FR SCURLY20  'DEFAULT'
+
+START POINT
+
+*  start with X(I) = 0.0001 * I * S(I) / (N+1).
+
+ DO I         1                        N
+
+ RI RI        I
+ R/ T         RI                       RN+1
+ RM T         T         0.0001
+ A* T         T                        S(I)
+ ZV SCURLY20  X(I)                     T
+
+ ND
+
+GROUP TYPE
+
+ GV P4        GVAR
+
+GROUP USES
+
+ XT 'DEFAULT' P4
+
+OBJECT BOUND
+
+*   Solution
+
+*ZL SOLTN               -1.003162D+5   $ (n=1000)
+
+ENDATA
+
+*********************
+* SET UP THE GROUPS *
+* ROUTINE           *
+*********************
+
+GROUPS        SCURLY20
+
+TEMPORARIES
+
+ R  APB
+
+INDIVIDUALS
+
+ T  P4
+ A  APB                 2.0D+1
+ F                      GVAR * ( GVAR * ( GVAR ** 2 - APB )
+ F+                     - 1.0D-1 )
+ G                      2.0D+0 * GVAR * ( 2.0D+0 * GVAR ** 2
+ G+                     - APB ) - 1.0D-1
+ H                      1.2D+1 * GVAR ** 2 - 2.0D+0 * APB
+
+ENDATA
