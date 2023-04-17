@@ -105,7 +105,7 @@ def update_classifications(verbose=False):
     *C* (single letter) - type of constraints
 
     * ``U`` .. unconstrained
-    * ``X`` .. equality constraints on variables
+    * ``X`` .. fixed variables
     * ``B`` .. bounds on variables
     * ``N`` .. constraints represent the adjacency matrix of a (linear) network
     * ``L`` .. linear constraints
@@ -186,7 +186,7 @@ cfDict = {
                   'S' : 'sum of squares',
                   'O' : 'other'},
     'constraints': {'U' : 'unconstrained',
-                    'X' : 'equality',
+                    'X' : 'fixed',
                     'B' : 'bound',
                     'N' : 'adjacency',
                     'L' : 'linear',
@@ -266,7 +266,7 @@ def find_problems(objective=None, constraints=None, regular=None,
     If a requirement is not given, it is not applied. See below for details on the requirements.
 
     :param objective: a string containing one or more substrings (``'none'``, ``'constant'``, ``'linear'``, ``'quadratic'``, ``'sum of squares'``, ``'other'``) specifying the type of the objective function
-    :param constraints: a string containing one or more substrings (``'unconstrained'``, ``'equality'``, ``'bound'``, ``'adjacency'``, ``'linear'``, ``'quadratic'``, ``'other'``) specifying the type of the constraints
+    :param constraints: a string containing one or more substrings (``'unconstrained'``, ``'fixed'``, ``'bound'``, ``'adjacency'``, ``'linear'``, ``'quadratic'``, ``'other'``) specifying the type of the constraints
     :param regular: a boolean, ``True`` if the problem must be regular, ``False`` if it must be irregular
     :param degree: list of the form ``[min, max]`` specifying the minimum and the maximum number of analytically available derivatives
     :param origin: a string containing one or more substrings (``'academic'``, ``'modelling'``, ``'real-world'``) specifying the origin of the problem
