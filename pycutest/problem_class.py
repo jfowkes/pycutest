@@ -758,7 +758,7 @@ class CUTEstProblem(object):
         v -- 1D array of length m with the values of Lagrange multipliers
 
         Output
-        H -- a scipy.sparse.coo_matrix of size n-by-n holding the sparse Hessian
+        H -- a scipy.sparse.coo_matrix of size n_full-by-n_full holding the sparse Hessian
             of objective at x or the sparse Hessian of the Lagrangian at (x, v)
 
         This function is a wrapper for sphess().
@@ -768,7 +768,7 @@ class CUTEstProblem(object):
             (Hi, Hj, Hv)=self._module.sphess(x)
         else:
             (Hi, Hj, Hv)=self._module.sphess(x, v)
-        return coo_matrix((Hv, (Hi, Hj)), shape=(self.n, self.n))
+        return coo_matrix((Hv, (Hi, Hj)), shape=(self.n_full, self.n_full))
 
     def sphess(self, x, v=None):
         """
