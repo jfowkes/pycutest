@@ -349,7 +349,7 @@ class CUTEstProblem(object):
             else:
                 assert 0 <= index <= self.m - 1, "Invalid constraint index %g (must be in 0..%g)" % (index, self.m-1)
                 ci, Ji = self._module.cons(self.free_to_all(x), True, index)
-                ci = float(ci)  # convert from 1x1 NumPy array to float
+                ci = ci[0]  # convert from 1x1 NumPy array to float
                 return ci, self.all_to_free(Ji)
         else:
             if index is None:
@@ -358,7 +358,7 @@ class CUTEstProblem(object):
             else:
                 assert 0 <= index <= self.m - 1, "Invalid constraint index %g (must be in 0..%g)" % (index, self.m - 1)
                 ci = self._module.cons(self.free_to_all(x), False, index)
-                ci = float(ci)  # convert from 1x1 NumPy array to float
+                ci = ci[0]  # convert from 1x1 NumPy array to float
                 return ci
 
     def lagjac(self, x, v=None):
@@ -670,7 +670,7 @@ class CUTEstProblem(object):
         else:
             assert 0 <= index <= self.m - 1, "Invalid constraint index %g (must be in 0..%g)" % (index, self.m - 1)
             ci, Ji = self.__scons(self.free_to_all(x), index)
-            ci = float(ci)  # convert from 1x1 NumPy array to float
+            ci = ci[0]  # convert from 1x1 NumPy array to float
             if gradient:
                 return ci, sparse_vec_extract_indices(Ji, self.idx_free)
             else:
