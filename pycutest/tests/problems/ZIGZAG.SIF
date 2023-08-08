@@ -1,0 +1,241 @@
+***************************
+* SET UP THE INITIAL DATA *
+***************************
+
+NAME          ZIGZAG
+
+*   Problem :
+*   *********
+
+*   A nonlinear optimal control problem with both state- and
+*   control constraints.
+*   The problem is to control (using an applied force of limited
+*   magnitude) a mass moving in the plane, such that its
+*   trajectory lies within a prescribed distance TOL of the curve y=sin(x),
+*   and such that it stops at a given abscissa XT in minimum time.
+*   The mass is initially stationary at the origin.
+
+*   Source:
+*   Ph. Toint, private communication.
+
+*   SIF input: Ph. Toint, April 1991.
+
+*   classification SOR2-AN-V-V
+
+*   Number of time intervals
+*   The number of variables is 6T+4, of which 6 are fixed.
+
+*IE T                   10             $-PARAMETER n = 64   original value
+*IE T                   50             $-PARAMETER n = 304
+*IE T                   100            $-PARAMETER n = 604
+ IE T                   500            $-PARAMETER n = 3004
+
+*   Target abscissa
+
+ RE XT                  10.0
+
+*   Mass
+
+ RE MASS                0.5
+
+*   Tolerance along the sine trajectory
+
+ RE TOL                 0.1
+
+*   Constants
+
+ IE 0                   0
+ IE 1                   1
+
+*   Useful parameters
+
+ RI RT        T
+ RA T+1       RT        1.0
+ R/ H         XT                       RT
+ RD 1/H       H         1.0
+ RM -1/H      1/H       -1.0
+ R/ M/H       MASS                     H
+ RM -M/H      M/H       -1.0
+ RM -TOL      TOL       -1.0
+ RM 2TOL      TOL       2.0
+ R* XTT+1     XT                       T+1
+ RM W         XTT+1     0.5
+ DO I         1                        T
+ RI RI        I
+ R* TI        RI                       H
+ A/ W/T(I)    W                        TI
+ ND
+
+*   Maximal force at any time
+
+ R/ FMAX      XT                       RT
+ RM -FMAX     FMAX      -1.0
+
+VARIABLES
+
+ DO I         0                        T
+ X  X(I)
+ X  Y(I)
+ X  VX(I)
+ X  VY(I)
+ ND
+
+ DO I         1                        T
+ X  UX(I)
+ X  UY(I)
+ ND
+
+GROUPS
+
+ DO I         1                        T
+ ZN OX(I)     'SCALE'                  W/T(I)
+ XN OX(I)     X(I)      1.0
+ ND
+
+ DO I         1                        T
+ IA I-1       I         -1
+
+ ZE ACX(I)    VX(I)                    M/H
+ ZE ACX(I)    VX(I-1)                  -M/H
+ XE ACX(I)    UX(I)     -1.0
+
+ ZE ACY(I)    VY(I)                    M/H
+ ZE ACY(I)    VY(I-1)                  -M/H
+ XE ACY(I)    UY(I)     -1.0
+
+ ZE PSX(I)    X(I)                     1/H
+ ZE PSX(I)    X(I-1)                   -1/H
+ XE PSX(I)    VX(I)     -1.0
+
+ ZE PSY(I)    Y(I)                     1/H
+ ZE PSY(I)    Y(I-1)                   -1/H
+ XE PSY(I)    VY(I)     -1.0
+
+ XG SC(I)     Y(I)      1.0
+
+ ND
+
+CONSTANTS
+
+ DO I         1                        T
+ Z  ZIGZAG    OX(I)                    XT
+ Z  ZIGZAG    SC(I)                    -TOL
+ ND
+
+RANGES
+
+ DO I         1                        T
+ Z  ZIGZAG    SC(I)                    2TOL
+ ND
+
+BOUNDS
+
+ FR ZIGZAG    'DEFAULT'
+
+ XX ZIGZAG    X(0)      0.0
+ XX ZIGZAG    Y(0)      0.0
+ XX ZIGZAG    VX(0)     0.0
+ XX ZIGZAG    VY(0)     0.0
+
+ XX ZIGZAG    VX(T)     0.0
+ XX ZIGZAG    VY(T)     0.0
+
+ DO I         1                        T
+ ZL ZIGZAG    UX(I)                    -FMAX
+ ZU ZIGZAG    UX(I)                    FMAX
+ ZL ZIGZAG    UY(I)                    -FMAX
+ ZU ZIGZAG    UY(I)                    FMAX
+ XL ZIGZAG    X(I)      0.0
+ ZU ZIGZAG    X(I)                     XT
+ ND
+
+START POINT
+
+ XV ZIGZAG    X(0)      0.0
+ XV ZIGZAG    Y(0)      0.0
+ XV ZIGZAG    VX(0)     0.0
+ XV ZIGZAG    VY(0)     0.0
+
+ XV ZIGZAG    VX(T)     0.0
+ XV ZIGZAG    VY(T)     0.0
+
+ DO I         1                        T
+ RI RI        I
+ R* TI        RI                       H
+ Z  ZIGZAG    X(I)                     TI
+ X  ZIGZAG    VX(I)     1.0
+ ND
+
+ELEMENT TYPE
+
+ EV SINE      X
+
+ELEMENT USES
+
+ DO I         1                        T
+ XT SINX(I)   SINE
+ ZV SINX(I)   X                        X(I)
+ ND
+
+GROUP TYPE
+
+ GV L2        GVAR
+
+GROUP USES
+
+ DO I         1                        T
+ XT OX(I)     L2
+ XE SC(I)     SINX(I)   -1.0
+ ND
+
+OBJECT BOUND
+
+*   Solution
+
+*LO SOLTN(10)           1.79999921
+*LO SOLTN(50)           3.37869476
+*LO SOLTN(100)          5.23053464
+*LO SOLTN(1000)         ???
+
+ENDATA
+
+***********************
+* SET UP THE FUNCTION *
+* AND RANGE ROUTINES  *
+***********************
+
+ELEMENTS      ZIGZAG
+
+TEMPORARIES
+
+ R  SINX
+ M  SIN
+ M  COS
+
+INDIVIDUALS
+
+ T  SINE
+ A  SINX                SIN(X)
+ F                      SIN(X)
+ G  X                   COS(X)
+ H  X         X         - SINX
+
+ENDATA
+
+*********************
+* SET UP THE GROUPS *
+* ROUTINE           *
+*********************
+
+GROUPS        ZIGZAG
+
+*   Least-square groups
+
+INDIVIDUALS
+
+ T  L2
+ F                      GVAR * GVAR
+ G                      GVAR + GVAR
+ H                      2.0
+
+ENDATA

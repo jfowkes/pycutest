@@ -612,19 +612,19 @@ class CUTEstProblem(object):
 
         Output
         c  -- 1D array of length m holding the values of constraints at x
-        J  -- a scipy.sparse.coo_matrix of size m-by-n holding the Jacobian at x
+        J  -- a scipy.sparse.coo_matrix of size m-by-n_full holding the Jacobian at x
         ci -- 1D array of length 1 holding the value of i-th constraint at x
-        gi -- a scipy.sparse.coo_matrix of size 1-by-n holding the gradient of i-th constraint at x
+        gi -- a scipy.sparse.coo_matrix of size 1-by-n_full holding the gradient of i-th constraint at x
 
         This function is a wrapper for scons().
         """
 
         if i is None:
             (c, Ji, Jif, Jv)=self._module.scons(x)
-            return (c, coo_matrix((Jv, (Jif, Ji)), shape=(self.m, self.n)))
+            return (c, coo_matrix((Jv, (Jif, Ji)), shape=(self.m, self.n_full)))
         else:
             (c, gi, gv)=self._module.scons(x, i)
-            return (c, coo_matrix((gv, (np.zeros(len(gv)), gi)), shape=(1, self.n)))
+            return (c, coo_matrix((gv, (np.zeros(len(gv)), gi)), shape=(1, self.n_full)))
 
     def scons(self, x, index=None, gradient=False):
         """
@@ -689,9 +689,9 @@ class CUTEstProblem(object):
         v -- 1D array of length m with the values of Lagrange multipliers
 
         Output
-        g -- a scipy.sparse.coo_matrix of size 1-by-n holding the gradient of objective at x or
+        g -- a scipy.sparse.coo_matrix of size 1-by-n_full holding the gradient of objective at x or
             the gradient of Lagrangian at (x, v)
-        J -- a scipy.sparse.coo_matrix of size m-by-n holding the sparse Jacobian
+        J -- a scipy.sparse.coo_matrix of size m-by-n_full holding the sparse Jacobian
             of constraints at x
 
         This function is a wrapper for slagjac().
@@ -702,8 +702,8 @@ class CUTEstProblem(object):
         else:
             (gi, gv, Ji, Jfi, Jv)=self._module.slagjac(x, v)
         return (
-            coo_matrix((gv, (np.zeros(len(gv)), gi)), shape=(1, self.n)),
-            coo_matrix((Jv, (Jfi, Ji)), shape=(self.m, self.n))
+            coo_matrix((gv, (np.zeros(len(gv)), gi)), shape=(1, self.n_full)),
+            coo_matrix((Jv, (Jfi, Ji)), shape=(self.m, self.n_full))
         )
 
     def slagjac(self, x, v=None):
@@ -758,7 +758,7 @@ class CUTEstProblem(object):
         v -- 1D array of length m with the values of Lagrange multipliers
 
         Output
-        H -- a scipy.sparse.coo_matrix of size n-by-n holding the sparse Hessian
+        H -- a scipy.sparse.coo_matrix of size n_full-by-n_full holding the sparse Hessian
             of objective at x or the sparse Hessian of the Lagrangian at (x, v)
 
         This function is a wrapper for sphess().
@@ -768,7 +768,7 @@ class CUTEstProblem(object):
             (Hi, Hj, Hv)=self._module.sphess(x)
         else:
             (Hi, Hj, Hv)=self._module.sphess(x, v)
-        return coo_matrix((Hv, (Hi, Hj)), shape=(self.n, self.n))
+        return coo_matrix((Hv, (Hi, Hj)), shape=(self.n_full, self.n_full))
 
     def sphess(self, x, v=None):
         """
@@ -824,7 +824,7 @@ class CUTEstProblem(object):
         i -- integer holding the index of constraint (between 0 and m-1)
 
         Output
-        H -- a scipy.sparse.coo_matrix of size n-by-n holding the sparse Hessian
+        H -- a scipy.sparse.coo_matrix of size n_full-by-n_full holding the sparse Hessian
             of objective or the sparse Hessian i-th constraint at x
 
         This function is a wrapper for isphess().
@@ -834,7 +834,7 @@ class CUTEstProblem(object):
             (Hi, Hj, Hv)=self._module.isphess(x)
         else:
             (Hi, Hj, Hv)=self._module.isphess(x, i)
-        return coo_matrix((Hv, (Hi, Hj)), shape=(self.n, self.n))
+        return coo_matrix((Hv, (Hi, Hj)), shape=(self.n_full, self.n_full))
 
     def isphess(self, x, cons_index=None):
         """
@@ -885,11 +885,11 @@ class CUTEstProblem(object):
                 Default is False
 
         Output
-        g -- a scipy.sparse.coo_matrix of size 1-by-n holding the gradient of objective at x or
+        g -- a scipy.sparse.coo_matrix of size 1-by-n_full holding the gradient of objective at x or
             the gradient of Lagrangian at (x, v)
-        J -- a scipy.sparse.coo_matrix of size m-by-n holding the sparse Jacobian
+        J -- a scipy.sparse.coo_matrix of size m-by-n_full holding the sparse Jacobian
             of constraints at x
-        H -- a scipy.sparse.coo_matrix of size n-by-n holding the sparse Hessian
+        H -- a scipy.sparse.coo_matrix of size n_full-by-n_full holding the sparse Hessian
             of objective at x or the sparse Hessian of the Lagrangian at (x, v)
 
         This function is a wrapper for gradsphess().
@@ -897,13 +897,13 @@ class CUTEstProblem(object):
 
         if v is None:
             (g, Hi, Hj, Hv)=self._module.gradsphess(x)
-            return (coo_matrix(g), coo_matrix((Hv, (Hi, Hj)), shape=(self.n, self.n)))
+            return (coo_matrix(g), coo_matrix((Hv, (Hi, Hj)), shape=(self.n_full, self.n_full)))
         else:
             (gi, gv, Ji, Jfi, Jv, Hi, Hj, Hv)=self._module.gradsphess(x, v, lagrFlag)
             return (
-                coo_matrix((gv, (np.zeros(len(gv)), gi)), shape=(1, self.n)),
-                coo_matrix((Jv, (Jfi, Ji)), shape=(self.m, self.n)),
-                coo_matrix((Hv, (Hi, Hj)), shape=(self.n, self.n))
+                coo_matrix((gv, (np.zeros(len(gv)), gi)), shape=(1, self.n_full)),
+                coo_matrix((Jv, (Jfi, Ji)), shape=(self.m, self.n_full)),
+                coo_matrix((Hv, (Hi, Hj)), shape=(self.n_full, self.n_full))
             )
 
     def gradsphess(self, x, v=None, gradient_of_lagrangian=True):

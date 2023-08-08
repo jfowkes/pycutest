@@ -1,0 +1,149 @@
+***************************
+* SET UP THE INITIAL DATA *
+***************************
+
+NAME          BOX2
+
+*   Problem :
+*   *********
+*   Box problem in 2 variables, obtained by fixing X3 = 1 in BOX3.
+
+*   Source: Problem 11 in
+*   A.R. Buckley,
+*   "Test functions for unconstrained minimization",
+*   TR 1989CS-3, Mathematics, statistics and computing centre,
+*   Dalhousie University, Halifax (CDN), 1989.
+
+*   SIF input: Ph. Toint, Dec 1989.
+
+*   classification SXR2-AN-3-0
+
+*   This function  is a nonlinear least squares with 10 groups.  Each
+*   group has 2 nonlinear elements of exponential type.
+
+*   Number of groups
+
+ IE M                   10
+
+*   Useful parameters
+
+ IE 1                   1
+
+VARIABLES
+
+    X1
+    X2
+    X3
+
+GROUPS
+
+ DO I         1                        M
+
+ RI RI        I
+ RM MRI       RI        -1.0
+ RM MTI       RI        -0.1
+ R( EMTI      EXP                      MTI
+ R( EMRI      EXP                      MRI
+ RM MEMTI     EMTI      -1.0
+ R+ COEFF     MEMTI                    EMRI
+
+ ZN G(I)      X3                       COEFF
+
+ ND
+
+BOUNDS
+
+ FR BOX2      'DEFAULT'
+ FX BOX2      X3        1.0
+
+START POINT
+
+    BOX2      X1        0.0
+    BOX2      X2        10.0
+    BOX2      X3        1.0
+
+ELEMENT TYPE
+
+ EV EXPT      V
+ EP EXPT      T
+
+ELEMENT USES
+
+ XT 'DEFAULT' EXPT
+
+ DO I         1                        M
+
+ RI RI        I
+ RM MTI       RI        -0.1
+
+ ZV A(I)      V                        X1
+ ZP A(I)      T                        MTI
+
+ ZV B(I)      V                        X2
+ ZP B(I)      T                        MTI
+
+ ND
+
+GROUP TYPE
+
+ GV L2        GVAR
+
+GROUP USES
+
+ XT 'DEFAULT' L2
+
+ DO I         1                        M
+ XE G(I)      A(I)      1.0            B(I)      -1.0
+ ND
+
+OBJECT BOUND
+
+ LO BOX2                0.0
+
+*   Solution
+
+*LO SOLTN               0.0
+
+ENDATA
+
+***********************
+* SET UP THE FUNCTION *
+* AND RANGE ROUTINES  *
+***********************
+
+ELEMENTS      BOX2
+
+TEMPORARIES
+
+ M  EXP
+ R  EXPA
+
+INDIVIDUALS
+
+*   Exponential
+
+ T  EXPT
+ A  EXPA                EXP( T * V )
+ F                      EXPA
+ G  V                   T * EXPA
+ H  V         V         T * T * EXPA
+
+ENDATA
+
+*********************
+* SET UP THE GROUPS *
+* ROUTINE           *
+*********************
+
+GROUPS        BOX2
+
+INDIVIDUALS
+
+*   Least-square groups
+
+ T  L2
+ F                      GVAR * GVAR
+ G                      GVAR + GVAR
+ H                      2.0
+
+ENDATA
