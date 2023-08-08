@@ -2,8 +2,15 @@ Version History
 ===============
 This section lists the different versions of PyCUTEst and the updates between them.
 
+Version 1.5.1 (8 Aug 2023)
+--------------------------
+* Fix invalid sparse dimensions while dropping fixed variables
+* Rename equality to fixed constraints for clarity
+* Restore current working directory on failure
+* Fix conversion of 1x1 NumPy arrays to scalars
+
 Version 1.5.0 (22 Feb 2023)
---------------------------------
+---------------------------
 * Fix memory leak in C interface (cache-breaking change)
 * Modernise C interface (cache-breaking change)
 * Drop Python 2.7 support as it is EOL
