@@ -1,5 +1,5 @@
 #!/bin/bash
-# CUTEst installer specialised for Travis
+# CUTEst installer specialised for Linux CI
 
 # set DRYRUN to 1 to test install scripts without actually installing
 DRYRUN=0
@@ -34,25 +34,9 @@ MODDIR=$SIFDECODE/modules/$VERSION
 echo "$MACHINE ($OPSYS) $COMPUSED" > $SIFDECODE/versions/$VERSION
 if [[ ! -e $OBJDIR ]]; then
     $MKDIR $OBJDIR
-    $MKDIR $OBJDIR/double $OBJDIR/single
-else
-    if [[ ! -e $OBJDIR/double ]]; then
-        $MKDIR $OBJDIR/double
-    fi
-    if [[ ! -e $OBJDIR/single ]]; then
-        $MKDIR $OBJDIR/single
-    fi
 fi
 if [[ ! -e $MODDIR ]]; then
     $MKDIR $MODDIR
-    $MKDIR $MODDIR/double $MODDIR/single
-else
-    if [[ ! -e $MODDIR/double ]]; then
-        $MKDIR $MODDIR/double
-    fi
-    if [[ ! -e $MODDIR/single ]]; then
-        $MKDIR $MODDIR/single
-    fi
 fi
 
 # write out the sifdecode/bin/sys file for this architecture
@@ -69,7 +53,7 @@ echo 'AWK="'$AWK'"'                                                >> $SYSFILE
 echo 'HEAD="'HEAD'"'                                               >> $SYSFILE
 echo 'TAIL="'$TAIL'"'                                              >> $SYSFILE
 echo 'FORTRAN="'$FORTRAN'"'                                        >> $SYSFILE
-MOD='$SIFDECODE/modules/'$VERSION'/$PRECIS'
+MOD='$SIFDECODE/modules/'$VERSION
 FFLAGS="$LIBCMD"' '`eval echo $MODCMD`' '"$F90"
 echo 'FFLAGS="'$FFLAGS' '$OPENMP'"'                                >> $SYSFILE
 echo 'PROBFLAGS="'$FFLAGS' '$BASIC' '$OPTIMIZATION' '$F77' "'      >> $SYSFILE
@@ -98,11 +82,8 @@ echo ' '                                                           >> $MAKEFILE
 echo '#  Directory for binaries'                                   >> $MAKEFILE
 echo ' '                                                           >> $MAKEFILE
 echo 'PRECIS = double'                                             >> $MAKEFILE
-echo 'OBJ = $(SIFDECODE)/objects/$(VERSION)/$(PRECIS)'             >> $MAKEFILE
-echo 'OBJS = $(SIFDECODE)/objects/$(VERSION)/single'               >> $MAKEFILE
-echo 'OBJD = $(SIFDECODE)/objects/$(VERSION)/double'               >> $MAKEFILE
-echo 'MOD = $(SIFDECODE)/modules/$(VERSION)/$(PRECIS)'             >> $MAKEFILE
-echo 'SEDS = $(SIFDECODE)/seds/$(PRECIS).sed'                      >> $MAKEFILE
+echo 'OBJ = $(SIFDECODE)/objects/$(VERSION)'                      >> $MAKEFILE
+echo 'MOD = $(SIFDECODE)/modules/$(VERSION)'                      >> $MAKEFILE
 echo 'MVMODS = '"$MVMODS"                                          >> $MAKEFILE
 echo ' '                                                           >> $MAKEFILE
 echo '#  Compiler options'                                         >> $MAKEFILE
