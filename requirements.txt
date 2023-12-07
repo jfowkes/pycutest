@@ -1,2 +1,3 @@
-numpy>=1.11
-scipy>=0.18
+numpy
+scipy
+setuptools
