@@ -3,7 +3,7 @@ import numpy as np
 import pycutest
 import unittest
 
-# All problems used here: ALLINITU (unconstrained), ALLINITC (constrained)
+# All problems used here: ALLINITU (unconstrained), ALLINITC (constrained), ARWHEAD, ARWHDNE, NGONE
 # ALLINITC has fixed variables
 
 def array_compare(x, y, thresh=1e-8):
@@ -117,6 +117,9 @@ class TestALLINITU(unittest.TestCase):
             f, g = p.obj(x, gradient=True)
             self.assertAlmostEqual(f, allinit_obj(x), places=places, msg="Wrong obj f value 2")
             self.assertTrue(array_compare(g, allinit_grad(x), thresh=10**(-places)), msg="Wrong obj g value 2")
+            # grad
+            g = p.grad(x)
+            self.assertTrue(array_compare(g, allinit_grad(x), thresh=10**(-places)), msg="Wrong obj g value")
             # cons
             c = p.cons(x)
             self.assertIsNone(c, msg="cons should be None")
@@ -150,7 +153,7 @@ class TestALLINITU(unittest.TestCase):
         stats = p.report()
         num_xs = 4
         self.assertEqual(stats['f'], 3*num_xs, msg="Wrong stat f")
-        self.assertEqual(stats['g'], 3*num_xs, msg="Wrong stat g")
+        self.assertEqual(stats['g'], 4*num_xs, msg="Wrong stat g")
         self.assertEqual(stats['H'], (3+2*len(ps))*num_xs, msg="Wrong stat H")
         self.assertEqual(stats['Hprod'], (2*len(ps))*num_xs, msg="Wrong stat Hprod")
         self.assertIsNone(stats['c'], msg="Stat c should be None")

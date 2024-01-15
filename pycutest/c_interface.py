@@ -23,7 +23,6 @@ itf_c_source = r"""
      cnames		... used pbname, varnames, connames
      udimen		... used cdimen
      ufn		... used uofg
-     ugr		... used uofg
      unames		... used pbname, varnames
      cscfg		... obsolete
      cscifg		... obsolete
@@ -44,6 +43,7 @@ static PyObject *cutest_varnames(PyObject *self, PyObject *args);
 static PyObject *cutest_connames(PyObject *self, PyObject *args);
 static PyObject *cutest_objcons(PyObject *self, PyObject *args);
 static PyObject *cutest_obj(PyObject *self, PyObject *args);
+static PyObject *cutest_grad(PyObject *self, PyObject *args);
 static PyObject *cutest_cons(PyObject *self, PyObject *args);
 static PyObject *cutest_lagjac(PyObject *self, PyObject *args);
 static PyObject *cutest_jprod(PyObject *self, PyObject *args);
@@ -61,19 +61,20 @@ static PyObject *cutest_terminate(PyObject *self, PyObject *args);
 
 /* Module global variables */
 #define STR_LEN 10
-static npy_int status = 0;    /* output status */
-static npy_int CUTEst_nvar = 0;		/* number of variables */
-static npy_int CUTEst_ncon = 0;		/* number of constraints */
-static npy_int CUTEst_nnzj = 0;		/* nnz in Jacobian */
-static npy_int CUTEst_nnzh = 0;		/* nnz in upper triangular Hessian */
-static char CUTEst_probName[STR_LEN+1];	/* problem name */
-static char setupCalled = 0;			/* Flag to indicate if setup was called */
-static char dataFileOpen = 0;			/* Flag to indicate if OUTSDIF is open */
+static npy_int status = 0;              /* output status */
+static npy_int CUTEst_nvar = 0;         /* number of variables */
+static npy_int CUTEst_ncon = 0;         /* number of constraints */
+static npy_int CUTEst_nnzj = 0;         /* nnz in Jacobian */
+static npy_int CUTEst_nnzh = 0;         /* nnz in upper triangular Hessian */
+static char CUTEst_probName[STR_LEN+1]; /* problem name */
+static char setupCalled = 0;            /* Flag to indicate if setup was called */
+static char dataFileOpen = 0;           /* Flag to indicate if OUTSDIF is open */
 
-static npy_int funit = 42;			/* FORTRAN unit number for OUTSDIF.d */
-static npy_int iout = 6;			/* FORTRAN unit number for error output */
-static npy_int io_buffer = 11;		/* FORTRAN unit number for internal input/output */
-static char  fName[] = "OUTSDIF.d"; 	/* Data file name */
+static npy_int funit = 42;              /* FORTRAN unit number for OUTSDIF.d */
+static npy_int iout = 6;                /* FORTRAN unit number for error output */
+static npy_int io_buffer = 11;          /* FORTRAN unit number for internal input/output */
+static char  fName[] = "OUTSDIF.d";     /* Data file name */
+
 /* Logical constants for FORTRAN calls */
 static logical somethingFalse = FALSE_, somethingTrue = TRUE_;
 
@@ -653,6 +654,53 @@ static PyObject *cutest_obj(PyObject *self, PyObject *args) {
             return Py_BuildValue("dO", f, Mg);
         }
     }
+}
+
+
+PyDoc_STRVAR(cutest_grad_doc,
+"Returns the gradient of the objective at x for uconstrained problems.\n"
+"\n"
+"g=grad(x)\n"
+"\n"
+"Input\n"
+"x        -- 1D array of length n with the values of variables\n"
+"\n"
+"Output\n"
+"g -- 1D array of length n holding the value of the gradient of f at x\n"
+"\n"
+"CUTEst tools used: CUTEST_ugr\n"
+);
+
+static PyObject *cutest_grad(PyObject *self, PyObject *args) {
+    PyArrayObject *arg1;
+    PyArrayObject *Mg=NULL;
+    doublereal *x, *g=NULL;
+    npy_intp dims[1];
+
+    if (!check_setup())
+        return NULL;
+
+    if (CUTEst_ncon != 0) {
+        PyErr_SetString(PyExc_Exception, "Use lagjac() for constrained problems");
+        return NULL;
+    }
+
+    if (!PyArg_ParseTuple(args, "O", &arg1))
+        return NULL;
+
+    /* Check if x is double and of correct length and shape */
+    if (!(PyArray_Check(arg1) && PyArray_ISFLOAT(arg1) && PyArray_TYPE(arg1)==NPY_DOUBLE && PyArray_NDIM(arg1)==1 && PyArray_DIM(arg1, 0)==CUTEst_nvar)) {
+        PyErr_SetString(PyExc_Exception, "Argument 1 must be a 1D double array of length nvar");
+        return NULL;
+    }
+
+    x=(npy_double *)PyArray_DATA(arg1);
+    dims[0]=CUTEst_nvar;
+    Mg=(PyArrayObject *)PyArray_SimpleNew(1, dims, NPY_DOUBLE);
+    g=(npy_double *)PyArray_DATA(Mg);
+
+    CUTEST_ugr((integer *)&status, (integer *)&CUTEst_nvar, x, g);
+    return Py_BuildValue("O", Mg);
 }
 
 
@@ -1874,6 +1922,7 @@ static PyMethodDef _methods[] = {
     {"connames", cutest_connames, METH_VARARGS, cutest_connames_doc},
     {"objcons", cutest_objcons, METH_VARARGS, cutest_objcons_doc},
     {"obj", cutest_obj, METH_VARARGS, cutest_obj_doc},
+    {"grad", cutest_grad, METH_VARARGS, cutest_grad_doc},
     {"cons", cutest_cons, METH_VARARGS, cutest_cons_doc},
     {"lagjac", cutest_lagjac, METH_VARARGS, cutest_lagjac_doc},
     {"jprod", cutest_jprod, METH_VARARGS, cutest_jprod_doc},
