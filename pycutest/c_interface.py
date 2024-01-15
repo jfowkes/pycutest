@@ -59,6 +59,10 @@ static PyObject *cutest_isphess(PyObject *self, PyObject *args);
 static PyObject *cutest_gradsphess(PyObject *self, PyObject *args);
 static PyObject *cutest_report(PyObject *self, PyObject *args);
 static PyObject *cutest_terminate(PyObject *self, PyObject *args);
+/* CUTEst 2.2 function prototypes */
+#ifdef CUTEST_VERSION
+static PyObject *cutest_hjprod(PyObject *self, PyObject *args);
+#endif
 
 /* Module global variables */
 #define STR_LEN 10
@@ -1294,6 +1298,88 @@ static PyObject *cutest_hprod(PyObject *self, PyObject *args) {
 }
 
 
+#ifdef CUTEST_VERSION
+PyDoc_STRVAR(cutest_hjprod_doc,
+"Returns the product of Hessian of the (Fritz) John function at x and vector p.\n"
+"The Hessian is either the Hessian of objective or the Hessian of Lagrangian.\n"
+"\n"
+"r=hprod(p, y0, x, v) -- use Hessian of Lagrangian at x (constrained problem)\n"
+"r=hprod(p, y0)       -- use last computed Hessian\n"
+"\n"
+"The Hessian is meant with respect to problem variables (has dimension n).\n"
+"\n"
+"Input\n"
+"p -- 1D array of length n holding the components of the vector\n"
+"y0 -- float holding the (Fritz) John scalar associated with the objective\n"
+"x -- 1D array of length n holding the values of variables\n"
+"v -- 1D array of length m holding the values of Lagrange multipliers\n"
+"\n"
+"Output\n"
+"r  -- 1D array of length n holding the result\n"
+"\n"
+"CUTEst tools used: CUTEST_chjprod\n"
+);
+
+static PyObject *cutest_hjprod(PyObject *self, PyObject *args) {
+    PyArrayObject *arg1, *arg3, *arg4, *Mr;
+    doublereal *p, *x=NULL, *v=NULL, *r;
+    doublereal y0;
+    npy_intp dims[1];
+
+    if (!check_setup())
+        return NULL;
+
+    arg3=arg4=NULL;
+    if (!PyArg_ParseTuple(args, "Od|OO", &arg1, &y0, &arg3, &arg4))
+        return NULL;
+
+    if (CUTEst_ncon>0) {
+        if (PyObject_Length(args)!=2 && PyObject_Length(args)!=4) {
+            PyErr_SetString(PyExc_Exception, "Need 2 or 4 arguments for constrained problems");
+            return NULL;
+        }
+    } else {
+        PyErr_SetString(PyExc_Exception, "Unconstrained problems do not have a (Fritz) John function");
+        return NULL;
+    }
+
+    /* Check if p is double and of correct dimension */
+    if (!(PyArray_Check(arg1) && PyArray_ISFLOAT(arg1) && PyArray_TYPE(arg1)==NPY_DOUBLE && PyArray_NDIM(arg1)==1 && PyArray_DIM(arg1, 0)==CUTEst_nvar)) {
+        PyErr_SetString(PyExc_Exception, "Argument 1 must be a 1D double array of length nvar");
+        return NULL;
+    }
+
+    /* Check if x is double and of correct dimension */
+    if (arg3!=NULL && !(PyArray_Check(arg3) && PyArray_ISFLOAT(arg3) && PyArray_TYPE(arg3)==NPY_DOUBLE && PyArray_NDIM(arg3)==1 && PyArray_DIM(arg3, 0)==CUTEst_nvar)) {
+        PyErr_SetString(PyExc_Exception, "Argument 3 must be a 1D double array of length nvar");
+        return NULL;
+    }
+
+    /* Check if v is double and of correct dimension */
+    if (arg4!=NULL && !(PyArray_Check(arg4) && PyArray_ISFLOAT(arg4) && PyArray_TYPE(arg4)==NPY_DOUBLE && PyArray_NDIM(arg4)==1 && PyArray_DIM(arg4, 0)==CUTEst_ncon)) {
+        PyErr_SetString(PyExc_Exception, "Argument 4 must be a 1D double array of length ncon");
+        return NULL;
+    }
+
+    p=(npy_double *)PyArray_DATA(arg1);
+    if (arg3!=NULL)
+        x=(npy_double *)PyArray_DATA(arg3);
+    if (arg4!=NULL)
+        v=(npy_double *)PyArray_DATA(arg4);
+    dims[0]=CUTEst_nvar;
+    Mr=(PyArrayObject *)PyArray_SimpleNew(1, dims, NPY_DOUBLE);
+    r=(npy_double *)PyArray_DATA(Mr);
+
+    if (arg3==NULL)
+        CUTEST_chjprod((integer *)&status, (integer *)&CUTEst_nvar, (integer *)&CUTEst_ncon, &somethingTrue, NULL, &y0, NULL, p, r);
+    else
+        CUTEST_chjprod((integer *)&status, (integer *)&CUTEst_nvar, (integer *)&CUTEst_ncon, &somethingFalse, x, &y0, v, p, r);
+
+    return (PyObject *)Mr;
+}
+#endif
+
+
 PyDoc_STRVAR(cutest_gradhess_doc,
 "Returns the Hessian of the Lagrangian, the Jacobian of constraints, and the\n"
 "gradient of the objective or the gradient of the Lagrangian at x.\n"
@@ -2008,6 +2094,9 @@ static PyMethodDef _methods[] = {
     {"hess", cutest_hess, METH_VARARGS, cutest_hess_doc},
     {"ihess", cutest_ihess, METH_VARARGS, cutest_ihess_doc},
     {"hprod", cutest_hprod, METH_VARARGS, cutest_hprod_doc},
+    #ifdef CUTEST_VERSION
+    {"hjprod", cutest_hjprod, METH_VARARGS, cutest_hjprod_doc},
+    #endif
     {"gradhess", cutest_gradhess, METH_VARARGS, cutest_gradhess_doc},
     {"scons", cutest_scons, METH_VARARGS, cutest_scons_doc},
     {"slagjac", cutest_slagjac, METH_VARARGS, cutest_slagjac_doc},

@@ -620,6 +620,42 @@ class CUTEstProblem(object):
             else:
                 r = self._module.hprod(self.free_to_all(p, use_zeros=True))
         return r[self.idx_free]
+    
+    def hjprod(self, p, y0, x=None, v=None):
+        """
+        Calculate Hessian-vector product H*p, where H is the Hessian of the (Fritz) John function.
+        For constrained problems, the (Fritz) John function is J(x,y0,v) = y0*f(x) + y^Tc(x).
+
+        .. code-block:: python
+
+            # use last computed Hessian to compute H*p (constrained problems only)
+            r = problem.hjprod(p, y0)
+            # use Hessian of Lagrangian J_{x,x}(x,y0,v) to compute H*p (constrained only)
+            r = problem.hprod(p, y0, x=x, v=v)
+
+        This calls CUTEst routine CUTEST_chjprod
+
+        Note: in CUTEst, the sign convention is such that the John = y0 * objective + lagrange_multipliers * constraints
+
+        :param p: vector to be multiplied by the Hessian
+        :type p: numpy.ndarray with shape (n,)
+        :param y0: John scalar associated with objective
+        :type y0: float
+        :param x: input vector for the Hessian
+        :type x: numpy.ndarray with shape (n,), optional
+        :param v: vector of Lagrange multipliers (must be specified for constrained problems)
+        :type v: numpy.ndarray with shape (m,), optional
+        :return: Hessian-vector product H*p
+        :rtype: numpy.ndarray(n,)
+        """
+        self.check_input_x(p)
+        if x is not None:
+            self.check_input_x(x)
+            self.check_input_v(v)
+            r = self._module.hjprod(self.free_to_all(p, use_zeros=True), y0, self.free_to_all(x), v)
+        else:
+            r = self._module.hjprod(self.free_to_all(p, use_zeros=True), y0)
+        return r[self.idx_free]
 
     def gradhess(self, x, v=None, gradient_of_lagrangian=True):
         """

@@ -19,6 +19,7 @@ The methods available for each :code:`CUTEstProblem` instance are:
 * `hess(x[, v]) <methods/pycutest.CUTEstProblem.hess.html>`_: evaluate Hessian of objective or Lagrangian
 * `ihess(x[, cons_index]) <methods/pycutest.CUTEstProblem.ihess.html>`_: evaluate Hessian of objective or a specific constraint
 * `hprod(p[, x, v]) <methods/pycutest.CUTEstProblem.hprod.html>`_: evaluate Hessian-vector product (for objective or Lagrangian)
+* `hjprod(p, y0, [, x, v]) <methods/pycutest.CUTEstProblem.hjprod.html>`_: evaluate Hessian-vector product for (Fritz) John function
 * `gradhess(x[, v, gradient_of_lagrangian]) <methods/pycutest.CUTEstProblem.gradhess.html>`_: evaluate gradient of objective/Lagrangian, Jacobian of constraints and Hessian of objective/Lagrangian
 * `report() <methods/pycutest.CUTEstProblem.report.html>`_: return a dictionary of statistics (number of objective/gradient evaluations, etc.)
 
@@ -83,7 +84,8 @@ Please click on a :code:`CUTEstProblem` method below for full documentation:
    jprod 
    hess 
    ihess 
-   hprod 
+   hprod
+   hjprod 
    gradhess
    report 
    scons 
