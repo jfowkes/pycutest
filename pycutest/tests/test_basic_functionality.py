@@ -209,7 +209,7 @@ class TestALLINITC_with_fixed(unittest.TestCase):
         lag = lambda x, v: allinit_obj(x) + v*cons(x)
         gradlag = lambda x, v: allinit_grad(x) + v*gradcons(x)
         hesslag = lambda x, v: allinit_hess(x) + v*hesscons(x)
-        hessjohn = lambda y0, x, v: y0*allinit_hess(x) + v*hesscons(x)
+        hessjohn = lambda x, y0, v: y0*allinit_hess(x) + v*hesscons(x)
 
         # Now actually test the main routines
         for x in [p.x0, np.ones((4,)), -np.ones((4,)), np.arange(4)+1.0]:
@@ -293,13 +293,13 @@ class TestALLINITC_with_fixed(unittest.TestCase):
             y0 = 3.5
             for pvec in ps:
                 for v in vs:
-                    r = p.hjprod(pvec, y0, x=x, v=v)
-                    self.assertTrue(array_compare(r, hessjohn(y0, x, v).dot(pvec), thresh=10 ** (-places)),
+                    r = p.hjprod(pvec, x=x, y0=y0, v=v)
+                    self.assertTrue(array_compare(r, hessjohn(x, y0, v).dot(pvec), thresh=10 ** (-places)),
                                     msg="Wrong hjprod r value for p = %s" % str(pvec))
-                    #_ = p.hessj(y0, x+1.5, v=v-0.2) # evaluate Hessian of John function at another x, to test default x value
-                    #r = p.hjprod(pvec, y0)
-                    #self.assertTrue(array_compare(r, hessjohn(y0, x+1.5, v-0.2).dot(pvec), thresh=10 ** (-places)),
-                    #                msg="Wrong hjprod r value for p = %s" % str(pvec))
+                    # _ = p.hessjohn(x+1.5, y0-1, v-0.2) # evaluate Hessian of John function at another x, to test default x value
+                    # r = p.hjprod(pvec)
+                    # self.assertTrue(array_compare(r, hessjohn(x+1.5, y0-1, v-0.2).dot(pvec), thresh=10 ** (-places)),
+                    #                 msg="Wrong hjprod r value for p = %s" % str(pvec))
             # gradhess
             for v in vs:
                 g, J, H = p.gradhess(x, v=v)
@@ -375,7 +375,7 @@ class TestALLINITC_with_free(unittest.TestCase):
         lag = lambda x, v: obj(x) + v*cons(x)
         gradlag = lambda x, v: grad(x) + v*gradcons(x)
         hesslag = lambda x, v: hess(x) + v*hesscons(x)
-        hessjohn = lambda y0, x, v: y0*hess(x) + v*hesscons(x)
+        hessjohn = lambda x, y0, v: y0*hess(x) + v*hesscons(x)
 
         # Now actually test the main routines
         for x in [p.x0, np.ones((3,)), -np.ones((3,)), np.arange(3)+1.0]:
@@ -459,12 +459,12 @@ class TestALLINITC_with_free(unittest.TestCase):
             y0 = 3.5
             for pvec in ps:
                 for v in vs:
-                    r = p.hjprod(pvec, y0, x=x, v=v)
-                    self.assertTrue(array_compare(r, hessjohn(y0, x, v).dot(pvec), thresh=10 ** (-places)),
+                    r = p.hjprod(pvec, x=x, y0=y0, v=v)
+                    self.assertTrue(array_compare(r, hessjohn(x, y0, v).dot(pvec), thresh=10 ** (-places)),
                                     msg="Wrong hjprod r value for p = %s" % str(pvec))
-                    #_ = p.hessj(x+1.5, v=v-0.2) # evaluate Hessian of John function at another x, to test default x value
-                    #r = p.hjprod(y0, pvec)
-                    #self.assertTrue(array_compare(r, hessjohn(y0, x+1.5, v-0.2).dot(pvec), thresh=10 ** (-places)),
+                    # _ = p.hessjohn(x+1.5, y0-1, v-0.2) # evaluate Hessian of John function at another x, to test default x value
+                    # r = p.hjprod(pvec)
+                    # self.assertTrue(array_compare(r, hessjohn(x+1.5, y0-1, v-0.2).dot(pvec), thresh=10 ** (-places)),
                     #                msg="Wrong hjprod r value for p = %s" % str(pvec))
             # gradhess
             for v in vs:

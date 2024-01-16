@@ -620,18 +620,20 @@ class CUTEstProblem(object):
             else:
                 r = self._module.hprod(self.free_to_all(p, use_zeros=True))
         return r[self.idx_free]
-    
-    def hjprod(self, p, y0, x=None, v=None):
+
+    def hjprod(self, p, x=None, y0=None, v=None):
         """
         Calculate Hessian-vector product H*p, where H is the Hessian of the (Fritz) John function.
-        For constrained problems, the (Fritz) John function is J(x,y0,v) = y0*f(x) + y^Tc(x).
+        For constrained problems, the (Fritz) John function is J(x,y0,v) = y0*f(x) + v^Tc(x).
 
         .. code-block:: python
 
-            # use last computed Hessian to compute H*p (constrained problems only)
-            r = problem.hjprod(p, y0)
-            # use Hessian of Lagrangian J_{x,x}(x,y0,v) to compute H*p (constrained only)
-            r = problem.hprod(p, y0, x=x, v=v)
+            # use Hessian of John function J_{x,x}(x,y0,v) to compute H*p (constrained problems only)
+            r = problem.hprod(p, x=x, y0=y0, v=v)
+            # use last computed John function Hessian to compute H*p (constrained problems only)
+            r = problem.hjprod(p)
+
+        Unconstrained problems do not have a (Fritz) John function.
 
         This calls CUTEst routine CUTEST_chjprod
 
@@ -639,11 +641,11 @@ class CUTEstProblem(object):
 
         :param p: vector to be multiplied by the Hessian
         :type p: numpy.ndarray with shape (n,)
-        :param y0: John scalar associated with objective
-        :type y0: float
         :param x: input vector for the Hessian
         :type x: numpy.ndarray with shape (n,), optional
-        :param v: vector of Lagrange multipliers (must be specified for constrained problems)
+        :param y0: John scalar associated with objective
+        :type y0: float, optional
+        :param v: vector of Lagrange multipliers
         :type v: numpy.ndarray with shape (m,), optional
         :return: Hessian-vector product H*p
         :rtype: numpy.ndarray(n,)
@@ -652,9 +654,9 @@ class CUTEstProblem(object):
         if x is not None:
             self.check_input_x(x)
             self.check_input_v(v)
-            r = self._module.hjprod(self.free_to_all(p, use_zeros=True), y0, self.free_to_all(x), v)
+            r = self._module.hjprod(self.free_to_all(p, use_zeros=True), self.free_to_all(x), y0, v)
         else:
-            r = self._module.hjprod(self.free_to_all(p, use_zeros=True), y0)
+            r = self._module.hjprod(self.free_to_all(p, use_zeros=True))
         return r[self.idx_free]
 
     def gradhess(self, x, v=None, gradient_of_lagrangian=True):
@@ -909,6 +911,59 @@ class CUTEstProblem(object):
         else:
             assert v is None, "CUTEstProblem.sphess: v must be None for unconstrained problems"
             H = self.__sphess(self.free_to_all(x), v)
+        return sparse_mat_extract_rows_and_columns(H, self.idx_free, self.idx_free)
+
+    # sphessjohn() wrapper (private)
+    def __sphessjohn(self, x, y0, v):
+        """Returns the sparse Hessian of the (Fritz) John function at (x, y0, v).
+
+        H=__sphessjohn(x, y0, v) -- Hessian of John function (constrained problems)
+
+        Input
+        x -- 1D array of length n with the values of variables
+        y0 -- float holding the (Fritz) John scalar associated with the objective
+        v -- 1D array of length m with the values of Lagrange multipliers
+
+        Output
+        H -- a scipy.sparse.coo_matrix of size n_full-by-n_full holding the sparse Hessian
+            of the (Fritz) John function at (x, y0, v)
+
+        This function is a wrapper for sphessjohn().
+        """
+
+        (Hi, Hj, Hv)=self._module.sphessjohn(x, y0, v)
+        return coo_matrix((Hv, (Hi, Hj)), shape=(self.n_full, self.n_full))
+
+    def sphessjohn(self, x, y0, v):
+        """
+        Evaluate the sparse Hessian of the (Fritz) John function at (x, y0, v).
+        For constrained problems, the (Fritz) John function is J(x,y0,v) = y0*f(x) + v^Tc(x).
+
+        .. code-block:: python
+
+            # Hessian of John function (constrained problems only)
+            H = problem.sphessjohn(x, y0, v)
+
+        The matrix H is of type scipy.sparse.coo_matrix.
+
+        Unconstrained problems do not have a (Fritz) John function.
+
+        This calls CUTEst routine CUTEST_cshj.
+
+        Note: in CUTEst, the sign convention is such that the John = y0 * objective + lagrange_multipliers * constraints
+
+        :param x: input vector
+        :type x: numpy.ndarray with shape (n,)
+        :param y0: John scalar associated with objective
+        :type y0: float
+        :param v: vector of Lagrange multipliers
+        :type v: numpy.ndarray with shape (m,)
+        :return: sparse Hessian of John function at x
+        :rtype: scipy.sparse.coo_matrix(n,n)
+        """
+        self.check_input_x(x)
+        self.check_input_v(v)
+        H = self.__sphessjohn(self.free_to_all(x), y0, v)
         return sparse_mat_extract_rows_and_columns(H, self.idx_free, self.idx_free)
 
     # isphess() wrapper (private)
