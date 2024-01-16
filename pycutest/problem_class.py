@@ -650,14 +650,17 @@ class CUTEstProblem(object):
         :return: Hessian-vector product H*p
         :rtype: numpy.ndarray(n,)
         """
-        self.check_input_x(p)
-        if x is not None:
-            self.check_input_x(x)
-            self.check_input_v(v)
-            r = self._module.hjprod(self.free_to_all(p, use_zeros=True), self.free_to_all(x), y0, v)
-        else:
-            r = self._module.hjprod(self.free_to_all(p, use_zeros=True))
-        return r[self.idx_free]
+        try:
+            self.check_input_x(p)
+            if x is not None:
+                self.check_input_x(x)
+                self.check_input_v(v)
+                r = self._module.hjprod(self.free_to_all(p, use_zeros=True), self.free_to_all(x), y0, v)
+            else:
+                r = self._module.hjprod(self.free_to_all(p, use_zeros=True))
+            return r[self.idx_free]
+        except AttributeError:
+            raise RuntimeError('You version of CUTEst is too old, please update it.')
 
     def gradhess(self, x, v=None, gradient_of_lagrangian=True):
         """
@@ -930,9 +933,11 @@ class CUTEstProblem(object):
 
         This function is a wrapper for sphessjohn().
         """
-
-        (Hi, Hj, Hv)=self._module.sphessjohn(x, y0, v)
-        return coo_matrix((Hv, (Hi, Hj)), shape=(self.n_full, self.n_full))
+        try:
+            (Hi, Hj, Hv)=self._module.sphessjohn(x, y0, v)
+            return coo_matrix((Hv, (Hi, Hj)), shape=(self.n_full, self.n_full))
+        except AttributeError:
+            raise RuntimeError('You version of CUTEst is too old, please update it.')
 
     def sphessjohn(self, x, y0, v):
         """
