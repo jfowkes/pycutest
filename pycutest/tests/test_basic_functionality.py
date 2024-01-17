@@ -199,6 +199,9 @@ class TestALLINITC_with_fixed(unittest.TestCase):
         # If we need Lagrange multipliers, use these
         vs = [np.array([v]).reshape((1,)) for v in [p.v0, 1.0, -1.0, 0.4]]
 
+        # If we need a John function scalar, use this
+        y0 = 3.5
+
         # The simple nonlinear constraint and its derivatives
         cons = lambda x: x[0]**2 + x[1]**2 - 1.0
         gradcons = lambda x: np.array([2.0*x[0], 2.0*x[1], 0.0, 0.0])
@@ -274,6 +277,10 @@ class TestALLINITC_with_fixed(unittest.TestCase):
             for v in vs:
                 H = p.hess(x, v=v)
                 self.assertTrue(array_compare(H, hesslag(x, v), thresh=10 ** (-places)), msg="Wrong hess H value")
+            # hessjohn
+            for v in vs:
+                H = p.hessjohn(x, y0, v)
+                self.assertTrue(array_compare(H, hessjohn(x, y0, v), thresh=10 ** (-places)), msg="Wrong hessjohn H value")
             # ihess
             H = p.ihess(x)
             self.assertTrue(array_compare(H, allinit_hess(x), thresh=10 ** (-places)), msg="Wrong ihess H value 1")
@@ -290,16 +297,15 @@ class TestALLINITC_with_fixed(unittest.TestCase):
                     self.assertTrue(array_compare(r, hesslag(x+1.5, v-0.2).dot(pvec), thresh=10 ** (-places)),
                                     msg="Wrong hprod r value for p = %s" % str(pvec))
             # hjprod
-            y0 = 3.5
             for pvec in ps:
                 for v in vs:
                     r = p.hjprod(pvec, x=x, y0=y0, v=v)
                     self.assertTrue(array_compare(r, hessjohn(x, y0, v).dot(pvec), thresh=10 ** (-places)),
                                     msg="Wrong hjprod r value for p = %s" % str(pvec))
-                    # _ = p.hessjohn(x+1.5, y0-1, v-0.2) # evaluate Hessian of John function at another x, to test default x value
-                    # r = p.hjprod(pvec)
-                    # self.assertTrue(array_compare(r, hessjohn(x+1.5, y0-1, v-0.2).dot(pvec), thresh=10 ** (-places)),
-                    #                 msg="Wrong hjprod r value for p = %s" % str(pvec))
+                    _ = p.hessjohn(x+1.5, y0-1, v-0.2) # evaluate Hessian of John function at another x, to test default x value
+                    r = p.hjprod(pvec)
+                    self.assertTrue(array_compare(r, hessjohn(x+1.5, y0-1, v-0.2).dot(pvec), thresh=10 ** (-places)),
+                                    msg="Wrong hjprod r value for p = %s" % str(pvec))
             # gradhess
             for v in vs:
                 g, J, H = p.gradhess(x, v=v)
@@ -315,11 +321,11 @@ class TestALLINITC_with_fixed(unittest.TestCase):
         num_xs = 4
         self.assertEqual(stats['f'], (3 + 2*len(vs)) * num_xs, msg="Wrong stat f")
         self.assertEqual(stats['g'], (3 + 4*len(vs)) * num_xs, msg="Wrong stat g")
-        self.assertEqual(stats['H'], (1 + 3*len(vs) + 3*len(vs)*len(ps)) * num_xs, msg="Wrong stat H")
-        self.assertEqual(stats['Hprod'], (3*len(vs)*len(ps)) * num_xs, msg="Wrong stat Hprod")
+        self.assertEqual(stats['H'], (1 + 4*len(vs) + 4*len(vs)*len(ps)) * num_xs, msg="Wrong stat H")
+        self.assertEqual(stats['Hprod'], (4*len(vs)*len(ps)) * num_xs, msg="Wrong stat Hprod")
         self.assertEqual(stats['c'], (5 + len(vs) + len(ps)) * num_xs, msg="Wrong stat c")
         self.assertEqual(stats['cg'], (4 + 6*len(vs) + 2*len(ps)) * num_xs, msg="Wrong stat cg")
-        self.assertEqual(stats['cH'], (1 + 3*len(vs) + 3*len(ps)*len(vs)) * num_xs, msg="Wrong stat cH")
+        self.assertEqual(stats['cH'], (1 + 4*len(vs) + 4*len(ps)*len(vs)) * num_xs, msg="Wrong stat cH")
 
 
 class TestALLINITC_with_free(unittest.TestCase):
@@ -360,6 +366,9 @@ class TestALLINITC_with_free(unittest.TestCase):
 
         # If we need Lagrange multipliers, use these
         vs = [np.array([v]).reshape((1,)) for v in [p.v0, 1.0, -1.0, 0.4]]
+
+        # If we need a John function scalar, use this
+        y0 = 3.5
 
         # The simple nonlinear constraint and its derivatives
         cons = lambda x: x[0]**2 + x[1]**2 - 1.0
@@ -440,6 +449,10 @@ class TestALLINITC_with_free(unittest.TestCase):
             for v in vs:
                 H = p.hess(x, v=v)
                 self.assertTrue(array_compare(H, hesslag(x, v), thresh=10 ** (-places)), msg="Wrong hess H value")
+            # hessjohn
+            for v in vs:
+                H = p.hessjohn(x, y0, v)
+                self.assertTrue(array_compare(H, hessjohn(x, y0, v), thresh=10 ** (-places)), msg="Wrong hessjohn H value")
             # ihess
             H = p.ihess(x)
             self.assertTrue(array_compare(H, hess(x), thresh=10 ** (-places)), msg="Wrong ihess H value 1")
@@ -456,16 +469,15 @@ class TestALLINITC_with_free(unittest.TestCase):
                     self.assertTrue(array_compare(r, hesslag(x+1.5, v-0.2).dot(pvec), thresh=10 ** (-places)),
                                     msg="Wrong hprod r value for p = %s" % str(pvec))
             # hjprod
-            y0 = 3.5
             for pvec in ps:
                 for v in vs:
                     r = p.hjprod(pvec, x=x, y0=y0, v=v)
                     self.assertTrue(array_compare(r, hessjohn(x, y0, v).dot(pvec), thresh=10 ** (-places)),
                                     msg="Wrong hjprod r value for p = %s" % str(pvec))
-                    # _ = p.hessjohn(x+1.5, y0-1, v-0.2) # evaluate Hessian of John function at another x, to test default x value
-                    # r = p.hjprod(pvec)
-                    # self.assertTrue(array_compare(r, hessjohn(x+1.5, y0-1, v-0.2).dot(pvec), thresh=10 ** (-places)),
-                    #                msg="Wrong hjprod r value for p = %s" % str(pvec))
+                    _ = p.hessjohn(x+1.5, y0-1, v-0.2) # evaluate Hessian of John function at another x, to test default x value
+                    r = p.hjprod(pvec)
+                    self.assertTrue(array_compare(r, hessjohn(x+1.5, y0-1, v-0.2).dot(pvec), thresh=10 ** (-places)),
+                                   msg="Wrong hjprod r value for p = %s" % str(pvec))
             # gradhess
             for v in vs:
                 g, J, H = p.gradhess(x, v=v)
@@ -481,11 +493,11 @@ class TestALLINITC_with_free(unittest.TestCase):
         num_xs = 4
         self.assertEqual(stats['f'], (3 + 2 * len(vs)) * num_xs, msg="Wrong stat f")
         self.assertEqual(stats['g'], (3 + 4 * len(vs)) * num_xs, msg="Wrong stat g")
-        self.assertEqual(stats['H'], (1 + 3 * len(vs) + 3 * len(vs) * len(ps)) * num_xs, msg="Wrong stat H")
-        self.assertEqual(stats['Hprod'], (3 * len(vs) * len(ps)) * num_xs, msg="Wrong stat Hprod")
+        self.assertEqual(stats['H'], (1 + 4 * len(vs) + 4 * len(vs) * len(ps)) * num_xs, msg="Wrong stat H")
+        self.assertEqual(stats['Hprod'], (4 * len(vs) * len(ps)) * num_xs, msg="Wrong stat Hprod")
         self.assertEqual(stats['c'], (5 + len(vs) + len(ps)) * num_xs, msg="Wrong stat c")
         self.assertEqual(stats['cg'], (4 + 6 * len(vs) + 2 * len(ps)) * num_xs, msg="Wrong stat cg")
-        self.assertEqual(stats['cH'], (1 + 3 * len(vs) + 3 * len(ps) * len(vs)) * num_xs, msg="Wrong stat cH")
+        self.assertEqual(stats['cH'], (1 + 4 * len(vs) + 4 * len(ps) * len(vs)) * num_xs, msg="Wrong stat cH")
 
 
 def box2_res(x):  # BOX2 residual

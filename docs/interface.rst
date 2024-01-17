@@ -17,9 +17,10 @@ The methods available for each :code:`CUTEstProblem` instance are:
 * `lagjac(x[, v]) <methods/pycutest.CUTEstProblem.lagjac.html>`_: evaluate gradient of objective/Lagrangian and Jacobian of constraints
 * `jprod(p[, transpose, x]) <methods/pycutest.CUTEstProblem.jprod.html>`_: evaluate constraint Jacobian-vector product
 * `hess(x[, v]) <methods/pycutest.CUTEstProblem.hess.html>`_: evaluate Hessian of objective or Lagrangian
+* `hessjohn(x, y0, v) <methods/pycutest.CUTEstProblem.hessjohn.html>`_: evaluate Hessian of (Fritz) John function
 * `ihess(x[, cons_index]) <methods/pycutest.CUTEstProblem.ihess.html>`_: evaluate Hessian of objective or a specific constraint
 * `hprod(p[, x, v]) <methods/pycutest.CUTEstProblem.hprod.html>`_: evaluate Hessian-vector product (for objective or Lagrangian)
-* `hjprod(p, y0, [, x, v]) <methods/pycutest.CUTEstProblem.hjprod.html>`_: evaluate Hessian-vector product for (Fritz) John function
+* `hjprod(p[,x, y0, v]) <methods/pycutest.CUTEstProblem.hjprod.html>`_: evaluate Hessian-vector product for (Fritz) John function
 * `gradhess(x[, v, gradient_of_lagrangian]) <methods/pycutest.CUTEstProblem.gradhess.html>`_: evaluate gradient of objective/Lagrangian, Jacobian of constraints and Hessian of objective/Lagrangian
 * `report() <methods/pycutest.CUTEstProblem.report.html>`_: return a dictionary of statistics (number of objective/gradient evaluations, etc.)
 
@@ -28,8 +29,9 @@ For large-scale problems, you may want to get vectors/matrices as sparse matrice
 * `scons(x[, index, gradient]) <methods/pycutest.CUTEstProblem.scons.html>`_: (sparse) evaluate constraint(s) and optionally their Jacobian/its gradient
 * `slagjac(x[, v]) <methods/pycutest.CUTEstProblem.slagjac.html>`_: (sparse) evaluate gradient of objective/Lagrangian and Jacobian of constraints
 * `sphess(x[, v]) <methods/pycutest.CUTEstProblem.sphess.html>`_: (sparse) evaluate Hessian of objective or Lagrangian
-* `isphess(x[, cons_index]) <methods/pycutest.CUTEstProblem.isphess.html>`_: (sparse) evaluate Hessian of objective or a specific constraint 
-* `gradsphess(x[, v, gradient_of_lagrangian]) <methods/pycutest.CUTEstProblem.gradsphess.html>`_: (sparse) evaluate gradient of objective/Lagrangian, Jacobian of constraints and Hessian of objective/Lagrangian 
+* `sphessjohn(x, y0, v) <methods/pycutest.CUTEstProblem.sphessjohn.html>`_: (sparse) evaluate Hessian of (Fritz) John function
+* `isphess(x[, cons_index]) <methods/pycutest.CUTEstProblem.isphess.html>`_: (sparse) evaluate Hessian of objective or a specific constraint
+* `gradsphess(x[, v, gradient_of_lagrangian]) <methods/pycutest.CUTEstProblem.gradsphess.html>`_: (sparse) evaluate gradient of objective/Lagrangian, Jacobian of constraints and Hessian of objective/Lagrangian
 
 Full documentation for each method above is given by clicking on it.
 
@@ -83,13 +85,15 @@ Please click on a :code:`CUTEstProblem` method below for full documentation:
    lagjac 
    jprod 
    hess 
+   hessjohn 
    ihess 
-   hprod
+   hprod 
    hjprod 
-   gradhess
+   gradhess 
    report 
    scons 
    slagjac 
    sphess 
+   sphessjohn 
    isphess 
    gradsphess

@@ -85,12 +85,12 @@ class TestSparseConstrained(unittest.TestCase):
                 H = p.sphess(x, v=v)
                 Hdense = p.hess(x, v=v)
                 self.assertTrue(array_compare(Hdense, H.toarray(), thresh=10 ** (-places)), msg="sphess H wrong")
-            # # sphessjohn
-            # y0 = 3.5
-            # for v in vs:
-            #     H = p.sphessjohn(x, y0, v)
-            #     Hdense = p.hessjohn(x, y0, v)
-            #     self.assertTrue(array_compare(Hdense, H.toarray(), thresh=10 ** (-places)), msg="sphessjohn H wrong")
+            # sphessjohn
+            y0 = 3.5
+            for v in vs:
+                H = p.sphessjohn(x, y0, v)
+                Hdense = p.hessjohn(x, y0, v)
+                self.assertTrue(array_compare(Hdense, H.toarray(), thresh=10 ** (-places)), msg="sphessjohn H wrong")
             # isphess
             H = p.isphess(x)
             Hdense = p.ihess(x)
@@ -188,12 +188,12 @@ class TestSparseConstrainedFixed(unittest.TestCase):
                 H = p.sphess(x, v=v)
                 Hdense = p.hess(x, v=v)
                 self.assertTrue(array_compare(Hdense, H.toarray(), thresh=10 ** (-places)), msg="sphess H wrong")
-            # # sphessjohn
-            # y0 = 3.5
-            # for v in vs:
-            #     H = p.sphessjohn(x, y0, v)
-            #     Hdense = p.hessjohn(x, y0, v)
-            #     self.assertTrue(array_compare(Hdense, H.toarray(), thresh=10 ** (-places)), msg="sphess H wrong")
+            # sphessjohn
+            y0 = 3.5
+            for v in vs:
+                H = p.sphessjohn(x, y0, v)
+                Hdense = p.hessjohn(x, y0, v)
+                self.assertTrue(array_compare(Hdense, H.toarray(), thresh=10 ** (-places)), msg="sphess H wrong")
             # isphess
             H = p.isphess(x)
             Hdense = p.ihess(x)

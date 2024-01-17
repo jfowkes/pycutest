@@ -61,6 +61,7 @@ static PyObject *cutest_report(PyObject *self, PyObject *args);
 static PyObject *cutest_terminate(PyObject *self, PyObject *args);
 /* CUTEst 2.2 function prototypes */
 #ifdef CUTEST_VERSION
+static PyObject *cutest_hessjohn(PyObject *self, PyObject *args);
 static PyObject *cutest_hjprod(PyObject *self, PyObject *args);
 static PyObject *cutest_sphessjohn(PyObject *self, PyObject *args);
 #endif
@@ -1144,6 +1145,69 @@ static PyObject *cutest_hess(PyObject *self, PyObject *args) {
 }
 
 
+#ifdef CUTEST_VERSION
+PyDoc_STRVAR(cutest_hessjohn_doc,
+"Returns the Hessian of the (Fritz) John function at (x, y0, v).\n"
+"\n"
+"H=hessjohn(x, y0, v) -- Hessian of John function at (x, y0, v) (constrained problems)\n"
+"\n"
+"The Hessian is meant with respect to problem variables (has dimension n).\n"
+"\n"
+"Input\n"
+"x         -- 1D array of length n holding the values of variables\n"
+"y0        -- float holding the John scalar associated with the objective\n"
+"v         -- 1D array of length m holding the values of Lagrange multipliers\n"
+"\n"
+"Output\n"
+"H  -- 2D array with n rows of n columns holding the John function Hessian at (x, y0, v))\n"
+"\n"
+"CUTEst tools used: CUTEST_cdhj\n"
+);
+
+static PyObject *cutest_hessjohn(PyObject *self, PyObject *args) {
+    PyArrayObject *arg1, *arg3, *MH;
+    doublereal *x, *v=NULL, *H;
+    doublereal y0;
+    npy_intp dims[2];
+
+    if (!check_setup())
+        return NULL;
+
+    if (CUTEst_ncon == 0) {
+        PyErr_SetString(PyExc_Exception, "Unconstrained problems do not have a (Fritz) John function");
+        return NULL;
+    }
+
+    if (!PyArg_ParseTuple(args, "OdO", &arg1, &y0, &arg3))
+        return NULL;
+
+    /* Check if x is double and of correct dimension */
+    if (!(PyArray_Check(arg1) && PyArray_ISFLOAT(arg1) && PyArray_TYPE(arg1)==NPY_DOUBLE && PyArray_NDIM(arg1)==1 && PyArray_DIM(arg1, 0)==CUTEst_nvar)) {
+        PyErr_SetString(PyExc_Exception, "Argument 1 must be a 1D double array of length nvar");
+        return NULL;
+    }
+
+    /* Check if v is double and of correct dimension */
+    if (!(PyArray_Check(arg3) && PyArray_ISFLOAT(arg3) && PyArray_TYPE(arg3)==NPY_DOUBLE && PyArray_NDIM(arg3)==1 && PyArray_DIM(arg3, 0)==CUTEst_ncon)) {
+        PyErr_SetString(PyExc_Exception, "Argument 3 must be a 1D double array of length ncon");
+        return NULL;
+    }
+
+    x=(npy_double *)PyArray_DATA(arg1);
+    v=(npy_double *)PyArray_DATA(arg3);
+    dims[0]=CUTEst_nvar;
+    dims[1]=CUTEst_nvar;
+    /* Create a FORTRAN style array (first index stride is 1) */
+    MH=(PyArrayObject *)PyArray_New(&PyArray_Type, 2, dims, NPY_DOUBLE, NULL, NULL, 0, NPY_ARRAY_F_CONTIGUOUS, NULL);
+    H=(npy_double *)PyArray_DATA(MH);
+
+    CUTEST_cdhj((integer *)&status, (integer *)&CUTEst_nvar, (integer *)&CUTEst_ncon, x, &y0, v, (integer *)&CUTEst_nvar, H);
+
+    return (PyObject *)MH;
+}
+#endif
+
+
 PyDoc_STRVAR(cutest_ihess_doc,
 "Returns the Hessian of the objective or the Hessian of i-th constraint at x.\n"
 "\n"
@@ -2180,6 +2244,7 @@ static PyMethodDef _methods[] = {
     {"report", cutest_report, METH_VARARGS, cutest_report_doc},
     {"terminate", cutest_terminate, METH_VARARGS, cutest_terminate_doc},
     #ifdef CUTEST_VERSION
+    {"hessjohn", cutest_hessjohn, METH_VARARGS, cutest_hessjohn_doc},
     {"hjprod", cutest_hjprod, METH_VARARGS, cutest_hjprod_doc},
     {"sphessjohn", cutest_sphessjohn, METH_VARARGS, cutest_sphessjohn_doc},
     #endif

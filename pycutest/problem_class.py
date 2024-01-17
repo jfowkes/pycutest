@@ -544,6 +544,40 @@ class CUTEstProblem(object):
         # https://stackoverflow.com/questions/4257394/slicing-of-a-numpy-2d-array-or-how-do-i-extract-an-mxm-submatrix-from-an-nxn-ar
         return H[self.idx_free][:, self.idx_free]
 
+    def hessjohn(self, x, y0, v):
+        """
+        Evaluate the Hessian of the (Fritz) John function at (x, y0, v).
+        For constrained problems, the (Fritz) John function is J(x,y0,v) = y0*f(x) + v^Tc(x).
+
+        .. code-block:: python
+
+            # Hessian of John function (constrained problems only)
+            H = problem.hessjohn(x, y0, v)
+
+        For large problems, problem.sphessjohn returns sparse matrices.
+
+        Unconstrained problems do not have a (Fritz) John function.
+
+        This calls CUTEst routine CUTEST_cdhj.
+
+        Note: in CUTEst, the sign convention is such that the John = y0 * objective + lagrange_multipliers * constraints
+
+        :param x: input vector
+        :type x: numpy.ndarray with shape (n,)
+        :param y0: John scalar associated with objective
+        :type y0: float
+        :param v: vector of Lagrange multipliers
+        :type v: numpy.ndarray with shape (m,), optional
+        :return: Hessian of (Fritz) John function at x
+        :rtype: numpy.ndarray(n,n)
+        """
+        self.check_input_x(x)
+        self.check_input_v(v)
+        H = self._module.hessjohn(self.free_to_all(x), y0, v)
+        # 2d indexing with lists is a bit strange in Python
+        # https://stackoverflow.com/questions/4257394/slicing-of-a-numpy-2d-array-or-how-do-i-extract-an-mxm-submatrix-from-an-nxn-ar
+        return H[self.idx_free][:, self.idx_free]
+
     def ihess(self, x, cons_index=None):
         """
         Evaluate the Hessian of the objective or the i-th constraint.
