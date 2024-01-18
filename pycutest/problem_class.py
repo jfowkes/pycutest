@@ -324,8 +324,6 @@ class CUTEstProblem(object):
 
         :param x: input vector
         :type x: numpy.ndarray with shape (n,)
-        :param gradient: whether to return objective and gradient, or just objective (default=False; i.e. objective only)
-        :type gradient: bool, optional
         :return: gradient of objective at x
         :rtype: numpy.ndarray(n,)
         """
