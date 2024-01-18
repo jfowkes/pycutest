@@ -9,8 +9,9 @@ Problem Methods
 
 The methods available for each :code:`CUTEstProblem` instance are:
 
-* `objcons(x) <methods/pycutest.CUTEstProblem.objcons.html>`_: evaluate objective and constraints
 * `obj(x[, gradient]) <methods/pycutest.CUTEstProblem.obj.html>`_: evaluate objective (and optionally its gradient)
+* `grad(x) <methods/pycutest.CUTEstProblem.grad.html>`_: evaluate objective gradient for unconstrained problems
+* `objcons(x) <methods/pycutest.CUTEstProblem.objcons.html>`_: evaluate objective and constraints
 * `cons(x[, index, gradient]) <methods/pycutest.CUTEstProblem.cons.html>`_: evaluate constraint(s) and optionally their Jacobian/its gradient
 * `lagjac(x[, v]) <methods/pycutest.CUTEstProblem.lagjac.html>`_: evaluate gradient of objective/Lagrangian and Jacobian of constraints
 * `jprod(p[, transpose, x]) <methods/pycutest.CUTEstProblem.jprod.html>`_: evaluate constraint Jacobian-vector product
@@ -72,8 +73,9 @@ Please click on a :code:`CUTEstProblem` method below for full documentation:
    :toctree: methods
    :template: method.rst
 
-   objcons 
    obj 
+   grad 
+   objcons 
    cons 
    lagjac 
    jprod 

@@ -3,8 +3,8 @@ import numpy as np
 import pycutest
 import unittest
 
-# All problems used here: ALLINITU (unconstrained), ALLINITC (constrained)
-# ALLINITC has fixed variables
+# All problems used here: ALLINITU (unconstrained), ALLINITC (constrained), ARWHEAD, ARWHDNE, NGONE, BOX2
+# ALLINITC and BOX2 have fixed variables
 
 def array_compare(x, y, thresh=1e-8):
     return np.max(np.abs(x - y)) < thresh
@@ -117,6 +117,9 @@ class TestALLINITU(unittest.TestCase):
             f, g = p.obj(x, gradient=True)
             self.assertAlmostEqual(f, allinit_obj(x), places=places, msg="Wrong obj f value 2")
             self.assertTrue(array_compare(g, allinit_grad(x), thresh=10**(-places)), msg="Wrong obj g value 2")
+            # grad
+            g = p.grad(x)
+            self.assertTrue(array_compare(g, allinit_grad(x), thresh=10**(-places)), msg="Wrong grad g value")
             # cons
             c = p.cons(x)
             self.assertIsNone(c, msg="cons should be None")
@@ -150,7 +153,7 @@ class TestALLINITU(unittest.TestCase):
         stats = p.report()
         num_xs = 4
         self.assertEqual(stats['f'], 3*num_xs, msg="Wrong stat f")
-        self.assertEqual(stats['g'], 3*num_xs, msg="Wrong stat g")
+        self.assertEqual(stats['g'], 4*num_xs, msg="Wrong stat g")
         self.assertEqual(stats['H'], (3+2*len(ps))*num_xs, msg="Wrong stat H")
         self.assertEqual(stats['Hprod'], (2*len(ps))*num_xs, msg="Wrong stat Hprod")
         self.assertIsNone(stats['c'], msg="Stat c should be None")
@@ -435,3 +438,102 @@ class TestALLINITC_with_free(unittest.TestCase):
         self.assertEqual(stats['c'], (5 + len(vs) + len(ps)) * num_xs, msg="Wrong stat c")
         self.assertEqual(stats['cg'], (3 + 5 * len(vs) + 2 * len(ps)) * num_xs, msg="Wrong stat cg")
         self.assertEqual(stats['cH'], (1 + 3 * len(vs) + 2 * len(ps) * len(vs)) * num_xs, msg="Wrong stat cH")
+
+
+def box2_res(x):  # BOX2 residual
+    r = np.zeros((10,))
+    for i in range(10):
+        t = 0.1*(i+1)
+        r[i] = np.exp(-t*x[0])-np.exp(-t*x[1])-x[2]*(np.exp(-t)-np.exp(-10*t))
+    return r
+
+def box2_jac(x):  # BOX2 Jacobian
+    J = np.zeros((10,3))
+    for i in range(10):
+        t = 0.1*(i+1)
+        J[i,0] = -t*np.exp(-t*x[0])
+        J[i,1] = t*np.exp(-t*x[1])
+        J[i,2] = -(np.exp(-t)-np.exp(-10*t))
+    return J
+
+def box2_obj(x):  # BOX2 objective
+    r = box2_res(x)
+    return r.dot(r)
+
+def box2_grad(x):  # Gradient of BOX2 objective
+    r = box2_res(x)
+    J = box2_jac(x)
+    return 2*J.T.dot(r)
+
+
+class TestBOX2_with_fixed(unittest.TestCase):
+    def runTest(self):
+        # pycutest.clear_cache('BOX2')
+        p = pycutest.import_problem('BOX2', drop_fixed_variables=False)
+        # Some test vectors
+        xs = [p.x0, np.ones((p.n,)), -np.ones((p.n)), 0.2*np.arange(p.n), np.sin(np.arange(p.n))-np.cos(np.arange(p.n))]
+
+        for x in xs:
+            places = 8  # places accuracy for comparing floats
+            print("Trying x =", x)
+            # objcons
+            f, c = p.objcons(x)
+            self.assertAlmostEqual(f, box2_obj(x), places=places, msg="Wrong objcons f value")
+            self.assertIsNone(c, msg="objcons c value should be None")
+            # obj
+            f = p.obj(x)
+            self.assertAlmostEqual(f, box2_obj(x), places=places, msg="Wrong obj f value 1")
+            f, g = p.obj(x, gradient=True)
+            self.assertAlmostEqual(f, box2_obj(x), places=places, msg="Wrong obj f value 2")
+            self.assertTrue(array_compare(g, box2_grad(x), thresh=10**(-places)), msg="Wrong obj g value 2")
+            # grad
+            g = p.grad(x)
+            self.assertTrue(array_compare(g, box2_grad(x), thresh=10**(-places)), msg="Wrong grad g value")
+            # cons
+            c = p.cons(x)
+            self.assertIsNone(c, msg="cons should be None")
+            # lagjac
+            g, J = p.lagjac(x)
+            self.assertTrue(array_compare(g, box2_grad(x), thresh=10 ** (-places)), msg="Wrong lagjac g value")
+            self.assertIsNone(J, msg="lagjac J should be None")
+            # jprod
+            r = p.jprod(x)
+            self.assertIsNone(r, msg="jprod r should be None")
+
+
+class TestBOX2_with_free(unittest.TestCase):
+    def runTest(self):
+        # pycutest.clear_cache('BOX2')
+        p = pycutest.import_problem('BOX2')
+        # Some test vectors
+        xs = [p.x0, np.ones((p.n,)), -np.ones((p.n)), 0.2*np.arange(p.n), np.sin(np.arange(p.n))-np.cos(np.arange(p.n))]
+
+        obj = lambda x: box2_obj(np.array([x[0], x[1], 1.0]))
+        grad = lambda x: box2_grad(np.array([x[0], x[1], 1.0]))[:-1]
+
+        for x in xs:
+            places = 8  # places accuracy for comparing floats
+            print("Trying x =", x)
+            # objcons
+            f, c = p.objcons(x)
+            self.assertAlmostEqual(f, obj(x), places=places, msg="Wrong objcons f value")
+            self.assertIsNone(c, msg="objcons c value should be None")
+            # obj
+            f = p.obj(x)
+            self.assertAlmostEqual(f, obj(x), places=places, msg="Wrong obj f value 1")
+            f, g = p.obj(x, gradient=True)
+            self.assertAlmostEqual(f, obj(x), places=places, msg="Wrong obj f value 2")
+            self.assertTrue(array_compare(g, grad(x), thresh=10**(-places)), msg="Wrong obj g value 2")
+            # grad
+            g = p.grad(x)
+            self.assertTrue(array_compare(g, grad(x), thresh=10**(-places)), msg="Wrong grad g value")
+            # cons
+            c = p.cons(x)
+            self.assertIsNone(c, msg="cons should be None")
+            # lagjac
+            g, J = p.lagjac(x)
+            self.assertTrue(array_compare(g, grad(x), thresh=10 ** (-places)), msg="Wrong lagjac g value")
+            self.assertIsNone(J, msg="lagjac J should be None")
+            # jprod
+            r = p.jprod(x)
+            self.assertIsNone(r, msg="jprod r should be None")
