@@ -571,12 +571,15 @@ class CUTEstProblem(object):
         :return: Hessian of (Fritz) John function at x
         :rtype: numpy.ndarray(n,n)
         """
-        self.check_input_x(x)
-        self.check_input_v(v)
-        H = self._module.hessjohn(self.free_to_all(x), y0, v)
-        # 2d indexing with lists is a bit strange in Python
-        # https://stackoverflow.com/questions/4257394/slicing-of-a-numpy-2d-array-or-how-do-i-extract-an-mxm-submatrix-from-an-nxn-ar
-        return H[self.idx_free][:, self.idx_free]
+        try:
+            self.check_input_x(x)
+            self.check_input_v(v)
+            H = self._module.hessjohn(self.free_to_all(x), y0, v)
+            # 2d indexing with lists is a bit strange in Python
+            # https://stackoverflow.com/questions/4257394/slicing-of-a-numpy-2d-array-or-how-do-i-extract-an-mxm-submatrix-from-an-nxn-ar
+            return H[self.idx_free][:, self.idx_free]
+        except AttributeError:
+            raise RuntimeError('You version of CUTEst is too old, please update it.')
 
     def ihess(self, x, cons_index=None):
         """
@@ -663,7 +666,7 @@ class CUTEstProblem(object):
         .. code-block:: python
 
             # use Hessian of John function J_{x,x}(x,y0,v) to compute H*p (constrained problems only)
-            r = problem.hprod(p, x=x, y0=y0, v=v)
+            r = problem.hjprod(p, x=x, y0=y0, v=v)
             # use last computed John function Hessian to compute H*p (constrained problems only)
             r = problem.hjprod(p)
 
@@ -1004,6 +1007,61 @@ class CUTEstProblem(object):
         self.check_input_v(v)
         H = self.__sphessjohn(self.free_to_all(x), y0, v)
         return sparse_mat_extract_rows_and_columns(H, self.idx_free, self.idx_free)
+
+    # shoprod() wrapper
+    def __shoprod(self, p, x=None):
+        """Returns the sparse product of objective Hessian at x and vector p.
+
+        (ri, rv)=__shoprod(p, x) -- use Hessian of objective at x
+        (ri, rv)=__shoprod(p)    -- use last computed Hessian
+
+        Input
+        p -- 1D array of length n holding the components of the vector
+        x -- 1D array of length n with the values of variables
+
+        Output
+        r -- a scipy.sparse.coo_matrix of size 1-by-n_full holding the result
+
+        This function is a wrapper for shoprod().
+        """
+        try:
+            if x is None:
+                (ri, rv)=self._module.shoprod(p)
+            else:
+                (ri, rv)=self._module.shoprod(p, x)
+            return coo_matrix((rv, (np.zeros(len(rv)), ri)), shape=(1, self.n_full))
+        except AttributeError:
+            raise RuntimeError('You version of CUTEst is too old, please update it.')
+
+    def shoprod(self, p, x=None):
+        """
+        Calculate sparse Hessian-vector product H*p, where H is Hessian of objective.
+
+        .. code-block:: python
+
+            # use last computed Hessian to compute H*p
+            r = problem.shoprod(p)
+            # use Hessian of objective at x to compute H*p
+            r = problem.shoprod(p, x=x)
+
+        The result vector r is of type scipy.sparse.coo_matrix.
+
+        This calls CUTEst routine CUTEST_cohprods.
+
+        :param p: vector to be multiplied by the Hessian
+        :type p: numpy.ndarray with shape (n,)
+        :param x: input vector
+        :type x: numpy.ndarray with shape (n,), optional
+        :return: sparse Hessian-vector product H*p
+        :rtype: scipy.sparse.coo_matrix(n,)
+        """
+        self.check_input_x(p)
+        if x is None:
+            r = self.__shoprod(self.free_to_all(p, use_zeros=True))
+        else:
+            self.check_input_x(x)
+            r = self.__shoprod(self.free_to_all(p, use_zeros=True), self.free_to_all(x))
+        return sparse_vec_extract_indices(r, self.idx_free)
 
     # isphess() wrapper (private)
     def __isphess(self, x, i=None):

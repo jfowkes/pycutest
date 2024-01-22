@@ -64,6 +64,7 @@ static PyObject *cutest_terminate(PyObject *self, PyObject *args);
 static PyObject *cutest_hessjohn(PyObject *self, PyObject *args);
 static PyObject *cutest_hjprod(PyObject *self, PyObject *args);
 static PyObject *cutest_sphessjohn(PyObject *self, PyObject *args);
+static PyObject *cutest_shoprod(PyObject *self, PyObject *args);
 #endif
 
 /* Module global variables */
@@ -1911,6 +1912,97 @@ static PyObject *cutest_sphessjohn(PyObject *self, PyObject *args) {
 }
 #endif
 
+#ifdef CUTEST_VERSION
+PyDoc_STRVAR(cutest_shoprod_doc,
+"Returns the sparse product of the Hessian of the objective function at x and vector p.\n"
+"\n"
+"(ri, rv)=shoprod(p, x) -- use Hessian of objective function at x (constrained problem)\n"
+"(ri, rv)=shoprod(p)    -- use last computed objective function Hessian (constrained problem)\n"
+"\n"
+"The Hessian is meant with respect to problem variables (has dimension n).\n"
+"\n"
+"Input\n"
+"p -- 1D array of length n holding the components of the vector\n"
+"x -- 1D array of length n holding the values of variables\n"
+"\n"
+"Output\n"
+"ri  -- 1D array of length nnzohp holding the indices of the nonzeros of the sparse result\n"
+"rv  -- 1D array of length nnzohp holding the values of the nonzeros of the sparse result\n"
+"\n"
+"CUTEst tools used: CUTEST_cohprods, CUTEST_cdimohp, CUTEST_cohprodsp\n"
+);
+
+static PyObject *cutest_shoprod(PyObject *self, PyObject *args) {
+    PyArrayObject *arg1, *arg2, *Mri, *Mrv;
+    doublereal *p, *x=NULL, *rv, *sv;
+    npy_int *ri, *si;
+    npy_int nnzohp, lohp;
+    int i;
+    npy_intp dims[1];
+
+    if (!check_setup())
+        return NULL;
+
+    if (CUTEst_ncon == 0) {
+        PyErr_SetString(PyExc_Exception, "For unconstrained problems please use hprod()");
+        return NULL;
+    }
+
+    arg2=NULL;
+    if (!PyArg_ParseTuple(args, "O|O", &arg1, &arg2))
+        return NULL;
+
+    if (PyObject_Length(args)!=1 && PyObject_Length(args)!=2) {
+        PyErr_SetString(PyExc_Exception, "Need 1 or 2 arguments");
+        return NULL;
+    }
+
+    /* Check if p is double and of correct dimension */
+    if (!(PyArray_Check(arg1) && PyArray_ISFLOAT(arg1) && PyArray_TYPE(arg1)==NPY_DOUBLE && PyArray_NDIM(arg1)==1 && PyArray_DIM(arg1, 0)==CUTEst_nvar)) {
+        PyErr_SetString(PyExc_Exception, "Argument 1 must be a 1D double array of length nvar");
+        return NULL;
+    }
+
+    /* Check if x is double and of correct dimension */
+    if (arg2!=NULL && !(PyArray_Check(arg2) && PyArray_ISFLOAT(arg2) && PyArray_TYPE(arg2)==NPY_DOUBLE && PyArray_NDIM(arg2)==1 && PyArray_DIM(arg2, 0)==CUTEst_nvar)) {
+        PyErr_SetString(PyExc_Exception, "Argument 2 must be a 1D double array of length nvar");
+        return NULL;
+    }
+
+    /* Get number of nonzeros in Hessian vector product */
+    CUTEST_cdimohp((integer *)&status, (integer *)&lohp);
+
+    p=(npy_double *)PyArray_DATA(arg1);
+    if (arg2!=NULL)
+        x=(npy_double *)PyArray_DATA(arg2);
+    si=(npy_int *)malloc(lohp*sizeof(npy_int));
+    sv=(npy_double *)malloc(lohp*sizeof(npy_double));
+
+    /* Must use different variable for output NNZOHP and input LOHP */
+    if (arg2==NULL) {
+        CUTEST_cohprodsp((integer *)&status, (integer *)&nnzohp, (integer *)&lohp, (integer *)si);
+        CUTEST_cohprods((integer *)&status, (integer *)&CUTEst_nvar, &somethingTrue, NULL, p, (integer *)&nnzohp, (integer *)&lohp, sv, (integer *)si);
+    } else {
+        CUTEST_cohprods((integer *)&status, (integer *)&CUTEst_nvar, &somethingFalse, x, p, (integer *)&nnzohp, (integer *)&lohp, sv, (integer *)si);
+    }
+        
+    /* Allocate and copy results, convert indices from FORTRAN to C, free storage */
+    dims[0]=nnzohp;
+    Mri=(PyArrayObject *)PyArray_SimpleNew(1, dims, NPY_INT);
+    Mrv=(PyArrayObject *)PyArray_SimpleNew(1, dims, NPY_DOUBLE);
+    ri=(npy_int *)PyArray_DATA(Mri);
+    rv=(npy_double *)PyArray_DATA(Mrv);
+    for (i=0;i<nnzohp;i++) {
+            ri[i]=si[i]-1;
+            rv[i]=sv[i];
+    }
+    free(si);
+    free(sv);
+
+    return Py_BuildValue("OO", Mri, Mrv);
+}
+#endif
+
 
 PyDoc_STRVAR(cutest_isphess_doc,
 "Returns the sparse Hessian of the objective or the sparse Hessian of i-th\n"
@@ -2247,6 +2339,7 @@ static PyMethodDef _methods[] = {
     {"hessjohn", cutest_hessjohn, METH_VARARGS, cutest_hessjohn_doc},
     {"hjprod", cutest_hjprod, METH_VARARGS, cutest_hjprod_doc},
     {"sphessjohn", cutest_sphessjohn, METH_VARARGS, cutest_sphessjohn_doc},
+    {"shoprod", cutest_shoprod, METH_VARARGS, cutest_shoprod_doc},
     #endif
     {NULL, NULL, 0, NULL}  /* Sentinel, marks the end of this structure */
 };

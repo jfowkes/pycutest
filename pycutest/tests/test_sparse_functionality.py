@@ -91,6 +91,12 @@ class TestSparseConstrained(unittest.TestCase):
                 H = p.sphessjohn(x, y0, v)
                 Hdense = p.hessjohn(x, y0, v)
                 self.assertTrue(array_compare(Hdense, H.toarray(), thresh=10 ** (-places)), msg="sphessjohn H wrong")
+            # shoprod
+            r = p.shoprod(np.ones((p.n,)), x)
+            rdense = np.zeros((p.n,))
+            self.assertTrue(array_compare(rdense, r.toarray(), thresh=10 ** (-places)), msg="shoprod result wrong 1")
+            r = p.shoprod(np.ones((p.n,)))
+            self.assertTrue(array_compare(rdense, r.toarray(), thresh=10 ** (-places)), msg="shoprod result wrong 2")
             # isphess
             H = p.isphess(x)
             Hdense = p.ihess(x)
@@ -194,6 +200,12 @@ class TestSparseConstrainedFixed(unittest.TestCase):
                 H = p.sphessjohn(x, y0, v)
                 Hdense = p.hessjohn(x, y0, v)
                 self.assertTrue(array_compare(Hdense, H.toarray(), thresh=10 ** (-places)), msg="sphess H wrong")
+            # shoprod
+            r = p.shoprod(np.zeros((p.n,)), x)
+            rdense = np.zeros((p.n,))
+            self.assertTrue(array_compare(rdense, r.toarray(), thresh=10 ** (-places)), msg="shoprod result wrong 1")
+            r = p.shoprod(np.zeros((p.n,)))
+            self.assertTrue(array_compare(rdense, r.toarray(), thresh=10 ** (-places)), msg="shoprod result wrong 2")
             # isphess
             H = p.isphess(x)
             Hdense = p.ihess(x)

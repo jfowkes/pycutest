@@ -30,6 +30,7 @@ For large-scale problems, you may want to get vectors/matrices as sparse matrice
 * `slagjac(x[, v]) <methods/pycutest.CUTEstProblem.slagjac.html>`_: (sparse) evaluate gradient of objective/Lagrangian and Jacobian of constraints
 * `sphess(x[, v]) <methods/pycutest.CUTEstProblem.sphess.html>`_: (sparse) evaluate Hessian of objective or Lagrangian
 * `sphessjohn(x, y0, v) <methods/pycutest.CUTEstProblem.sphessjohn.html>`_: (sparse) evaluate Hessian of (Fritz) John function
+* `shoprod(p[, x]) <methods/pycutest.CUTEstProblem.shoprod.html>`_: evaluate sparse Hessian-vector product for objective
 * `isphess(x[, cons_index]) <methods/pycutest.CUTEstProblem.isphess.html>`_: (sparse) evaluate Hessian of objective or a specific constraint
 * `gradsphess(x[, v, gradient_of_lagrangian]) <methods/pycutest.CUTEstProblem.gradsphess.html>`_: (sparse) evaluate gradient of objective/Lagrangian, Jacobian of constraints and Hessian of objective/Lagrangian
 
@@ -95,5 +96,6 @@ Please click on a :code:`CUTEstProblem` method below for full documentation:
    slagjac 
    sphess 
    sphessjohn 
+   shoprod 
    isphess 
    gradsphess
