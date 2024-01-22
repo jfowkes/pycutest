@@ -309,28 +309,33 @@ class CUTEstProblem(object):
             f = self._module.obj(self.free_to_all(x))
             return f
 
-    def grad(self, x):
+    def grad(self, x, index=None):
         """
-        Evaluate the gradient of the objective for unconstrained problems (for constrained problems please use lagjac() or obj()).
+        Evaluate the gradient of the objective function or gradient of the i-th constraint.
 
         .. code-block:: python
 
-            # gradient for unconstrained problems
+            # gradient of objective
             g = problem.grad(x)
+            # gradient of i-th constraint
+            g = problem.grad(x, index=i)
 
         For constrained problems, this raises a RuntimeError.
 
-        This calls CUTEst routine CUTEST_ugr.
+        This calls CUTEst routine CUTEST_ugr or CUTEST_cigr.
 
         :param x: input vector
         :type x: numpy.ndarray with shape (n,)
-        :return: gradient of objective at x
+        :param index: which constraint to evaluate. Must be in 0..self.m-1.
+        :type index: int, optional
+        :return: gradient of objective at x or gradient of i-th constraint 
         :rtype: numpy.ndarray(n,)
         """
-        if self.m > 0:
-            raise RuntimeError("For constrained problems please use lagjac() or obj()")
         self.check_input_x(x)
-        g = self._module.grad(self.free_to_all(x))
+        if index is None:
+            g = self._module.grad(self.free_to_all(x))
+        else:
+            g = self._module.grad(self.free_to_all(x), index)
         return self.all_to_free(g)
 
     def cons(self, x, index=None, gradient=False):

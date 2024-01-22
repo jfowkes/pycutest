@@ -10,7 +10,7 @@ Problem Methods
 The methods available for each :code:`CUTEstProblem` instance are:
 
 * `obj(x[, gradient]) <methods/pycutest.CUTEstProblem.obj.html>`_: evaluate objective (and optionally its gradient)
-* `grad(x) <methods/pycutest.CUTEstProblem.grad.html>`_: evaluate objective gradient for unconstrained problems
+* `grad(x[, index]) <methods/pycutest.CUTEstProblem.grad.html>`_: evaluate objective gradient or specific constraint gradient
 * `objcons(x) <methods/pycutest.CUTEstProblem.objcons.html>`_: evaluate objective and constraints
 * `cons(x[, index, gradient]) <methods/pycutest.CUTEstProblem.cons.html>`_: evaluate constraint(s) and optionally their Jacobian/its gradient
 * `lagjac(x[, v]) <methods/pycutest.CUTEstProblem.lagjac.html>`_: evaluate gradient of objective/Lagrangian and Jacobian of constraints

@@ -658,34 +658,33 @@ static PyObject *cutest_obj(PyObject *self, PyObject *args) {
 
 
 PyDoc_STRVAR(cutest_grad_doc,
-"Returns the gradient of the objective at x for uconstrained problems.\n"
+"Returns the gradient of the objective or gradient of the i-th constraint at x.\n"
 "\n"
-"g=grad(x)\n"
+"g=grad(x)   -- objective gradient\n"       
+"g=grad(x,i) -- i-th constraint gradient\n"
 "\n"
 "Input\n"
-"x        -- 1D array of length n with the values of variables\n"
+"x -- 1D array of length n with the values of variables\n"
+"i -- integer index of constraint (between 0 and m-1)\n"
 "\n"
 "Output\n"
-"g -- 1D array of length n holding the value of the gradient of f at x\n"
+"g -- 1D array of length n holding the value of the gradient at x\n"
 "\n"
-"CUTEst tools used: CUTEST_ugr\n"
+"CUTEst tools used: CUTEST_ugr, CUTEST_cigr\n"
 );
 
 static PyObject *cutest_grad(PyObject *self, PyObject *args) {
     PyArrayObject *arg1;
     PyArrayObject *Mg=NULL;
     doublereal *x, *g=NULL;
+    int index;
+    npy_int icon;
     npy_intp dims[1];
 
     if (!check_setup())
         return NULL;
 
-    if (CUTEst_ncon != 0) {
-        PyErr_SetString(PyExc_Exception, "Use lagjac() for constrained problems");
-        return NULL;
-    }
-
-    if (!PyArg_ParseTuple(args, "O", &arg1))
+    if (!PyArg_ParseTuple(args, "O|i", &arg1, &index))
         return NULL;
 
     /* Check if x is double and of correct length and shape */
@@ -694,13 +693,29 @@ static PyObject *cutest_grad(PyObject *self, PyObject *args) {
         return NULL;
     }
 
+    /* Check index */
+    if (PyObject_Length(args)>1) {
+        if (index<0 || index>=CUTEst_ncon) {
+            PyErr_SetString(PyExc_Exception, "Argument 2 must be between 0 and ncon-1");
+            return NULL;
+        }
+        icon=index+1;
+    } else {
+        icon=0;
+    }
+
     x=(npy_double *)PyArray_DATA(arg1);
     dims[0]=CUTEst_nvar;
     Mg=(PyArrayObject *)PyArray_SimpleNew(1, dims, NPY_DOUBLE);
     g=(npy_double *)PyArray_DATA(Mg);
 
-    CUTEST_ugr((integer *)&status, (integer *)&CUTEst_nvar, x, g);
-    return Py_BuildValue("O", Mg);
+    if (CUTEst_ncon == 0) {
+        CUTEST_ugr((integer *)&status, (integer *)&CUTEst_nvar, x, g);
+        return Py_BuildValue("O", Mg);
+    } else {
+        CUTEST_cigr((integer *)&status, (integer *)&CUTEst_nvar, (integer *)&icon, x, g);
+        return Py_BuildValue("O", Mg);
+    }
 }
 
 
@@ -720,7 +735,7 @@ PyDoc_STRVAR(cutest_cons_doc,
 "c  -- 1D array of length m holding the values of constraints at x\n"
 "ci -- 1D array of length 1 holding the value of i-th constraint at x\n"
 "J  -- 2D array with m rows of n columns holding Jacobian of constraints at x\n"
-"Ji -- 1D array of length n holding the gradient of i-th constraintn"
+"Ji -- 1D array of length n holding the gradient of i-th constraint\n"
 "      (also equal to the i-th row of Jacobian)\n"
 "\n"
 "CUTEst tools used: CUTEST_ccfg, CUTEST_ccifg\n"
