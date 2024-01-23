@@ -320,15 +320,13 @@ class CUTEstProblem(object):
             # gradient of i-th constraint
             g = problem.grad(x, index=i)
 
-        For constrained problems, this raises a RuntimeError.
-
         This calls CUTEst routine CUTEST_ugr or CUTEST_cigr.
 
         :param x: input vector
         :type x: numpy.ndarray with shape (n,)
         :param index: which constraint to evaluate. Must be in 0..self.m-1.
         :type index: int, optional
-        :return: gradient of objective at x or gradient of i-th constraint 
+        :return: gradient of objective or gradient of i-th constraint at x
         :rtype: numpy.ndarray(n,)
         """
         self.check_input_x(x)
