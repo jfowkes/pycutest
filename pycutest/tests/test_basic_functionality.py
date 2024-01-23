@@ -224,6 +224,11 @@ class TestALLINITC_with_fixed(unittest.TestCase):
             f, g = p.obj(x, gradient=True)
             self.assertAlmostEqual(f, allinit_obj(x), places=places, msg="Wrong obj f value 2")
             self.assertTrue(array_compare(g, allinit_grad(x), thresh=10**(-places)), msg="Wrong obj g value 2")
+            # grad
+            g = p.grad(x)
+            self.assertTrue(array_compare(g, allinit_grad(x), thresh=10**(-places)), msg="Wrong grad g value")
+            g = p.grad(x,0)
+            self.assertTrue(array_compare(g, gradcons(x), thresh=10**(-places)), msg="Wrong grad g value 1")
             # cons
             c = p.cons(x)
             self.assertAlmostEqual(c, cons(x), places=places, msg="Wrong cons c value 1")
@@ -290,11 +295,11 @@ class TestALLINITC_with_fixed(unittest.TestCase):
         stats = p.report()
         num_xs = 4
         self.assertEqual(stats['f'], 3 * num_xs, msg="Wrong stat f")
-        self.assertEqual(stats['g'], (2 + 3*len(vs)) * num_xs, msg="Wrong stat g")
+        self.assertEqual(stats['g'], (3 + 3*len(vs)) * num_xs, msg="Wrong stat g")
         self.assertEqual(stats['H'], (1 + 3*len(vs) + 2*len(vs)*len(ps)) * num_xs, msg="Wrong stat H")
         self.assertEqual(stats['Hprod'], (2*len(vs)*len(ps)) * num_xs, msg="Wrong stat Hprod")
         self.assertEqual(stats['c'], (5 + len(vs) + len(ps)) * num_xs, msg="Wrong stat c")
-        self.assertEqual(stats['cg'], (3 + 5*len(vs) + 2*len(ps)) * num_xs, msg="Wrong stat cg")
+        self.assertEqual(stats['cg'], (4 + 5*len(vs) + 2*len(ps)) * num_xs, msg="Wrong stat cg")
         self.assertEqual(stats['cH'], (1 + 3*len(vs) + 2*len(ps)*len(vs)) * num_xs, msg="Wrong stat cH")
 
 
@@ -366,6 +371,11 @@ class TestALLINITC_with_free(unittest.TestCase):
             f, g = p.obj(x, gradient=True)
             self.assertAlmostEqual(f, obj(x), places=places, msg="Wrong obj f value 2")
             self.assertTrue(array_compare(g, grad(x), thresh=10**(-places)), msg="Wrong obj g value 2")
+            # grad
+            g = p.grad(x)
+            self.assertTrue(array_compare(g, grad(x), thresh=10**(-places)), msg="Wrong grad g value")
+            g = p.grad(x,0)
+            self.assertTrue(array_compare(g, gradcons(x), thresh=10**(-places)), msg="Wrong grad g value 1")
             # cons
             c = p.cons(x)
             self.assertAlmostEqual(c, cons(x), places=places, msg="Wrong cons c value 1")
@@ -432,11 +442,11 @@ class TestALLINITC_with_free(unittest.TestCase):
         stats = p.report()
         num_xs = 4
         self.assertEqual(stats['f'], 3 * num_xs, msg="Wrong stat f")
-        self.assertEqual(stats['g'], (2 + 3 * len(vs)) * num_xs, msg="Wrong stat g")
+        self.assertEqual(stats['g'], (3 + 3 * len(vs)) * num_xs, msg="Wrong stat g")
         self.assertEqual(stats['H'], (1 + 3 * len(vs) + 2 * len(vs) * len(ps)) * num_xs, msg="Wrong stat H")
         self.assertEqual(stats['Hprod'], (2 * len(vs) * len(ps)) * num_xs, msg="Wrong stat Hprod")
         self.assertEqual(stats['c'], (5 + len(vs) + len(ps)) * num_xs, msg="Wrong stat c")
-        self.assertEqual(stats['cg'], (3 + 5 * len(vs) + 2 * len(ps)) * num_xs, msg="Wrong stat cg")
+        self.assertEqual(stats['cg'], (4 + 5 * len(vs) + 2 * len(ps)) * num_xs, msg="Wrong stat cg")
         self.assertEqual(stats['cH'], (1 + 3 * len(vs) + 2 * len(ps) * len(vs)) * num_xs, msg="Wrong stat cH")
 
 
