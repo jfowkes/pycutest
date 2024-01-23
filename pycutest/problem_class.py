@@ -388,6 +388,43 @@ class CUTEstProblem(object):
                 ci = ci[0]  # convert from 1x1 NumPy array to float
                 return ci
 
+    def lag(self, x, v, gradient=False):
+        """
+        Evaluate Lagrangian function value and its gradient if requested.
+
+        .. code-block:: python
+
+            # Lagrangian function value
+            l      = problem.lag(x, v)
+            # Lagrangian function value and Lagrangian gradient
+            l, g   = problem.lag(x, v, gradient=True)
+
+        For unconstrained problems, this returns None.
+
+        This calls CUTEst routine CUTEST_clfg.
+
+        For large problems, problem.slagjac returns a sparse Lagrangian gradient.
+
+        :param x: input vector
+        :type x: numpy.ndarray with shape (n,)
+        :param v: input vector of Lagrange multipliers
+        :type v: numpy.ndarray with shape (m,)
+        :param gradient: whether to also return Lagrangian gradient (default=False)
+        :type gradient: bool, optional
+        :return: value of Lagrangian function, and optionally gradient of Lagrangian at x
+        :rtype: float or (float, numpy.ndarray(n,))
+        """
+        if self.m <= 0:
+            return None
+        self.check_input_x(x)
+        self.check_input_v(v)
+        if gradient:
+            l, g = self._module.lag(self.free_to_all(x), v, True)
+            return l, self.all_to_free(g)
+        else:
+            l = self._module.lag(self.free_to_all(x), v)
+            return l
+
     def lagjac(self, x, v=None):
         """
         Evaluate gradient of objective or Lagrangian, and Jacobian of constraints.
