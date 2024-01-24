@@ -1,25 +1,27 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Problem Interface &mdash; PyCUTEst v1.5.1 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <title>Problem Interface &mdash; PyCUTEst v1.6.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=72d88caf"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="CUTEstProblem.objcons" href="methods/pycutest.CUTEstProblem.objcons.html" />
+    <link rel="next" title="CUTEstProblem.obj" href="methods/pycutest.CUTEstProblem.obj.html" />
     <link rel="prev" title="pycutest.all_cached_problems" href="functions/pycutest.all_cached_problems.html" /> 
 </head>
 
@@ -35,7 +37,7 @@
             PyCUTEst
           </a>
               <div class="version">
-                1.5.1
+                1.6.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -53,9 +55,11 @@
 <li class="toctree-l2"><a class="reference internal" href="#problem-methods">Problem Methods</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#problem-attributes">Problem Attributes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#full-method-documentation">Full method documentation</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="methods/pycutest.CUTEstProblem.objcons.html">CUTEstProblem.objcons</a></li>
 <li class="toctree-l3"><a class="reference internal" href="methods/pycutest.CUTEstProblem.obj.html">CUTEstProblem.obj</a></li>
+<li class="toctree-l3"><a class="reference internal" href="methods/pycutest.CUTEstProblem.grad.html">CUTEstProblem.grad</a></li>
+<li class="toctree-l3"><a class="reference internal" href="methods/pycutest.CUTEstProblem.objcons.html">CUTEstProblem.objcons</a></li>
 <li class="toctree-l3"><a class="reference internal" href="methods/pycutest.CUTEstProblem.cons.html">CUTEstProblem.cons</a></li>
+<li class="toctree-l3"><a class="reference internal" href="methods/pycutest.CUTEstProblem.lag.html">CUTEstProblem.lag</a></li>
 <li class="toctree-l3"><a class="reference internal" href="methods/pycutest.CUTEstProblem.lagjac.html">CUTEstProblem.lagjac</a></li>
 <li class="toctree-l3"><a class="reference internal" href="methods/pycutest.CUTEstProblem.jprod.html">CUTEstProblem.jprod</a></li>
 <li class="toctree-l3"><a class="reference internal" href="methods/pycutest.CUTEstProblem.hess.html">CUTEstProblem.hess</a></li>
@@ -103,16 +107,18 @@
            <div itemprop="articleBody">
              
   <section id="problem-interface">
-<h1>Problem Interface<a class="headerlink" href="#problem-interface" title="Permalink to this heading"></a></h1>
+<h1>Problem Interface<a class="headerlink" href="#problem-interface" title="Link to this heading"></a></h1>
 <p>Having built a problem, PyCUTEst returns an instance of class <code class="code docutils literal notranslate"><span class="pre">CUTEstProblem</span></code>
 (for fixed variables, its behaviour can be set with the <code class="code docutils literal notranslate"><span class="pre">drop_fixed_variables</span></code> flag for <code class="code docutils literal notranslate"><span class="pre">import_problem()</span></code>).</p>
 <section id="problem-methods">
-<h2>Problem Methods<a class="headerlink" href="#problem-methods" title="Permalink to this heading"></a></h2>
+<h2>Problem Methods<a class="headerlink" href="#problem-methods" title="Link to this heading"></a></h2>
 <p>The methods available for each <code class="code docutils literal notranslate"><span class="pre">CUTEstProblem</span></code> instance are:</p>
 <ul class="simple">
-<li><p><a class="reference external" href="methods/pycutest.CUTEstProblem.objcons.html">objcons(x)</a>: evaluate objective and constraints</p></li>
 <li><p><a class="reference external" href="methods/pycutest.CUTEstProblem.obj.html">obj(x[, gradient])</a>: evaluate objective (and optionally its gradient)</p></li>
+<li><p><a class="reference external" href="methods/pycutest.CUTEstProblem.grad.html">grad(x[, index])</a>: evaluate objective gradient or specific constraint gradient</p></li>
+<li><p><a class="reference external" href="methods/pycutest.CUTEstProblem.objcons.html">objcons(x)</a>: evaluate objective and constraints</p></li>
 <li><p><a class="reference external" href="methods/pycutest.CUTEstProblem.cons.html">cons(x[, index, gradient])</a>: evaluate constraint(s) and optionally their Jacobian/its gradient</p></li>
+<li><p><a class="reference external" href="methods/pycutest.CUTEstProblem.lag.html">lag(x, v[, gradient])</a>: evaluate Lagrangian function value and optionally its gradient</p></li>
 <li><p><a class="reference external" href="methods/pycutest.CUTEstProblem.lagjac.html">lagjac(x[, v])</a>: evaluate gradient of objective/Lagrangian and Jacobian of constraints</p></li>
 <li><p><a class="reference external" href="methods/pycutest.CUTEstProblem.jprod.html">jprod(p[, transpose, x])</a>: evaluate constraint Jacobian-vector product</p></li>
 <li><p><a class="reference external" href="methods/pycutest.CUTEstProblem.hess.html">hess(x[, v])</a>: evaluate Hessian of objective or Lagrangian</p></li>
@@ -132,7 +138,7 @@
 <p>Full documentation for each method above is given by clicking on it.</p>
 </section>
 <section id="problem-attributes">
-<h2>Problem Attributes<a class="headerlink" href="#problem-attributes" title="Permalink to this heading"></a></h2>
+<h2>Problem Attributes<a class="headerlink" href="#problem-attributes" title="Link to this heading"></a></h2>
 <p>Each <code class="code docutils literal notranslate"><span class="pre">CUTEstProblem</span></code> instance has the following attributes:</p>
 <ul class="simple">
 <li><p><code class="code docutils literal notranslate"><span class="pre">name</span></code>: CUTEst problem name (string)</p></li>
@@ -163,18 +169,24 @@
 </ul>
 </section>
 <section id="full-method-documentation">
-<h2>Full method documentation<a class="headerlink" href="#full-method-documentation" title="Permalink to this heading"></a></h2>
+<h2>Full method documentation<a class="headerlink" href="#full-method-documentation" title="Link to this heading"></a></h2>
 <p>Please click on a <code class="code docutils literal notranslate"><span class="pre">CUTEstProblem</span></code> method below for full documentation:</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="methods/pycutest.CUTEstProblem.obj.html#pycutest.CUTEstProblem.obj" title="pycutest.CUTEstProblem.obj"><code class="xref py py-obj docutils literal notranslate"><span class="pre">obj</span></code></a>(x[, gradient])</p></td>
+<td><p>Evaluate the objective (and optionally its gradient).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="methods/pycutest.CUTEstProblem.grad.html#pycutest.CUTEstProblem.grad" title="pycutest.CUTEstProblem.grad"><code class="xref py py-obj docutils literal notranslate"><span class="pre">grad</span></code></a>(x[, index])</p></td>
+<td><p>Evaluate the gradient of the objective function or gradient of the i-th constraint.</p></td>
+</tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="methods/pycutest.CUTEstProblem.objcons.html#pycutest.CUTEstProblem.objcons" title="pycutest.CUTEstProblem.objcons"><code class="xref py py-obj docutils literal notranslate"><span class="pre">objcons</span></code></a>(x)</p></td>
 <td><p>Evaluate objective and constraints.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="methods/pycutest.CUTEstProblem.obj.html#pycutest.CUTEstProblem.obj" title="pycutest.CUTEstProblem.obj"><code class="xref py py-obj docutils literal notranslate"><span class="pre">obj</span></code></a>(x[, gradient])</p></td>
-<td><p>Evaluate the objective (and optionally its gradient).</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="methods/pycutest.CUTEstProblem.cons.html#pycutest.CUTEstProblem.cons" title="pycutest.CUTEstProblem.cons"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cons</span></code></a>(x[, index, gradient])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="methods/pycutest.CUTEstProblem.cons.html#pycutest.CUTEstProblem.cons" title="pycutest.CUTEstProblem.cons"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cons</span></code></a>(x[, index, gradient])</p></td>
 <td><p>Evaluate the constraints (and optionally their Jacobian or gradient).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="methods/pycutest.CUTEstProblem.lag.html#pycutest.CUTEstProblem.lag" title="pycutest.CUTEstProblem.lag"><code class="xref py py-obj docutils literal notranslate"><span class="pre">lag</span></code></a>(x, v[, gradient])</p></td>
+<td><p>Evaluate Lagrangian function value and its gradient if requested.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="methods/pycutest.CUTEstProblem.lagjac.html#pycutest.CUTEstProblem.lagjac" title="pycutest.CUTEstProblem.lagjac"><code class="xref py py-obj docutils literal notranslate"><span class="pre">lagjac</span></code></a>(x[, v])</p></td>
 <td><p>Evaluate gradient of objective or Lagrangian, and Jacobian of constraints.</p></td>
@@ -222,7 +234,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="functions/pycutest.all_cached_problems.html" class="btn btn-neutral float-left" title="pycutest.all_cached_problems" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="methods/pycutest.CUTEstProblem.objcons.html" class="btn btn-neutral float-right" title="CUTEstProblem.objcons" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="methods/pycutest.CUTEstProblem.obj.html" class="btn btn-neutral float-right" title="CUTEstProblem.obj" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CUTEstProblem.cons &mdash; PyCUTEst v1.6.0 documentation</title>
+  <title>CUTEstProblem.lag &mdash; PyCUTEst v1.6.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
 
@@ -21,8 +21,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="CUTEstProblem.lag" href="pycutest.CUTEstProblem.lag.html" />
-    <link rel="prev" title="CUTEstProblem.objcons" href="pycutest.CUTEstProblem.objcons.html" /> 
+    <link rel="next" title="CUTEstProblem.lagjac" href="pycutest.CUTEstProblem.lagjac.html" />
+    <link rel="prev" title="CUTEstProblem.cons" href="pycutest.CUTEstProblem.cons.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -58,11 +58,11 @@
 <li class="toctree-l3"><a class="reference internal" href="pycutest.CUTEstProblem.obj.html">CUTEstProblem.obj</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pycutest.CUTEstProblem.grad.html">CUTEstProblem.grad</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pycutest.CUTEstProblem.objcons.html">CUTEstProblem.objcons</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">CUTEstProblem.cons</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#pycutest.CUTEstProblem.cons"><code class="docutils literal notranslate"><span class="pre">CUTEstProblem.cons()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pycutest.CUTEstProblem.cons.html">CUTEstProblem.cons</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">CUTEstProblem.lag</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pycutest.CUTEstProblem.lag"><code class="docutils literal notranslate"><span class="pre">CUTEstProblem.lag()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="pycutest.CUTEstProblem.lag.html">CUTEstProblem.lag</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pycutest.CUTEstProblem.lagjac.html">CUTEstProblem.lagjac</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pycutest.CUTEstProblem.jprod.html">CUTEstProblem.jprod</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pycutest.CUTEstProblem.hess.html">CUTEstProblem.hess</a></li>
@@ -100,9 +100,9 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../interface.html">Problem Interface</a></li>
-      <li class="breadcrumb-item active">CUTEstProblem.cons</li>
+      <li class="breadcrumb-item active">CUTEstProblem.lag</li>
       <li class="wy-breadcrumbs-aside">
-              <a href="https://github.com/jfowkes/pycutest/blob/master/docs/methods/pycutest.CUTEstProblem.cons.rst" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/jfowkes/pycutest/blob/master/docs/methods/pycutest.CUTEstProblem.lag.rst" class="fa fa-github"> Edit on GitHub</a>
       </li>
   </ul>
   <hr/>
@@ -110,38 +110,34 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="cutestproblem-cons">
-<h1>CUTEstProblem.cons<a class="headerlink" href="#cutestproblem-cons" title="Link to this heading"></a></h1>
+  <section id="cutestproblem-lag">
+<h1>CUTEstProblem.lag<a class="headerlink" href="#cutestproblem-lag" title="Link to this heading"></a></h1>
 <dl class="py method">
-<dt class="sig sig-object py" id="pycutest.CUTEstProblem.cons">
-<span class="sig-prename descclassname"><span class="pre">CUTEstProblem.</span></span><span class="sig-name descname"><span class="pre">cons</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gradient</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycutest.CUTEstProblem.cons" title="Link to this definition"></a></dt>
-<dd><p>Evaluate the constraints (and optionally their Jacobian or gradient).</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># constraint vector</span>
-<span class="n">c</span>      <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">cons</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-<span class="c1"># i-th constraint</span>
-<span class="n">ci</span>     <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">cons</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">i</span><span class="p">)</span>
-<span class="c1"># constraints and Jacobian</span>
-<span class="n">c</span><span class="p">,</span> <span class="n">J</span>   <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">cons</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">gradient</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="c1"># i-th constraint and its gradient</span>
-<span class="n">ci</span><span class="p">,</span> <span class="n">Ji</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">cons</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">gradient</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<dt class="sig sig-object py" id="pycutest.CUTEstProblem.lag">
+<span class="sig-prename descclassname"><span class="pre">CUTEstProblem.</span></span><span class="sig-name descname"><span class="pre">lag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gradient</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycutest.CUTEstProblem.lag" title="Link to this definition"></a></dt>
+<dd><p>Evaluate Lagrangian function value and its gradient if requested.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Lagrangian function value</span>
+<span class="n">l</span>      <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">lag</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+<span class="c1"># Lagrangian function value and Lagrangian gradient</span>
+<span class="n">l</span><span class="p">,</span> <span class="n">g</span>   <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">lag</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">gradient</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>For unconstrained problems, this returns None.</p>
-<p>This calls CUTEst routine CUTEST_ccfg or CUTEST_ccifg.</p>
-<p>For large problems, problem.scons returns sparse matrices.</p>
+<p>This calls CUTEst routine CUTEST_clfg.</p>
+<p>For large problems, problem.slagjac returns a sparse Lagrangian gradient.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>x</strong> (<em>numpy.ndarray with shape</em><em> (</em><em>n</em><em>,</em><em>)</em>) – input vector</p></li>
-<li><p><strong>index</strong> (<em>int</em><em>, </em><em>optional</em>) – which constraint to evaluate (default=None -&gt; all constraints). Must be in 0..self.m-1.</p></li>
-<li><p><strong>gradient</strong> (<em>bool</em><em>, </em><em>optional</em>) – whether to return constraint(s) and gradient/Jacobian, or just constraint (default=False; i.e. constraint only)</p></li>
+<li><p><strong>v</strong> (<em>numpy.ndarray with shape</em><em> (</em><em>m</em><em>,</em><em>)</em>) – input vector of Lagrange multipliers</p></li>
+<li><p><strong>gradient</strong> (<em>bool</em><em>, </em><em>optional</em>) – whether to also return Lagrangian gradient (default=False)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>value of constraint(s), and Jacobian or gradient of constraint(s) at x</p>
+<dd class="field-even"><p>value of Lagrangian function, and optionally gradient of Lagrangian at x</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>numpy.ndarray(m,) or float or (numpy.ndarray(m,), numpy.ndarray(m,n)) or (float, numpy.ndarray(n,))</p>
+<dd class="field-odd"><p>float or (float, numpy.ndarray(n,))</p>
 </dd>
 </dl>
 </dd></dl>
@@ -152,8 +148,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="pycutest.CUTEstProblem.objcons.html" class="btn btn-neutral float-left" title="CUTEstProblem.objcons" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="pycutest.CUTEstProblem.lag.html" class="btn btn-neutral float-right" title="CUTEstProblem.lag" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="pycutest.CUTEstProblem.cons.html" class="btn btn-neutral float-left" title="CUTEstProblem.cons" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pycutest.CUTEstProblem.lagjac.html" class="btn btn-neutral float-right" title="CUTEstProblem.lagjac" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

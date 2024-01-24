@@ -1,21 +1,23 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Building Test Problems &mdash; PyCUTEst v1.5.1 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <title>Building Test Problems &mdash; PyCUTEst v1.6.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=72d88caf"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -35,7 +37,7 @@
             PyCUTEst
           </a>
               <div class="version">
-                1.5.1
+                1.6.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -95,10 +97,10 @@
            <div itemprop="articleBody">
              
   <section id="building-test-problems">
-<h1>Building Test Problems<a class="headerlink" href="#building-test-problems" title="Permalink to this heading"></a></h1>
+<h1>Building Test Problems<a class="headerlink" href="#building-test-problems" title="Link to this heading"></a></h1>
 <p>In this section, we describe the interface for finding and compiling CUTEst problems.</p>
 <section id="finding-problems">
-<h2>Finding Problems<a class="headerlink" href="#finding-problems" title="Permalink to this heading"></a></h2>
+<h2>Finding Problems<a class="headerlink" href="#finding-problems" title="Link to this heading"></a></h2>
 <p>CUTEst has a scheme for classifying problems (see <a class="reference external" href="http://www.cuter.rl.ac.uk/Problems/classification.shtml">here</a>).
 Based on these properties, we can search for test problems using the <a class="reference external" href="functions/pycutest.find_problems.html">find_problems()</a> function.
 We can check the properties of a specific problem with <a class="reference external" href="functions/pycutest.problem_properties.html">problem_properties()</a>.</p>
@@ -127,7 +129,7 @@ We can check the properties of a specific problem with <a class="reference exter
 <p>Full documentation for these functions is given below.</p>
 </section>
 <section id="building-problems">
-<h2>Building Problems<a class="headerlink" href="#building-problems" title="Permalink to this heading"></a></h2>
+<h2>Building Problems<a class="headerlink" href="#building-problems" title="Link to this heading"></a></h2>
 <p>Many CUTEst problems have optional input parameters. The <a class="reference external" href="functions/pycutest.print_available_sif_params.html">print_available_sif_params()</a> function prints a list of valid parameters for a given problem.
 Then, we can build a problem, including optional parameters, with <a class="reference external" href="functions/pycutest.import_problem.html">import_problem()</a>.
 This returns an instance of the <code class="code docutils literal notranslate"><span class="pre">CUTEstProblem</span></code> class (see next section).</p>
@@ -165,13 +167,13 @@ CUTEst problem ARGLALE (params {&#39;M&#39;: 200, &#39;N&#39;: 100}) with 100 va
 <p>Full documentation for these functions is given below.</p>
 </section>
 <section id="cache-management">
-<h2>Cache Management<a class="headerlink" href="#cache-management" title="Permalink to this heading"></a></h2>
+<h2>Cache Management<a class="headerlink" href="#cache-management" title="Link to this heading"></a></h2>
 <p>PyCUTEst works by compiling each problem in its own folder inside its cache (given by the <code class="code docutils literal notranslate"><span class="pre">PYCUTEST_CACHE</span></code> environment variable if specified, or the current working directory if not).
 A problem can be cleared from the cache using <a class="reference external" href="functions/pycutest.clear_cache.html">clear_cache()</a>, and a list of all problems currently installed can be displayed with <a class="reference external" href="functions/pycutest.all_cached_problems.html">all_cached_problems()</a>.
 Documentation for these functions is given below.</p>
 </section>
 <section id="full-function-documentation">
-<h2>Full function documentation<a class="headerlink" href="#full-function-documentation" title="Permalink to this heading"></a></h2>
+<h2>Full function documentation<a class="headerlink" href="#full-function-documentation" title="Link to this heading"></a></h2>
 <p>Please click on a <code class="code docutils literal notranslate"><span class="pre">pycutest</span></code> function below for full documentation:</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>

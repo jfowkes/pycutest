@@ -1,21 +1,23 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CUTEstProblem.gradsphess &mdash; PyCUTEst v1.5.1 documentation</title>
-      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <title>CUTEstProblem.gradsphess &mdash; PyCUTEst v1.6.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=72d88caf"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -35,7 +37,7 @@
             PyCUTEst
           </a>
               <div class="version">
-                1.5.1
+                1.6.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -53,9 +55,11 @@
 <li class="toctree-l2"><a class="reference internal" href="../interface.html#problem-methods">Problem Methods</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../interface.html#problem-attributes">Problem Attributes</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../interface.html#full-method-documentation">Full method documentation</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="pycutest.CUTEstProblem.objcons.html">CUTEstProblem.objcons</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pycutest.CUTEstProblem.obj.html">CUTEstProblem.obj</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pycutest.CUTEstProblem.grad.html">CUTEstProblem.grad</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pycutest.CUTEstProblem.objcons.html">CUTEstProblem.objcons</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pycutest.CUTEstProblem.cons.html">CUTEstProblem.cons</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pycutest.CUTEstProblem.lag.html">CUTEstProblem.lag</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pycutest.CUTEstProblem.lagjac.html">CUTEstProblem.lagjac</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pycutest.CUTEstProblem.jprod.html">CUTEstProblem.jprod</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pycutest.CUTEstProblem.hess.html">CUTEstProblem.hess</a></li>
@@ -107,10 +111,10 @@
            <div itemprop="articleBody">
              
   <section id="cutestproblem-gradsphess">
-<h1>CUTEstProblem.gradsphess<a class="headerlink" href="#cutestproblem-gradsphess" title="Permalink to this heading"></a></h1>
+<h1>CUTEstProblem.gradsphess<a class="headerlink" href="#cutestproblem-gradsphess" title="Link to this heading"></a></h1>
 <dl class="py method">
 <dt class="sig sig-object py" id="pycutest.CUTEstProblem.gradsphess">
-<span class="sig-prename descclassname"><span class="pre">CUTEstProblem.</span></span><span class="sig-name descname"><span class="pre">gradsphess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gradient_of_lagrangian</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycutest.CUTEstProblem.gradsphess" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">CUTEstProblem.</span></span><span class="sig-name descname"><span class="pre">gradsphess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gradient_of_lagrangian</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycutest.CUTEstProblem.gradsphess" title="Link to this definition"></a></dt>
 <dd><p>Evaluate the sparse gradient of objective or Lagrangian, sparse Jacobian of constraints, and sparse Hessian of objective or Lagrangian.
 For constrained problems, the gradient is L_{x}(x,v) and the Hessian is L_{x,x}(x,v).</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># For unconstrained problems</span>

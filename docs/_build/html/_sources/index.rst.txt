@@ -8,12 +8,9 @@ PyCUTEst
 Python interface to the CUTEst optimization test environment
 ------------------------------------------------------------
 
-.. warning::
-    PyCUTEst v1.5.0 broke existing cached problems, when upgrading to v1.5.0 please clear out your cache by deleting the $PYCUTEST_CACHE/pycutest_cache_holder directory.
-
 **Release:** |version|
 
-**Date:** 8 August 2023
+**Date:** 24 January 2024
 
 **Author:** `Jaroslav Fowkes <jaroslav.fowkes@maths.ox.ac.uk>`_ and `Lindon Roberts <https://lindonroberts.github.io/>`_
 

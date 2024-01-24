@@ -1,21 +1,23 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PyCUTEst &mdash; PyCUTEst v1.5.1 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <title>PyCUTEst &mdash; PyCUTEst v1.6.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=72d88caf"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -34,7 +36,7 @@
             PyCUTEst
           </a>
               <div class="version">
-                1.5.1
+                1.6.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -80,22 +82,18 @@
            <div itemprop="articleBody">
              
   <section id="pycutest">
-<h1>PyCUTEst<a class="headerlink" href="#pycutest" title="Permalink to this heading"></a></h1>
+<h1>PyCUTEst<a class="headerlink" href="#pycutest" title="Link to this heading"></a></h1>
 <section id="python-interface-to-the-cutest-optimization-test-environment">
-<h2>Python interface to the CUTEst optimization test environment<a class="headerlink" href="#python-interface-to-the-cutest-optimization-test-environment" title="Permalink to this heading"></a></h2>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>PyCUTEst v1.5.0 broke existing cached problems, when upgrading to v1.5.0 please clear out your cache by deleting the $PYCUTEST_CACHE/pycutest_cache_holder directory.</p>
-</div>
-<p><strong>Release:</strong> 1.5.1</p>
-<p><strong>Date:</strong> 8 August 2023</p>
+<h2>Python interface to the CUTEst optimization test environment<a class="headerlink" href="#python-interface-to-the-cutest-optimization-test-environment" title="Link to this heading"></a></h2>
+<p><strong>Release:</strong> 1.6.0</p>
+<p><strong>Date:</strong> 24 January 2024</p>
 <p><strong>Author:</strong> <a class="reference external" href="mailto:jaroslav&#46;fowkes&#37;&#52;&#48;maths&#46;ox&#46;ac&#46;uk">Jaroslav Fowkes</a> and <a class="reference external" href="https://lindonroberts.github.io/">Lindon Roberts</a></p>
 <p>PyCUTEst is a Python interface to <a class="reference external" href="https://github.com/ralna/CUTEst">CUTEst</a>, a Fortran package for testing optimization software <a class="footnote-reference brackets" href="#id4" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>. It is based on the interface originally developed for CUTEr by <a class="reference external" href="http://www.fe.uni-lj.si/en/the_faculty/staff/alphabetically/55/">Prof. Arpad Buermen</a> <a class="footnote-reference brackets" href="#id5" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>. Currently it supports Mac and Linux only, although on Windows 10 (and later) it can be used through the <a class="reference external" href="https://docs.microsoft.com/en-us/windows/wsl/">Windows Subsystem for Linux</a>, following the Linux installation instructions.</p>
 <p>In essence, this package gives convenient access to a large collection of nonlinear optimization test problems.</p>
 <p>PyCUTEst is released under the GNU General Public License.</p>
 </section>
 <section id="the-aim-of-pycutest">
-<h2>The aim of PyCUTEst<a class="headerlink" href="#the-aim-of-pycutest" title="Permalink to this heading"></a></h2>
+<h2>The aim of PyCUTEst<a class="headerlink" href="#the-aim-of-pycutest" title="Link to this heading"></a></h2>
 <p>PyCUTEst gives Python users access to the full <a class="reference external" href="https://github.com/ralna/CUTEst">CUTEst</a> collection of optimization test problems via a simple interface for compiling problems (that automatically generates a C interface to the underlying Fortran package).</p>
 <p>The main benefits of the PyCUTEst package are:</p>
 <ul class="simple">
@@ -105,7 +103,7 @@
 <p>Our aim is for PyCUTEst to make it easier for both optimization users and software developers to develop and test new and existing algorithms and software in Python.</p>
 </section>
 <section id="citing-pycutest">
-<h2>Citing PyCUTEst<a class="headerlink" href="#citing-pycutest" title="Permalink to this heading"></a></h2>
+<h2>Citing PyCUTEst<a class="headerlink" href="#citing-pycutest" title="Link to this heading"></a></h2>
 <p>To cite PyCUTEst, please use the following reference:</p>
 <p><cite>J. Fowkes, L. Roberts, and Á. Bűrmen, (2022). PyCUTEst: an open source Python package of optimization test problems. Journal of Open Source Software, 7(78), 4377, https://doi.org/10.21105/joss.04377</cite></p>
 <p>In BibTeX, the citation is:</p>
@@ -159,6 +157,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="history.html">Version History</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="history.html#version-1-6-0-24-jan-2024">Version 1.6.0 (24 Jan 2024)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="history.html#version-1-5-1-8-aug-2023">Version 1.5.1 (8 Aug 2023)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="history.html#version-1-5-0-22-feb-2023">Version 1.5.0 (22 Feb 2023)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="history.html#version-1-4-24-oct-2022">Version 1.4 (24 Oct 2022)</a></li>
@@ -177,7 +176,7 @@
 </ul>
 </section>
 <section id="references">
-<h2>References<a class="headerlink" href="#references" title="Permalink to this heading"></a></h2>
+<h2>References<a class="headerlink" href="#references" title="Link to this heading"></a></h2>
 <aside class="footnote-list brackets">
 <aside class="footnote brackets" id="id4" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
