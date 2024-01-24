@@ -240,6 +240,13 @@ class TestALLINITC_with_fixed(unittest.TestCase):
             c, g = p.cons(x, index=0, gradient=True)
             self.assertAlmostEqual(c, cons(x), places=places, msg="Wrong cons c value 4")
             self.assertTrue(array_compare(g, gradcons(x), thresh=10**(-places)), msg="Wrong cons g value 4")
+            # lag
+            for v in vs:
+                l = p.lag(x, v)
+                self.assertAlmostEqual(l, lag(x, v), places=places, msg="Wrong lag l value for v = %s" % str(v))
+                l, g = p.lag(x, v, gradient=True)
+                self.assertAlmostEqual(l, lag(x, v), places=places, msg="Wrong lag l value 2 for v = %s" % str(v))
+                self.assertTrue(array_compare(g, gradlag(x, v), thresh=10 ** (-places)), msg="Wrong lag g value 2 for v = %s" % str(v))
             # lagjac
             g, J = p.lagjac(x)
             self.assertTrue(array_compare(g, allinit_grad(x), thresh=10 ** (-places)), msg="Wrong lagjac g value 1")
@@ -294,12 +301,12 @@ class TestALLINITC_with_fixed(unittest.TestCase):
 
         stats = p.report()
         num_xs = 4
-        self.assertEqual(stats['f'], 3 * num_xs, msg="Wrong stat f")
-        self.assertEqual(stats['g'], (3 + 3*len(vs)) * num_xs, msg="Wrong stat g")
+        self.assertEqual(stats['f'], (3 + 2*len(vs)) * num_xs, msg="Wrong stat f")
+        self.assertEqual(stats['g'], (3 + 4*len(vs)) * num_xs, msg="Wrong stat g")
         self.assertEqual(stats['H'], (1 + 3*len(vs) + 2*len(vs)*len(ps)) * num_xs, msg="Wrong stat H")
         self.assertEqual(stats['Hprod'], (2*len(vs)*len(ps)) * num_xs, msg="Wrong stat Hprod")
         self.assertEqual(stats['c'], (5 + len(vs) + len(ps)) * num_xs, msg="Wrong stat c")
-        self.assertEqual(stats['cg'], (4 + 5*len(vs) + 2*len(ps)) * num_xs, msg="Wrong stat cg")
+        self.assertEqual(stats['cg'], (4 + 6*len(vs) + 2*len(ps)) * num_xs, msg="Wrong stat cg")
         self.assertEqual(stats['cH'], (1 + 3*len(vs) + 2*len(ps)*len(vs)) * num_xs, msg="Wrong stat cH")
 
 
@@ -387,6 +394,13 @@ class TestALLINITC_with_free(unittest.TestCase):
             c, g = p.cons(x, index=0, gradient=True)
             self.assertAlmostEqual(c, cons(x), places=places, msg="Wrong cons c value 4")
             self.assertTrue(array_compare(g, gradcons(x), thresh=10**(-places)), msg="Wrong cons g value 4")
+            # lag
+            for v in vs:
+                l = p.lag(x, v)
+                self.assertAlmostEqual(l, lag(x, v), places=places, msg="Wrong lag l value for v = %s" % str(v))
+                l, g = p.lag(x, v, gradient=True)
+                self.assertAlmostEqual(l, lag(x, v), places=places, msg="Wrong lag l value 2 for v = %s" % str(v))
+                self.assertTrue(array_compare(g, gradlag(x, v), thresh=10 ** (-places)), msg="Wrong lag g value 2 for v = %s" % str(v))
             # lagjac
             g, J = p.lagjac(x)
             self.assertTrue(array_compare(g, grad(x), thresh=10 ** (-places)), msg="Wrong lagjac g value 1")
@@ -441,12 +455,12 @@ class TestALLINITC_with_free(unittest.TestCase):
 
         stats = p.report()
         num_xs = 4
-        self.assertEqual(stats['f'], 3 * num_xs, msg="Wrong stat f")
-        self.assertEqual(stats['g'], (3 + 3 * len(vs)) * num_xs, msg="Wrong stat g")
+        self.assertEqual(stats['f'], (3 + 2 * len(vs)) * num_xs, msg="Wrong stat f")
+        self.assertEqual(stats['g'], (3 + 4 * len(vs)) * num_xs, msg="Wrong stat g")
         self.assertEqual(stats['H'], (1 + 3 * len(vs) + 2 * len(vs) * len(ps)) * num_xs, msg="Wrong stat H")
         self.assertEqual(stats['Hprod'], (2 * len(vs) * len(ps)) * num_xs, msg="Wrong stat Hprod")
         self.assertEqual(stats['c'], (5 + len(vs) + len(ps)) * num_xs, msg="Wrong stat c")
-        self.assertEqual(stats['cg'], (4 + 5 * len(vs) + 2 * len(ps)) * num_xs, msg="Wrong stat cg")
+        self.assertEqual(stats['cg'], (4 + 6 * len(vs) + 2 * len(ps)) * num_xs, msg="Wrong stat cg")
         self.assertEqual(stats['cH'], (1 + 3 * len(vs) + 2 * len(ps) * len(vs)) * num_xs, msg="Wrong stat cH")
 
 

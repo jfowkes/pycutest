@@ -13,6 +13,7 @@ The methods available for each :code:`CUTEstProblem` instance are:
 * `grad(x[, index]) <methods/pycutest.CUTEstProblem.grad.html>`_: evaluate objective gradient or specific constraint gradient
 * `objcons(x) <methods/pycutest.CUTEstProblem.objcons.html>`_: evaluate objective and constraints
 * `cons(x[, index, gradient]) <methods/pycutest.CUTEstProblem.cons.html>`_: evaluate constraint(s) and optionally their Jacobian/its gradient
+* `lag(x, v[, gradient]) <methods/pycutest.CUTEstProblem.lag.html>`_: evaluate Lagrangian function value and optionally its gradient
 * `lagjac(x[, v]) <methods/pycutest.CUTEstProblem.lagjac.html>`_: evaluate gradient of objective/Lagrangian and Jacobian of constraints
 * `jprod(p[, transpose, x]) <methods/pycutest.CUTEstProblem.jprod.html>`_: evaluate constraint Jacobian-vector product
 * `hess(x[, v]) <methods/pycutest.CUTEstProblem.hess.html>`_: evaluate Hessian of objective or Lagrangian
@@ -77,6 +78,7 @@ Please click on a :code:`CUTEstProblem` method below for full documentation:
    grad 
    objcons 
    cons 
+   lag 
    lagjac 
    jprod 
    hess 

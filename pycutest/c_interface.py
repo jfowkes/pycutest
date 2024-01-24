@@ -45,6 +45,7 @@ static PyObject *cutest_objcons(PyObject *self, PyObject *args);
 static PyObject *cutest_obj(PyObject *self, PyObject *args);
 static PyObject *cutest_grad(PyObject *self, PyObject *args);
 static PyObject *cutest_cons(PyObject *self, PyObject *args);
+static PyObject *cutest_lag(PyObject *self, PyObject *args);
 static PyObject *cutest_lagjac(PyObject *self, PyObject *args);
 static PyObject *cutest_jprod(PyObject *self, PyObject *args);
 static PyObject *cutest_hess(PyObject *self, PyObject *args);
@@ -824,6 +825,68 @@ static PyObject *cutest_cons(PyObject *self, PyObject *args) {
             CUTEST_ccifg((integer *)&status, (integer *)&CUTEst_nvar, (integer *)&icon, x, c, J, &somethingTrue);
             return Py_BuildValue("OO", Mc, MJ);
         }
+    }
+}
+
+
+PyDoc_STRVAR(cutest_lag_doc,
+"Returns the Lagrangian function value and its gradient if requested at x.\n"
+"The gradient is the gradient with respect to the problem variables (has n components).\n"
+"\n"
+"l=lag(x, v)                -- Lagrangian function value\n"
+"(l, g)=lag(x, v, gradFlag) -- Lagrangian function value and the Lagrangian gradient\n"
+"\n"
+"Input\n"
+"x        -- 1D array of length n with the values of variables\n"
+"v        -- 1D array of length m with the Lagrange multipliers\n"
+"gradFlag -- if given the function returns l and g; can be anything\n"
+"\n"
+"Output\n"
+"l -- float holding the value of the Lagrangian function at x\n"
+"g -- 1D array of length n holding the Lagrangian gradient at x\n"
+"\n"
+"CUTEst tools used: CUTEST_clfg\n"
+);
+
+static PyObject *cutest_lag(PyObject *self, PyObject *args) {
+    PyArrayObject *arg1, *arg2, *Mg=NULL;
+    PyObject *arg3;
+    doublereal *x, *v, *g=NULL;
+    doublereal f;
+    npy_intp dims[1];
+
+    if (!check_setup())
+        return NULL;
+
+    if (!PyArg_ParseTuple(args, "OO|O", &arg1, &arg2, &arg3))
+        return NULL;
+
+    /* Check if x is double and of correct length and shape */
+    if (!(PyArray_Check(arg1) && PyArray_ISFLOAT(arg1) && PyArray_TYPE(arg1)==NPY_DOUBLE && PyArray_NDIM(arg1)==1 && PyArray_DIM(arg1, 0)==CUTEst_nvar)) {
+        PyErr_SetString(PyExc_Exception, "Argument 1 must be a 1D double array of length nvar");
+        return NULL;
+    }
+
+    /* Check if v is double and of correct length and shape */
+    if (!(PyArray_Check(arg2) && PyArray_ISFLOAT(arg2) && PyArray_TYPE(arg2)==NPY_DOUBLE && PyArray_NDIM(arg2)==1 && PyArray_DIM(arg2, 0)==CUTEst_ncon)) {
+        PyErr_SetString(PyExc_Exception, "Argument 2 must be a 1D double array of length ncon");
+        return NULL;
+    }
+
+    x=(npy_double *)PyArray_DATA(arg1);
+    v=(npy_double *)PyArray_DATA(arg2);
+    if (PyObject_Length(args)>2) {
+        dims[0]=CUTEst_nvar;
+        Mg=(PyArrayObject *)PyArray_SimpleNew(1, dims, NPY_DOUBLE);
+        g=(npy_double *)PyArray_DATA(Mg);
+    }
+
+    if (PyObject_Length(args)==2) {
+        CUTEST_clfg((integer *)&status, (integer *)&CUTEst_nvar, (integer *)&CUTEst_ncon, x, v, &f, NULL, &somethingFalse);
+        return Py_BuildValue("d", f);
+    } else {
+        CUTEST_clfg((integer *)&status, (integer *)&CUTEst_nvar, (integer *)&CUTEst_ncon, x, v, &f, g, &somethingTrue);
+        return Py_BuildValue("dO", f, Mg);
     }
 }
 
@@ -1939,6 +2002,7 @@ static PyMethodDef _methods[] = {
     {"obj", cutest_obj, METH_VARARGS, cutest_obj_doc},
     {"grad", cutest_grad, METH_VARARGS, cutest_grad_doc},
     {"cons", cutest_cons, METH_VARARGS, cutest_cons_doc},
+    {"lag", cutest_lag, METH_VARARGS, cutest_lag_doc},
     {"lagjac", cutest_lagjac, METH_VARARGS, cutest_lagjac_doc},
     {"jprod", cutest_jprod, METH_VARARGS, cutest_jprod_doc},
     {"hess", cutest_hess, METH_VARARGS, cutest_hess_doc},
