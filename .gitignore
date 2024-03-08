@@ -1,6 +1,9 @@
 # PyCUTEst Cache
 pycutest_cache_holder/
 
+# Sphinx doctrees
+docs/_build/doctrees/
+
 # Mac temp files
 .DS_Store
 
