@@ -2,6 +2,10 @@ Version History
 ===============
 This section lists the different versions of PyCUTEst and the updates between them.
 
+Version 1.6.1 (8 Mar 2024)
+--------------------------
+* Add setuptools requirement to setup.py
+
 Version 1.6.0 (24 Jan 2024)
 ---------------------------
 * New grad function to evaluate the gradient only
