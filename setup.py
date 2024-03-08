@@ -58,9 +58,8 @@ setup(
         'Topic :: Scientific/Engineering',
         'Topic :: Scientific/Engineering :: Mathematics',
         ],
-    install_requires = ['numpy >= 1.11', 'scipy >= 0.17'],
+    install_requires = ['numpy >= 1.11', 'scipy >= 0.17', 'setuptools'],
     test_suite='nose.collector',
     tests_require=['nose'],
     zip_safe = True,
     )
-
