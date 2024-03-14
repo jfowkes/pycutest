@@ -1,0 +1,54 @@
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pycutest"
+version = "1.6.1"
+dependencies = [
+    "setuptools",
+    "numpy",
+    "scipy"
+]
+requires-python = ">=3.8"
+authors = [
+    {name = "Jaroslav Fowkes", email = "jaroslav.fowkes@maths.ox.ac.uk"},
+    {name = "Lindon Roberts", email = "lindon.roberts@sydney.edu.au"}
+]
+maintainers = [
+    {name = "Jaroslav Fowkes", email = "jaroslav.fowkes@maths.ox.ac.uk"},
+    {name = "Lindon Roberts", email = "lindon.roberts@sydney.edu.au"}
+]
+description = "A Python wrapper to the CUTEst optimization test environment"
+readme = "README.rst"
+license = {text = "GPL-3.0-or-later"}
+keywords = ["mathematics", "optimization"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Framework :: IPython",
+    "Framework :: Jupyter",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    "Operating System :: MacOS",
+    "Operating System :: Unix",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Mathematics"
+]
+
+[project.urls]
+Homepage = "https://github.com/jfowkes/pycutest/"
+Download = "https://github.com/jfowkes/pycutest/releases/"
+"Bug Tracker" = "https://github.com/jfowkes/pycutest/issues/"
+Documentation = "https://jfowkes.github.io/pycutest/"
+"Source Code" = "https://github.com/jfowkes/pycutest/"
+
+[tool.setuptools]
+packages = ["pycutest"]
