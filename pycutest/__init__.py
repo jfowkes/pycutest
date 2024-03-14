@@ -1,9 +1,8 @@
-# Ensure compatibility with Python 2
-from __future__ import absolute_import, division, print_function, unicode_literals
+import importlib.metadata
 
 __all__ = []
 
-from .version import __version__
+__version__ = importlib.metadata.version("pycutest")
 __all__ += ['__version__']
 
 from .build_interface import import_problem, clear_cache, all_cached_problems

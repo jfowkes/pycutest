@@ -3,9 +3,10 @@ Installation scripts for individual problems
 """
 
 import sys
+import importlib.metadata
 
 from .system_paths import get_cutest_path
-from .version import __version__
+__version__ = importlib.metadata.version("pycutest")
 
 __all__ = ['get_setup_script']
 
