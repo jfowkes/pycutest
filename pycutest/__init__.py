@@ -1,8 +1,7 @@
-import importlib.metadata
 
 __all__ = []
 
-__version__ = importlib.metadata.version("pycutest")
+__version__ = '1.6.1'
 __all__ += ['__version__']
 
 from .build_interface import import_problem, clear_cache, all_cached_problems

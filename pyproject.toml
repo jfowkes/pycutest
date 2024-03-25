@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pycutest"
-version = "1.6.1"
+dynamic = ["version"]
 dependencies = [
     "setuptools",
     "numpy",
@@ -52,3 +52,6 @@ Documentation = "https://jfowkes.github.io/pycutest/"
 
 [tool.setuptools]
 packages = ["pycutest"]
+
+[tool.setuptools.dynamic]
+version = {attr = "pycutest.__version__"}
