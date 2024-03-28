@@ -1,10 +1,8 @@
-# Ensure compatibility with Python 2
-from __future__ import absolute_import, division, print_function, unicode_literals
+# Set PyCUTEst version number
+__version__ = '1.6.1'
 
+# Define submodules to expose on wildcard imports
 __all__ = []
-
-from .version import __version__
-__all__ += ['__version__']
 
 from .build_interface import import_problem, clear_cache, all_cached_problems
 __all__ += ['import_problem', 'clear_cache', 'all_cached_problems']

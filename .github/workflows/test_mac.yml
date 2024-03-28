@@ -29,10 +29,9 @@ jobs:
         sudo ln -s /usr/local/Cellar/gcc@11/*/lib/gcc/11/*.dylib /usr/local/lib/
         brew tap optimizers/cutest &&
         brew install cutest --without-single
-        pip install -r requirements.txt --only-binary=numpy,scipy
         sudo ln -s $GITHUB_WORKSPACE/pycutest/tests/problems /usr/local/opt/mastsif &&
         mkdir $GITHUB_WORKSPACE/pycutest_cache
-        python setup.py install
+        python -m pip install .
     - name: Tests
       run: |
         source /usr/local/opt/archdefs/archdefs.bashrc &&

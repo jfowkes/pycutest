@@ -26,7 +26,6 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get install -qq gfortran
-        pip install -r requirements.txt --only-binary=numpy,scipy
         mkdir cutest &&
         git clone https://github.com/ralna/ARCHDefs ./cutest/archdefs &&
         git clone https://github.com/ralna/SIFDecode ./cutest/sifdecode &&
@@ -35,7 +34,7 @@ jobs:
         source ./.cutest.env &&
         ./.install_cutest.sh
         mkdir $GITHUB_WORKSPACE/pycutest_cache
-        python setup.py install
+        python -m pip install .
     - name: Tests
       run: |
         source ./.cutest.env

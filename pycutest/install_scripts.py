@@ -5,7 +5,7 @@ Installation scripts for individual problems
 import sys
 
 from .system_paths import get_cutest_path
-from .version import __version__
+from pycutest import __version__
 
 __all__ = ['get_setup_script']
 
