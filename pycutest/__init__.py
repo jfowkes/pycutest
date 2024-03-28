@@ -1,8 +1,8 @@
-
-__all__ = []
-
+# Set PyCUTEst version number
 __version__ = '1.6.1'
-__all__ += ['__version__']
+
+# Define submodules to expose on wildcard imports
+__all__ = []
 
 from .build_interface import import_problem, clear_cache, all_cached_problems
 __all__ += ['import_problem', 'clear_cache', 'all_cached_problems']
