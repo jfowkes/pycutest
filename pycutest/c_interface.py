@@ -682,7 +682,7 @@ static PyObject *cutest_obj(PyObject *self, PyObject *args) {
 PyDoc_STRVAR(cutest_grad_doc,
 "Returns the gradient of the objective or gradient of the i-th constraint at x.\n"
 "\n"
-"g=grad(x)   -- objective gradient\n"       
+"g=grad(x)   -- objective gradient\n"
 "g=grad(x,i) -- i-th constraint gradient\n"
 "\n"
 "Input\n"
