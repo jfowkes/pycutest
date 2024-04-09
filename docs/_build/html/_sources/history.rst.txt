@@ -2,6 +2,10 @@ Version History
 ===============
 This section lists the different versions of PyCUTEst and the updates between them.
 
+Version 1.6.2 (9 Apr 2024)
+--------------------------
+* Migrate from setup.py to pyproject.toml
+
 Version 1.6.1 (8 Mar 2024)
 --------------------------
 * Add setuptools requirement to setup.py
