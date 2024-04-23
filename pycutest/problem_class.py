@@ -544,6 +544,43 @@ class CUTEstProblem(object):
         # https://stackoverflow.com/questions/4257394/slicing-of-a-numpy-2d-array-or-how-do-i-extract-an-mxm-submatrix-from-an-nxn-ar
         return H[self.idx_free][:, self.idx_free]
 
+    def hessjohn(self, x, y0, v):
+        """
+        Evaluate the Hessian of the (Fritz) John function at (x, y0, v).
+        For constrained problems, the (Fritz) John function is J(x,y0,v) = y0*f(x) + v^Tc(x).
+
+        .. code-block:: python
+
+            # Hessian of John function (constrained problems only)
+            H = problem.hessjohn(x, y0, v)
+
+        For large problems, problem.sphessjohn returns sparse matrices.
+
+        Unconstrained problems do not have a (Fritz) John function.
+
+        This calls CUTEst routine CUTEST_cdhj.
+
+        Note: in CUTEst, the sign convention is such that the John = y0 * objective + lagrange_multipliers * constraints
+
+        :param x: input vector
+        :type x: numpy.ndarray with shape (n,)
+        :param y0: John scalar associated with objective
+        :type y0: float
+        :param v: vector of Lagrange multipliers
+        :type v: numpy.ndarray with shape (m,), optional
+        :return: Hessian of (Fritz) John function at x
+        :rtype: numpy.ndarray(n,n)
+        """
+        try:
+            self.check_input_x(x)
+            self.check_input_v(v)
+            H = self._module.hessjohn(self.free_to_all(x), y0, v)
+            # 2d indexing with lists is a bit strange in Python
+            # https://stackoverflow.com/questions/4257394/slicing-of-a-numpy-2d-array-or-how-do-i-extract-an-mxm-submatrix-from-an-nxn-ar
+            return H[self.idx_free][:, self.idx_free]
+        except AttributeError:
+            raise RuntimeError('You version of CUTEst is too old, please update it.')
+
     def ihess(self, x, cons_index=None):
         """
         Evaluate the Hessian of the objective or the i-th constraint.
@@ -620,6 +657,47 @@ class CUTEstProblem(object):
             else:
                 r = self._module.hprod(self.free_to_all(p, use_zeros=True))
         return r[self.idx_free]
+
+    def hjprod(self, p, x=None, y0=None, v=None):
+        """
+        Calculate Hessian-vector product H*p, where H is the Hessian of the (Fritz) John function.
+        For constrained problems, the (Fritz) John function is J(x,y0,v) = y0*f(x) + v^Tc(x).
+
+        .. code-block:: python
+
+            # use Hessian of John function J_{x,x}(x,y0,v) to compute H*p (constrained problems only)
+            r = problem.hjprod(p, x=x, y0=y0, v=v)
+            # use last computed John function Hessian to compute H*p (constrained problems only)
+            r = problem.hjprod(p)
+
+        Unconstrained problems do not have a (Fritz) John function.
+
+        This calls CUTEst routine CUTEST_chjprod
+
+        Note: in CUTEst, the sign convention is such that the John = y0 * objective + lagrange_multipliers * constraints
+
+        :param p: vector to be multiplied by the Hessian
+        :type p: numpy.ndarray with shape (n,)
+        :param x: input vector for the Hessian
+        :type x: numpy.ndarray with shape (n,), optional
+        :param y0: John scalar associated with objective
+        :type y0: float, optional
+        :param v: vector of Lagrange multipliers
+        :type v: numpy.ndarray with shape (m,), optional
+        :return: Hessian-vector product H*p
+        :rtype: numpy.ndarray(n,)
+        """
+        try:
+            self.check_input_x(p)
+            if x is not None:
+                self.check_input_x(x)
+                self.check_input_v(v)
+                r = self._module.hjprod(self.free_to_all(p, use_zeros=True), self.free_to_all(x), y0, v)
+            else:
+                r = self._module.hjprod(self.free_to_all(p, use_zeros=True))
+            return r[self.idx_free]
+        except AttributeError:
+            raise RuntimeError('You version of CUTEst is too old, please update it.')
 
     def gradhess(self, x, v=None, gradient_of_lagrangian=True):
         """
@@ -874,6 +952,116 @@ class CUTEstProblem(object):
             assert v is None, "CUTEstProblem.sphess: v must be None for unconstrained problems"
             H = self.__sphess(self.free_to_all(x), v)
         return sparse_mat_extract_rows_and_columns(H, self.idx_free, self.idx_free)
+
+    # sphessjohn() wrapper (private)
+    def __sphessjohn(self, x, y0, v):
+        """Returns the sparse Hessian of the (Fritz) John function at (x, y0, v).
+
+        H=__sphessjohn(x, y0, v) -- Hessian of John function (constrained problems)
+
+        Input
+        x -- 1D array of length n with the values of variables
+        y0 -- float holding the (Fritz) John scalar associated with the objective
+        v -- 1D array of length m with the values of Lagrange multipliers
+
+        Output
+        H -- a scipy.sparse.coo_matrix of size n_full-by-n_full holding the sparse Hessian
+            of the (Fritz) John function at (x, y0, v)
+
+        This function is a wrapper for sphessjohn().
+        """
+        try:
+            (Hi, Hj, Hv)=self._module.sphessjohn(x, y0, v)
+            return coo_matrix((Hv, (Hi, Hj)), shape=(self.n_full, self.n_full))
+        except AttributeError:
+            raise RuntimeError('You version of CUTEst is too old, please update it.')
+
+    def sphessjohn(self, x, y0, v):
+        """
+        Evaluate the sparse Hessian of the (Fritz) John function at (x, y0, v).
+        For constrained problems, the (Fritz) John function is J(x,y0,v) = y0*f(x) + v^Tc(x).
+
+        .. code-block:: python
+
+            # Hessian of John function (constrained problems only)
+            H = problem.sphessjohn(x, y0, v)
+
+        The matrix H is of type scipy.sparse.coo_matrix.
+
+        Unconstrained problems do not have a (Fritz) John function.
+
+        This calls CUTEst routine CUTEST_cshj.
+
+        Note: in CUTEst, the sign convention is such that the John = y0 * objective + lagrange_multipliers * constraints
+
+        :param x: input vector
+        :type x: numpy.ndarray with shape (n,)
+        :param y0: John scalar associated with objective
+        :type y0: float
+        :param v: vector of Lagrange multipliers
+        :type v: numpy.ndarray with shape (m,)
+        :return: sparse Hessian of John function at x
+        :rtype: scipy.sparse.coo_matrix(n,n)
+        """
+        self.check_input_x(x)
+        self.check_input_v(v)
+        H = self.__sphessjohn(self.free_to_all(x), y0, v)
+        return sparse_mat_extract_rows_and_columns(H, self.idx_free, self.idx_free)
+
+    # shoprod() wrapper
+    def __shoprod(self, p, x=None):
+        """Returns the sparse product of objective Hessian at x and vector p.
+
+        (ri, rv)=__shoprod(p, x) -- use Hessian of objective at x
+        (ri, rv)=__shoprod(p)    -- use last computed Hessian
+
+        Input
+        p -- 1D array of length n holding the components of the vector
+        x -- 1D array of length n with the values of variables
+
+        Output
+        r -- a scipy.sparse.coo_matrix of size 1-by-n_full holding the result
+
+        This function is a wrapper for shoprod().
+        """
+        try:
+            if x is None:
+                (ri, rv)=self._module.shoprod(p)
+            else:
+                (ri, rv)=self._module.shoprod(p, x)
+            return coo_matrix((rv, (np.zeros(len(rv)), ri)), shape=(1, self.n_full))
+        except AttributeError:
+            raise RuntimeError('You version of CUTEst is too old, please update it.')
+
+    def shoprod(self, p, x=None):
+        """
+        Calculate sparse Hessian-vector product H*p, where H is Hessian of objective.
+
+        .. code-block:: python
+
+            # use last computed Hessian to compute H*p
+            r = problem.shoprod(p)
+            # use Hessian of objective at x to compute H*p
+            r = problem.shoprod(p, x=x)
+
+        The result vector r is of type scipy.sparse.coo_matrix.
+
+        This calls CUTEst routine CUTEST_cohprods.
+
+        :param p: vector to be multiplied by the Hessian
+        :type p: numpy.ndarray with shape (n,)
+        :param x: input vector
+        :type x: numpy.ndarray with shape (n,), optional
+        :return: sparse Hessian-vector product H*p
+        :rtype: scipy.sparse.coo_matrix(n,)
+        """
+        self.check_input_x(p)
+        if x is None:
+            r = self.__shoprod(self.free_to_all(p, use_zeros=True))
+        else:
+            self.check_input_x(x)
+            r = self.__shoprod(self.free_to_all(p, use_zeros=True), self.free_to_all(x))
+        return sparse_vec_extract_indices(r, self.idx_free)
 
     # isphess() wrapper (private)
     def __isphess(self, x, i=None):
