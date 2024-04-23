@@ -24,6 +24,8 @@ The methods available for each :code:`CUTEstProblem` instance are:
 
 For large-scale problems, you may want to get vectors/matrices as sparse matrices. We have the following methods which return sparse matrices:
 
+* `sobj(x[, gradient]) <methods/pycutest.CUTEstProblem.sobj.html>`_: (sparse) evaluate objective (and optionally its gradient)
+* `sgrad(x[, index]) <methods/pycutest.CUTEstProblem.sgrad.html>`_: (sparse) evaluate objective gradient or specific constraint gradient
 * `scons(x[, index, gradient]) <methods/pycutest.CUTEstProblem.scons.html>`_: (sparse) evaluate constraint(s) and optionally their Jacobian/its gradient
 * `slagjac(x[, v]) <methods/pycutest.CUTEstProblem.slagjac.html>`_: (sparse) evaluate gradient of objective/Lagrangian and Jacobian of constraints
 * `sphess(x[, v]) <methods/pycutest.CUTEstProblem.sphess.html>`_: (sparse) evaluate Hessian of objective or Lagrangian
@@ -84,10 +86,12 @@ Please click on a :code:`CUTEstProblem` method below for full documentation:
    hess 
    ihess 
    hprod 
-   gradhess
+   gradhess 
    report 
+   sobj 
+   sgrad 
    scons 
    slagjac 
    sphess 
    isphess 
-   gradsphess
+   gradsphess 
