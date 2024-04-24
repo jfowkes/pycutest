@@ -1446,7 +1446,7 @@ static PyObject *cutest_sobj(PyObject *self, PyObject *args) {
     doublereal *x, *sv;
     doublereal f;
     npy_int *si;
-    npy_int nnzg;
+    npy_int nnzg, nzero=0;
 
     if (!check_setup())
         return NULL;
@@ -1467,7 +1467,7 @@ static PyObject *cutest_sobj(PyObject *self, PyObject *args) {
 
     x=(npy_double *)PyArray_DATA(arg1);
     if (PyObject_Length(args)==1) {
-        CUTEST_cofsg((integer *)&status, (integer *)&CUTEst_nvar, x, &f, (integer *)&nnzg, 0, NULL, NULL, &somethingFalse);
+        CUTEST_cofsg((integer *)&status, (integer *)&CUTEst_nvar, x, &f, (integer *)&nnzg, (integer *)&nzero, NULL, NULL, &somethingFalse);
         return Py_BuildValue("d", f);
     } else {
         si=(npy_int *)malloc(CUTEst_nvar*sizeof(npy_int));
