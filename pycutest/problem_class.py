@@ -662,7 +662,131 @@ class CUTEstProblem(object):
             g, H = self._module.gradhess(self.free_to_all(x))
             return self.all_to_free(g), H[self.idx_free][:, self.idx_free]
 
-    # scons() wrapper (private)
+    # sobj() wrapper (private)
+    def __sobj(self, x, gradFlag=False):
+        """Returns the value of the objective and optionally its sparse gradient at x.
+           Only works on constrained problems due to the inherent design of CUTEst.
+
+        f=__sobj(x)            -- objective value
+        (f, g)=__sobj(x, True) -- objective value and sparse objective gradient
+
+        Input
+        x        -- 1D array of length n with the values of variables
+        gradFlag -- boolean flag. If True the gradient of the objective is returned. Default is False
+
+        Output
+        f -- float holding the value of the objective function at x
+        g -- a scipy.sparse.coo_matrix of size 1-by-n_full holding the gradient of objective at x
+
+        This function is a wrapper for sobj().
+        """
+
+        if gradFlag:
+            (f, gi, gv)=self._module.sobj(x, gradFlag)
+            return (f, coo_matrix((gv, (np.zeros(len(gv)), gi)), shape=(1, self.n_full)))
+        else:
+            f=self._module.sobj(x)
+            return f
+
+    def sobj(self, x, gradient=False):
+        """
+        Evaluate the objective (and optionally its sparse gradient).
+
+        .. code-block:: python
+
+            # objective
+            f    = problem.obj(x)
+            # objective and gradient
+            f, g = problem.obj(x, gradient=True)
+
+        The vector g is of type scipy.sparse.coo_matrix.
+        For unconstrained problems, g is formed from a dense matrix due to CUTEst limitations.
+
+        For small problems, problem.obj returns dense matrices.
+
+        This calls CUTEst routine CUTEst_uofg or CUTEST_cofsg.
+
+        :param x: input vector
+        :type x: numpy.ndarray with shape (n,)
+        :param gradient: whether to return objective and gradient, or just objective (default=False; i.e. objective only)
+        :type gradient: bool, optional
+        :return: objective value f, or tuple (f,g) of objective and sparse gradient at x
+        :rtype: float or (float, scipy.sparse.coo_matrix(n,))
+        """
+        self.check_input_x(x)
+        if self.m <= 0: # unconstrained problem (convert dense obj)
+            if gradient:
+                f, g = self.obj(x, True) # fixed/free variables already handled
+                return f, coo_matrix(g)  # inefficient but CUTEst gives us no choice
+            else:
+                return self.obj(x)
+        else: # constrained problem (use sobj wrapper)
+            if gradient:
+                f, g = self.__sobj(self.free_to_all(x), True)
+                return f, sparse_vec_extract_indices(g, self.idx_free)
+            else:
+                f = self.__sobj(self.free_to_all(x))
+                return f
+
+    # sgrad() wrapper
+    def __sgrad(self, x, i=None):
+        """Returns the sparse gradient of the objective or gradient of the i-th constraint at x.
+           Only works on constrained problems due to the inherent design of CUTEst.
+
+        g=__sgrad(x)    -- objective gradient
+        g=__sgrad(x, i) -- i-th constraint gradient
+
+        Input
+        x -- 1D array of length n with the values of variables
+        i -- integer index of constraint (between 0 and m-1)
+
+        Output
+        g -- a scipy.sparse.coo_matrix of size 1-by-n_full holding the gradient of objective at x or
+            the gradient of i-th constraint at x
+
+        This function is a wrapper for sgrad().
+        """
+
+        if i is None:
+            (gi, gv)=self._module.sgrad(x)
+        else:
+            (gi, gv)=self._module.sgrad(x, i)
+        return coo_matrix((gv, (np.zeros(len(gv)), gi)), shape=(1, self.n_full))
+
+    def sgrad(self, x, index=None):
+        """
+        Evaluate the sparse gradient of the objective function or sparse gradient of the i-th constraint.
+
+        .. code-block:: python
+
+            # gradient of objective
+            g = problem.grad(x)
+            # gradient of i-th constraint
+            g = problem.grad(x, index=i)
+
+        The vector g is of type scipy.sparse.coo_matrix.
+        For unconstrained problems, g is formed from a dense matrix due to CUTEst limitations.
+
+        For small problems, problem.grad returns dense matrices.
+
+        This calls CUTEst routine CUTEst_ugr or CUTEST_cisgr.
+
+        :param x: input vector
+        :type x: numpy.ndarray with shape (n,)
+        :param index: which constraint to evaluate. Must be in 0..self.m-1.
+        :type index: int, optional
+        :return: sparse gradient of objective or sparse gradient of i-th constraint at x
+        :rtype: scipy.sparse.coo_matrix(n,)
+        """
+        self.check_input_x(x)
+        if self.m <= 0: # unconstrained problem (convert dense grad)
+            g = self.grad(x, index) # fixed/free variables already handled
+            return coo_matrix(g)   # inefficient but CUTEst gives us no choice
+        else: # constrained problem (use sgrad wrapper)
+            g = self.__sgrad(self.free_to_all(x), index)
+            return sparse_vec_extract_indices(g, self.idx_free)
+
+    # scons() wrapper
     def __scons(self, x, i=None):
         """Returns the value of constraints and
         the sparse Jacobian of constraints at x.
@@ -938,15 +1062,15 @@ class CUTEstProblem(object):
         """Returns the sparse Hessian of the Lagrangian, the sparse Jacobian of
         constraints, and the gradient of the objective or Lagrangian.
 
-        (g, H)=__gradsphess(x)              -- unconstrained problems
-        (g, J, H)=__gradsphess(x, v, gradl) -- constrained problems
+        (g, H)=__gradsphess(x)                 -- unconstrained problems
+        (g, J, H)=__gradsphess(x, v, lagrFlag) -- constrained problems
 
         Input
-        x     -- 1D array of length n with the values of variables
-        v     -- 1D array of length m with the values of Lagrange multipliers
-        gradl -- boolean flag. If False the gradient of the objective is returned,
-                if True the gradient of the Lagrangian is returned.
-                Default is False
+        x        -- 1D array of length n with the values of variables
+        v        -- 1D array of length m with the values of Lagrange multipliers
+        lagrFlag -- boolean flag. If False the gradient of the objective is returned,
+                    if True the gradient of the Lagrangian is returned.
+                    Default is False
 
         Output
         g -- a scipy.sparse.coo_matrix of size 1-by-n_full holding the gradient of objective at x or

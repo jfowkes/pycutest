@@ -21,6 +21,15 @@ class TestSparseUnconstrained(unittest.TestCase):
             print("Trying x = [...]")
             ftrue, gdense = p.obj(x, gradient=True)
             Hdense = p.hess(x)
+            # sobj
+            f = p.sobj(x)
+            self.assertAlmostEqual(ftrue, f, places=places, msg="sobj f wrong 1")
+            f, g = p.sobj(x, gradient=True)
+            self.assertAlmostEqual(ftrue, f, places=places, msg="sobj f wrong 2")
+            self.assertTrue(array_compare(gdense, g.toarray(), thresh=10**(-places)), msg="sobj g wrong 2")
+            # sgrad
+            g = p.sgrad(x)
+            self.assertTrue(array_compare(gdense, g.toarray(), thresh=10**(-places)), msg="sgrad g wrong")
             # scons
             c = p.scons(x)
             self.assertIsNone(c, msg="scons c is not None")
@@ -55,7 +64,20 @@ class TestSparseConstrained(unittest.TestCase):
         for x in xs:
             places = 8  # accuracy
             print("Trying x = [...]")
+            ftrue, gdense = p.obj(x, gradient=True)
             cdense, Jdense = p.cons(x, gradient=True)
+            # sobj
+            f = p.sobj(x)
+            self.assertAlmostEqual(ftrue, f, places=places, msg="sobj f wrong 1")
+            f, g = p.sobj(x, gradient=True)
+            self.assertAlmostEqual(ftrue, f, places=places, msg="sobj f wrong 2")
+            self.assertTrue(array_compare(gdense, g.toarray(), thresh=10**(-places)), msg="sobj g wrong 2")
+            # sgrad
+            g = p.sgrad(x)
+            self.assertTrue(array_compare(gdense, g.toarray(), thresh=10**(-places)), msg="sgrad g wrong")
+            for i in range(p.m):
+                Ji = p.sgrad(x, index=i)
+                self.assertTrue(array_compare(Jdense[i,:], Ji.toarray(), thresh=10 ** (-places)), msg="sgrad g wrong 2 [i = %g]" % i)
             # scons
             c = p.scons(x)
             self.assertTrue(array_compare(cdense, c, thresh=10**(-places)), msg="scons c is wrong 1")
@@ -119,6 +141,15 @@ class TestSparseUnconstrainedFixed(unittest.TestCase):
             print("Trying x = [...]")
             ftrue, gdense = p.obj(x, gradient=True)
             Hdense = p.hess(x)
+            # sobj
+            f = p.sobj(x)
+            self.assertAlmostEqual(ftrue, f, places=places, msg="sobj f wrong 1")
+            f, g = p.sobj(x, gradient=True)
+            self.assertAlmostEqual(ftrue, f, places=places, msg="sobj f wrong 2")
+            self.assertTrue(array_compare(gdense, g.toarray(), thresh=10**(-places)), msg="sobj g wrong 2")
+            # sgrad
+            g = p.sgrad(x)
+            self.assertTrue(array_compare(gdense, g.toarray(), thresh=10**(-places)), msg="sgrad g wrong")
             # scons
             c = p.scons(x)
             self.assertIsNone(c, msg="scons c is not None")
@@ -152,7 +183,20 @@ class TestSparseConstrainedFixed(unittest.TestCase):
         for x in xs:
             places = 8  # accuracy
             print("Trying x = [...]")
+            ftrue, gdense = p.obj(x, gradient=True)
             cdense, Jdense = p.cons(x, gradient=True)
+            # sobj
+            f = p.sobj(x)
+            self.assertAlmostEqual(ftrue, f, places=places, msg="sobj f wrong 1")
+            f, g = p.sobj(x, gradient=True)
+            self.assertAlmostEqual(ftrue, f, places=places, msg="sobj f wrong 2")
+            self.assertTrue(array_compare(gdense, g.toarray(), thresh=10**(-places)), msg="sobj g wrong 2")
+            # sgrad
+            g = p.sgrad(x)
+            self.assertTrue(array_compare(gdense, g.toarray(), thresh=10**(-places)), msg="sgrad g wrong")
+            for i in range(p.m):
+                Ji = p.sgrad(x, index=i)
+                self.assertTrue(array_compare(Jdense[i,:], Ji.toarray(), thresh=10 ** (-places)), msg="sgrad g wrong 2 [i = %g]" % i)
             # scons
             c = p.scons(x)
             self.assertTrue(array_compare(cdense, c, thresh=10**(-places)), msg="scons c is wrong 1")

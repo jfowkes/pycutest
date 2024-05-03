@@ -52,6 +52,8 @@ static PyObject *cutest_hess(PyObject *self, PyObject *args);
 static PyObject *cutest_ihess(PyObject *self, PyObject *args);
 static PyObject *cutest_hprod(PyObject *self, PyObject *args);
 static PyObject *cutest_gradhess(PyObject *self, PyObject *args);
+static PyObject *cutest_sobj(PyObject *self, PyObject *args);
+static PyObject *cutest_sgrad(PyObject *self, PyObject *args);
 static PyObject *cutest_scons(PyObject *self, PyObject *args);
 static PyObject *cutest_slagjac(PyObject *self, PyObject *args);
 static PyObject *cutest_sphess(PyObject *self, PyObject *args);
@@ -139,6 +141,25 @@ PyObject *decRefDict(PyObject *dict) {
         Py_XDECREF(value);
     }
     return dict;
+}
+
+/* Extract sparse gradient in form of NumPy arrays */
+void extract_sparse_gradient(npy_int nnzg, npy_int *si, npy_double *sv, PyArrayObject **Mgi, PyArrayObject **Mgv) {
+    npy_double *gv;
+    npy_int *gi, i;
+    npy_intp dims[1];
+
+    /* Alocate and fill objective gradient data,
+       convert indices from FORTRAN to C. */
+    dims[0]=nnzg;
+    *Mgi=(PyArrayObject *)PyArray_SimpleNew(1, dims, NPY_INT);
+    *Mgv=(PyArrayObject *)PyArray_SimpleNew(1, dims, NPY_DOUBLE);
+    gi=(npy_int *)PyArray_DATA(*Mgi);
+    gv=(npy_double *)PyArray_DATA(*Mgv);
+    for(i=0;i<nnzg;i++) {
+        gi[i]=si[i]-1;
+        gv[i]=sv[i];
+    }
 }
 
 /* Extract sparse gradient and Jacobian in form of NumPy arrays */
@@ -661,7 +682,7 @@ static PyObject *cutest_obj(PyObject *self, PyObject *args) {
 PyDoc_STRVAR(cutest_grad_doc,
 "Returns the gradient of the objective or gradient of the i-th constraint at x.\n"
 "\n"
-"g=grad(x)   -- objective gradient\n"       
+"g=grad(x)   -- objective gradient\n"
 "g=grad(x,i) -- i-th constraint gradient\n"
 "\n"
 "Input\n"
@@ -1399,6 +1420,140 @@ static PyObject *cutest_gradhess(PyObject *self, PyObject *args) {
 }
 
 
+PyDoc_STRVAR(cutest_sobj_doc,
+"Returns the value of objective and its sparse gradient at x (constrained problems only).\n"
+"\n"
+"f=sobj(x)\n"
+"(f, gi, gv)=sobj(x, gradFlag)\n"
+"\n"
+"Input\n"
+"x        -- 1D array of length n with the values of variables\n"
+"gradFlag -- if given the function returns f and gi,gv; can be anything\n"
+"\n"
+"Output\n"
+"f -- float holding the value of the function at x\n"
+"gi  -- 1D array of integers holding the indices (0 .. n-1) of nonzero\n"
+"       elements in the sparse gradient vector\n"
+"gv  -- 1D array holding the values of nonzero elements in the sparse gradient\n"
+"       vector. Has the same length as gi.\n"
+"\n"
+"CUTEst tools used: CUTEST_cofsg\n"
+);
+
+static PyObject *cutest_sobj(PyObject *self, PyObject *args) {
+    PyArrayObject *arg1, *Mgi, *Mgv;
+    PyObject *arg2;
+    doublereal *x, *sv;
+    doublereal f;
+    npy_int *si;
+    npy_int nnzg, nzero=0;
+
+    if (!check_setup())
+        return NULL;
+
+    if (CUTEst_ncon == 0) {
+        PyErr_SetString(PyExc_Exception, "For unconstrained problems please use obj()");
+        return NULL;
+    }
+
+    if (!PyArg_ParseTuple(args, "O|O", &arg1, &arg2))
+        return NULL;
+
+    /* Check if x is double and of correct length and shape */
+    if (!(PyArray_Check(arg1) && PyArray_ISFLOAT(arg1) && PyArray_TYPE(arg1)==NPY_DOUBLE && PyArray_NDIM(arg1)==1 && PyArray_DIM(arg1, 0)==CUTEst_nvar)) {
+        PyErr_SetString(PyExc_Exception, "Argument 1 must be a 1D double array of length nvar");
+        return NULL;
+    }
+
+    x=(npy_double *)PyArray_DATA(arg1);
+    if (PyObject_Length(args)==1) {
+        CUTEST_cofsg((integer *)&status, (integer *)&CUTEst_nvar, x, &f, (integer *)&nnzg, (integer *)&nzero, NULL, NULL, &somethingFalse);
+        return Py_BuildValue("d", f);
+    } else {
+        si=(npy_int *)malloc(CUTEst_nvar*sizeof(npy_int));
+        sv=(npy_double *)malloc(CUTEst_nvar*sizeof(npy_double));
+
+        CUTEST_cofsg((integer *)&status, (integer *)&CUTEst_nvar, x, &f, (integer *)&nnzg, (integer *)&CUTEst_nvar, sv, (integer *)si, &somethingTrue);
+
+        extract_sparse_gradient(nnzg, si, sv, (PyArrayObject **)&Mgi, (PyArrayObject **)&Mgv);
+
+        free(si);
+        free(sv);
+
+        return Py_BuildValue("dOO", f, Mgi, Mgv);
+    }
+}
+
+
+PyDoc_STRVAR(cutest_sgrad_doc,
+"Returns the sparse gradient of the objective or gradient of the i-th constraint at x (constrained problems only).\n"
+"\n"
+"(gi, gv)=sgrad(x)   -- objective gradient\n"
+"(gi, gv)=sgrad(x,i) -- i-th constraint gradient\n"
+"\n"
+"Input\n"
+"x -- 1D array of length n with the values of variables\n"
+"i -- integer index of constraint (between 0 and m-1)\n"
+"\n"
+"Output\n"
+"gi  -- 1D array of integers holding the indices (0 .. n-1) of nonzero\n"
+"       elements in the sparse gradient vector\n"
+"gv  -- 1D array holding the values of nonzero elements in the sparse gradient\n"
+"       vector. Has the same length as gi.\n"
+"\n"
+"CUTEst tools used: CUTEST_cisgr\n"
+);
+
+static PyObject *cutest_sgrad(PyObject *self, PyObject *args) {
+    PyArrayObject *arg1, *Mgi, *Mgv;
+    doublereal *x, *sv;
+    int index;
+    npy_int *si;
+    npy_int icon, nnzg;
+
+    if (!check_setup())
+        return NULL;
+
+    if (CUTEst_ncon == 0) {
+        PyErr_SetString(PyExc_Exception, "For unconstrained problems please use grad()");
+        return NULL;
+    }
+
+    if (!PyArg_ParseTuple(args, "O|i", &arg1, &index))
+        return NULL;
+
+    /* Check if x is double and of correct length and shape */
+    if (!(PyArray_Check(arg1) && PyArray_ISFLOAT(arg1) && PyArray_TYPE(arg1)==NPY_DOUBLE && PyArray_NDIM(arg1)==1 && PyArray_DIM(arg1, 0)==CUTEst_nvar)) {
+        PyErr_SetString(PyExc_Exception, "Argument 1 must be a 1D double array of length nvar");
+        return NULL;
+    }
+
+    /* Check index */
+    if (PyObject_Length(args)>1) {
+        if (index<0 || index>=CUTEst_ncon) {
+            PyErr_SetString(PyExc_Exception, "Argument 2 must be between 0 and ncon-1");
+            return NULL;
+        }
+        icon=index+1;
+    } else {
+        icon=0;
+    }
+
+    x=(npy_double *)PyArray_DATA(arg1);
+    si=(npy_int *)malloc(CUTEst_nvar*sizeof(npy_int));
+    sv=(npy_double *)malloc(CUTEst_nvar*sizeof(npy_double));
+
+    CUTEST_cisgr((integer *)&status, (integer *)&CUTEst_nvar, (integer *)&icon, x, (integer *)&nnzg, (integer *)&CUTEst_nvar, sv, (integer *)si);
+
+    extract_sparse_gradient(nnzg, si, sv, (PyArrayObject **)&Mgi, (PyArrayObject **)&Mgv);
+
+    free(si);
+    free(sv);
+
+    return Py_BuildValue("OO", Mgi, Mgv);
+}
+
+
 PyDoc_STRVAR(cutest_scons_doc,
 "Returns the value of constraints and the sparse Jacobian of constraints at x.\n"
 "\n"
@@ -2009,6 +2164,8 @@ static PyMethodDef _methods[] = {
     {"ihess", cutest_ihess, METH_VARARGS, cutest_ihess_doc},
     {"hprod", cutest_hprod, METH_VARARGS, cutest_hprod_doc},
     {"gradhess", cutest_gradhess, METH_VARARGS, cutest_gradhess_doc},
+    {"sobj", cutest_sobj, METH_VARARGS, cutest_sobj_doc},
+    {"sgrad", cutest_sgrad, METH_VARARGS, cutest_sgrad_doc},
     {"scons", cutest_scons, METH_VARARGS, cutest_scons_doc},
     {"slagjac", cutest_slagjac, METH_VARARGS, cutest_slagjac_doc},
     {"sphess", cutest_sphess, METH_VARARGS, cutest_sphess_doc},
