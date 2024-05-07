@@ -2,6 +2,12 @@ Version History
 ===============
 This section lists the different versions of PyCUTEst and the updates between them.
 
+Version 1.7.0 (7 May 2024)
+--------------------------
+* New sobj function to evaluate the objective and sparse gradient
+* New sgrad function to evaluate the sparse gradient only
+* Document the need to install Python headers on Ubuntu
+
 Version 1.6.2 (9 Apr 2024)
 --------------------------
 * Migrate from setup.py to pyproject.toml
