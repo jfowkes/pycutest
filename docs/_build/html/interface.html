@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Problem Interface &mdash; PyCUTEst v1.6.2 documentation</title>
+  <title>Problem Interface &mdash; PyCUTEst v1.7.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -35,7 +35,7 @@
             PyCUTEst
           </a>
               <div class="version">
-                1.6.2
+                1.7.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -65,6 +65,8 @@
 <li class="toctree-l3"><a class="reference internal" href="methods/pycutest.CUTEstProblem.hprod.html">CUTEstProblem.hprod</a></li>
 <li class="toctree-l3"><a class="reference internal" href="methods/pycutest.CUTEstProblem.gradhess.html">CUTEstProblem.gradhess</a></li>
 <li class="toctree-l3"><a class="reference internal" href="methods/pycutest.CUTEstProblem.report.html">CUTEstProblem.report</a></li>
+<li class="toctree-l3"><a class="reference internal" href="methods/pycutest.CUTEstProblem.sobj.html">CUTEstProblem.sobj</a></li>
+<li class="toctree-l3"><a class="reference internal" href="methods/pycutest.CUTEstProblem.sgrad.html">CUTEstProblem.sgrad</a></li>
 <li class="toctree-l3"><a class="reference internal" href="methods/pycutest.CUTEstProblem.scons.html">CUTEstProblem.scons</a></li>
 <li class="toctree-l3"><a class="reference internal" href="methods/pycutest.CUTEstProblem.slagjac.html">CUTEstProblem.slagjac</a></li>
 <li class="toctree-l3"><a class="reference internal" href="methods/pycutest.CUTEstProblem.sphess.html">CUTEstProblem.sphess</a></li>
@@ -127,6 +129,8 @@
 </ul>
 <p>For large-scale problems, you may want to get vectors/matrices as sparse matrices. We have the following methods which return sparse matrices:</p>
 <ul class="simple">
+<li><p><a class="reference external" href="methods/pycutest.CUTEstProblem.sobj.html">sobj(x[, gradient])</a>: (sparse) evaluate objective (and optionally its gradient)</p></li>
+<li><p><a class="reference external" href="methods/pycutest.CUTEstProblem.sgrad.html">sgrad(x[, index])</a>: (sparse) evaluate objective gradient or specific constraint gradient</p></li>
 <li><p><a class="reference external" href="methods/pycutest.CUTEstProblem.scons.html">scons(x[, index, gradient])</a>: (sparse) evaluate constraint(s) and optionally their Jacobian/its gradient</p></li>
 <li><p><a class="reference external" href="methods/pycutest.CUTEstProblem.slagjac.html">slagjac(x[, v])</a>: (sparse) evaluate gradient of objective/Lagrangian and Jacobian of constraints</p></li>
 <li><p><a class="reference external" href="methods/pycutest.CUTEstProblem.sphess.html">sphess(x[, v])</a>: (sparse) evaluate Hessian of objective or Lagrangian</p></li>
@@ -206,6 +210,12 @@
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="methods/pycutest.CUTEstProblem.report.html#pycutest.CUTEstProblem.report" title="pycutest.CUTEstProblem.report"><code class="xref py py-obj docutils literal notranslate"><span class="pre">report</span></code></a>()</p></td>
 <td><p>Get CUTEst usage statistics.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="methods/pycutest.CUTEstProblem.sobj.html#pycutest.CUTEstProblem.sobj" title="pycutest.CUTEstProblem.sobj"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sobj</span></code></a>(x[, gradient])</p></td>
+<td><p>Evaluate the objective (and optionally its sparse gradient).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="methods/pycutest.CUTEstProblem.sgrad.html#pycutest.CUTEstProblem.sgrad" title="pycutest.CUTEstProblem.sgrad"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sgrad</span></code></a>(x[, index])</p></td>
+<td><p>Evaluate the sparse gradient of the objective function or sparse gradient of the i-th constraint.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="methods/pycutest.CUTEstProblem.scons.html#pycutest.CUTEstProblem.scons" title="pycutest.CUTEstProblem.scons"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scons</span></code></a>(x[, index, gradient])</p></td>
 <td><p>Evaluate the constraints (and optionally their sparse Jacobian or gradient).</p></td>

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CUTEstProblem.objcons &mdash; PyCUTEst v1.7.0 documentation</title>
+  <title>CUTEstProblem.sobj &mdash; PyCUTEst v1.7.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -19,8 +19,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="CUTEstProblem.cons" href="pycutest.CUTEstProblem.cons.html" />
-    <link rel="prev" title="CUTEstProblem.grad" href="pycutest.CUTEstProblem.grad.html" /> 
+    <link rel="next" title="CUTEstProblem.sgrad" href="pycutest.CUTEstProblem.sgrad.html" />
+    <link rel="prev" title="CUTEstProblem.report" href="pycutest.CUTEstProblem.report.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -55,10 +55,7 @@
 <li class="toctree-l2 current"><a class="reference internal" href="../interface.html#full-method-documentation">Full method documentation</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="pycutest.CUTEstProblem.obj.html">CUTEstProblem.obj</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pycutest.CUTEstProblem.grad.html">CUTEstProblem.grad</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">CUTEstProblem.objcons</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#pycutest.CUTEstProblem.objcons"><code class="docutils literal notranslate"><span class="pre">CUTEstProblem.objcons()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="pycutest.CUTEstProblem.objcons.html">CUTEstProblem.objcons</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pycutest.CUTEstProblem.cons.html">CUTEstProblem.cons</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pycutest.CUTEstProblem.lag.html">CUTEstProblem.lag</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pycutest.CUTEstProblem.lagjac.html">CUTEstProblem.lagjac</a></li>
@@ -68,7 +65,10 @@
 <li class="toctree-l3"><a class="reference internal" href="pycutest.CUTEstProblem.hprod.html">CUTEstProblem.hprod</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pycutest.CUTEstProblem.gradhess.html">CUTEstProblem.gradhess</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pycutest.CUTEstProblem.report.html">CUTEstProblem.report</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pycutest.CUTEstProblem.sobj.html">CUTEstProblem.sobj</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">CUTEstProblem.sobj</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pycutest.CUTEstProblem.sobj"><code class="docutils literal notranslate"><span class="pre">CUTEstProblem.sobj()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="pycutest.CUTEstProblem.sgrad.html">CUTEstProblem.sgrad</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pycutest.CUTEstProblem.scons.html">CUTEstProblem.scons</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pycutest.CUTEstProblem.slagjac.html">CUTEstProblem.slagjac</a></li>
@@ -100,9 +100,9 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../interface.html">Problem Interface</a></li>
-      <li class="breadcrumb-item active">CUTEstProblem.objcons</li>
+      <li class="breadcrumb-item active">CUTEstProblem.sobj</li>
       <li class="wy-breadcrumbs-aside">
-              <a href="https://github.com/jfowkes/pycutest/blob/master/docs/methods/pycutest.CUTEstProblem.objcons.rst" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/jfowkes/pycutest/blob/master/docs/methods/pycutest.CUTEstProblem.sobj.rst" class="fa fa-github"> Edit on GitHub</a>
       </li>
   </ul>
   <hr/>
@@ -110,27 +110,34 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="cutestproblem-objcons">
-<h1>CUTEstProblem.objcons<a class="headerlink" href="#cutestproblem-objcons" title="Permalink to this heading"></a></h1>
+  <section id="cutestproblem-sobj">
+<h1>CUTEstProblem.sobj<a class="headerlink" href="#cutestproblem-sobj" title="Permalink to this heading"></a></h1>
 <dl class="py method">
-<dt class="sig sig-object py" id="pycutest.CUTEstProblem.objcons">
-<span class="sig-prename descclassname"><span class="pre">CUTEstProblem.</span></span><span class="sig-name descname"><span class="pre">objcons</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycutest.CUTEstProblem.objcons" title="Permalink to this definition"></a></dt>
-<dd><p>Evaluate objective and constraints.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># objective and constraints</span>
-<span class="n">f</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">objcons</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<dt class="sig sig-object py" id="pycutest.CUTEstProblem.sobj">
+<span class="sig-prename descclassname"><span class="pre">CUTEstProblem.</span></span><span class="sig-name descname"><span class="pre">sobj</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gradient</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycutest.CUTEstProblem.sobj" title="Permalink to this definition"></a></dt>
+<dd><p>Evaluate the objective (and optionally its sparse gradient).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># objective</span>
+<span class="n">f</span>    <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">obj</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="c1"># objective and gradient</span>
+<span class="n">f</span><span class="p">,</span> <span class="n">g</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">obj</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">gradient</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>For unconstrained problems, c is None.</p>
-<p>This calls CUTEst routine CUTEst_cfn.</p>
+<p>The vector g is of type scipy.sparse.coo_matrix.
+For unconstrained problems, g is formed from a dense matrix due to CUTEst limitations.</p>
+<p>For small problems, problem.obj returns dense matrices.</p>
+<p>This calls CUTEst routine CUTEst_uofg or CUTEST_cofsg.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>x</strong> (<em>numpy.ndarray with shape</em><em> (</em><em>n</em><em>,</em><em>)</em>) – input vector</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>numpy.ndarray with shape</em><em> (</em><em>n</em><em>,</em><em>)</em>) – input vector</p></li>
+<li><p><strong>gradient</strong> (<em>bool</em><em>, </em><em>optional</em>) – whether to return objective and gradient, or just objective (default=False; i.e. objective only)</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>tuple (f, c) of objective and constraint values at x for constrained problems.</p>
+<dd class="field-even"><p>objective value f, or tuple (f,g) of objective and sparse gradient at x</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>(float, numpy.ndarray(m,))</p>
+<dd class="field-odd"><p>float or (float, scipy.sparse.coo_matrix(n,))</p>
 </dd>
 </dl>
 </dd></dl>
@@ -141,8 +148,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="pycutest.CUTEstProblem.grad.html" class="btn btn-neutral float-left" title="CUTEstProblem.grad" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="pycutest.CUTEstProblem.cons.html" class="btn btn-neutral float-right" title="CUTEstProblem.cons" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="pycutest.CUTEstProblem.report.html" class="btn btn-neutral float-left" title="CUTEstProblem.report" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pycutest.CUTEstProblem.sgrad.html" class="btn btn-neutral float-right" title="CUTEstProblem.sgrad" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
