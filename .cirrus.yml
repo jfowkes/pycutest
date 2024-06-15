@@ -1,0 +1,31 @@
+task:
+  macos_instance:
+    image: ghcr.io/cirruslabs/macos-sonoma-base:latest
+  matrix:
+    - name: Mac-Tests / build / (3.10)
+      python_script: brew install python@3.10
+    - name: Mac-Tests / build / (3.11)
+      python_script: brew install python@3.11
+    - name: Mac-Tests / build / (3.12)
+      python_script: brew install python@3.12
+  dependencies_script: |
+    brew tap optimizers/cutest &&
+    brew install cutest
+    sudo ln -s $CIRRUS_WORKING_DIR/pycutest/tests/problems /opt/homebrew/opt/mastsif &&
+    mkdir $CIRRUS_WORKING_DIR/pycutest_cache
+    python3 -m pip install --upgrade pip
+    python3 -m pip install .
+  test_script: |
+    source /opt/homebrew/opt/archdefs/archdefs.bashrc &&
+    source /opt/homebrew/opt/sifdecode/sifdecode.bashrc &&
+    export MASTSIF=/opt/homebrew/opt/mastsif/ &&
+    source /opt/homebrew/opt/cutest/cutest.bashrc
+    export PYCUTEST_CACHE="$CIRRUS_WORKING_DIR/pycutest_cache"
+    export MACOSX_DEPLOYMENT_TARGET=14.0
+    export TERM=xterm
+    python3 -m unittest pycutest.tests.test_sifdecode_extras
+    python3 -m unittest pycutest.tests.test_basic_functionality
+    python3 -m unittest pycutest.tests.test_sparse_functionality
+    python3 -m unittest pycutest.tests.test_sifparam_chars
+    python3 -m unittest pycutest.tests.test_multiple_instances
+    python3 -m unittest pycutest.tests.test_restore_cwd
