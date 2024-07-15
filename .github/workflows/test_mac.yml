@@ -28,7 +28,7 @@ jobs:
         sudo ln -s /opt/homebrew/bin/gfortran-12 /opt/homebrew/bin/gfortran
         sudo ln -s /opt/homebrew/Cellar/gcc/12.*/lib/gcc/12/*.dylib /opt/homebrew/lib/
         brew tap optimizers/cutest &&
-        brew install cutest
+        brew install cutest --without-single
         sudo ln -s $GITHUB_WORKSPACE/pycutest/tests/problems /opt/homebrew/opt/mastsif &&
         mkdir $GITHUB_WORKSPACE/pycutest_cache
         python -m pip install .
