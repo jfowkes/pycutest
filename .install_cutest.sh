@@ -28,6 +28,14 @@ echo ""
 echo ' Installing SIFDecode ...'
 cd $SIFDECODE
 
+#  ensure that objects and modules directories exist
+if [[ ! -e $SIFDECODE/objects ]]; then
+  $MKDIR $SIFDECODE/objects
+fi
+if [[ ! -e $SIFDECODE/modules ]]; then
+  $MKDIR $SIFDECODE/modules
+fi
+
 # create architecture-dependent object and module directories
 OBJDIR=$SIFDECODE/objects/$VERSION
 MODDIR=$SIFDECODE/modules/$VERSION
@@ -156,6 +164,14 @@ cd $topdir
 # install cutest
 echo ' Installing CUTEst ...'
 cd $CUTEST
+
+#  ensure that objects and modules directories exist
+if [[ ! -e $CUTEST/objects ]]; then
+  $MKDIR $CUTEST/objects
+fi
+if [[ ! -e $CUTEST/modules ]]; then
+  $MKDIR $CUTEST/modules
+fi
 
 # create architecture-dependent object and module directories
 OBJDIR=$CUTEST/objects/$VERSION
