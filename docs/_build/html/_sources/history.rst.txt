@@ -2,6 +2,10 @@ Version History
 ===============
 This section lists the different versions of PyCUTEst and the updates between them.
 
+Version 1.7.1 (15 Aug 2024)
+---------------------------
+* Fix incorrect time array size in report function
+
 Version 1.7.0 (7 May 2024)
 --------------------------
 * New sobj function to evaluate the objective and sparse gradient

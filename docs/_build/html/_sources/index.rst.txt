@@ -10,7 +10,7 @@ Python interface to the CUTEst optimization test environment
 
 **Release:** |version|
 
-**Date:** 7 May 2024
+**Date:** 15 August 2024
 
 **Author:** `Jaroslav Fowkes <jaroslav.fowkes@maths.ox.ac.uk>`_ and `Lindon Roberts <https://lindonroberts.github.io/>`_
 
