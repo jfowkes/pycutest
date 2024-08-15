@@ -2080,7 +2080,7 @@ PyDoc_STRVAR(cutest_report_doc,
 );
 
 static PyObject *cutest_report(PyObject *self, PyObject *args) {
-    doublereal calls[7], time[2];
+    doublereal calls[7], time[4];
     PyObject *dict;
 
     if (!check_setup())
