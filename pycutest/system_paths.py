@@ -41,10 +41,14 @@ def get_cutest_path():
         else:
             raise RuntimeError('Could not find CUTEST installation - have CUTEST and MYARCH environment variables been set correctly?')
     else:  # Linux
-        check_environment_vars_exist(['CUTEST', 'MYARCH'])
-        cutest_path = os.path.join(os.environ['CUTEST'], 'objects', os.environ['MYARCH'], 'double', 'libcutest.a')
-        if os.path.isfile(cutest_path):
-            return cutest_path
+        # First try environment variables, otherwise use default meson location
+        if 'CUTEST' in os.environ and 'MYARCH' in os.environ:
+            cutest_path = os.path.join(os.environ['CUTEST'], 'objects', os.environ['MYARCH'], 'double', 'libcutest.a')
+            if os.path.isfile(cutest_path):
+                return cutest_path
+        local_path = os.path.join('usr', 'local', 'lib', 'libcutest_double.a')
+        if os.path.isfile(local_path):
+            return local_path
         else:
             raise RuntimeError('Could not find CUTEST installation - have CUTEST and MYARCH environment variables been set correctly?')
 
@@ -62,10 +66,14 @@ def get_sifdecoder_path():
         else:
             raise RuntimeError('Could not find SIFDECODE installation - has SIFDECODE environment variable been set correctly?')
     else:  # Linux
-        check_environment_vars_exist(['SIFDECODE'])
-        sifdecoder_path = os.path.join(os.environ['SIFDECODE'], 'bin', 'sifdecoder')
-        if os.path.isfile(sifdecoder_path):
-            return sifdecoder_path
+        # First try environment variables, otherwise use default meson location
+        if 'SIFDECODE' in os.environ:
+            sifdecoder_path = os.path.join(os.environ['SIFDECODE'], 'bin', 'sifdecoder')
+            if os.path.isfile(sifdecoder_path):
+                return sifdecoder_path
+        local_path = os.path.join('usr', 'local', 'bin', 'sifdecoder')
+        if os.path.isfile(local_path):
+            return local_path
         else:
             raise RuntimeError('Could not find SIFDECODE installation - has SIFDECODE environment variable been set correctly?')
 
