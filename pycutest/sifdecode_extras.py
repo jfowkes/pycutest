@@ -64,7 +64,7 @@ def print_available_sif_params(problemName):
                 value = int(value)
             elif vals[1] == '(RE)':
                 dtype = 'float'
-                value = float(value)
+                value = float(value.replace('D','e').replace('d', 'e'))
             else:
                 dtype = 'unknown type'
                 value = None
