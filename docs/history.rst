@@ -2,6 +2,10 @@ Version History
 ===============
 This section lists the different versions of PyCUTEst and the updates between them.
 
+Version 1.7.2 (10 Dec 2024)
+---------------------------
+* Handle Fortran D exponents in SIF files
+
 Version 1.7.1 (15 Aug 2024)
 ---------------------------
 * Fix incorrect time array size in report function
