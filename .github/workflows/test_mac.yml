@@ -15,7 +15,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.10", "3.11", "3.12"]
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
 
     steps:
     - uses: actions/checkout@v4
@@ -25,8 +25,6 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
-        sudo ln -s /opt/homebrew/bin/gfortran-12 /opt/homebrew/bin/gfortran
-        sudo ln -s /opt/homebrew/Cellar/gcc/12.*/lib/gcc/12/*.dylib /opt/homebrew/lib/
         brew tap optimizers/cutest &&
         brew install cutest --without-single
         sudo ln -s $GITHUB_WORKSPACE/pycutest/tests/problems /opt/homebrew/opt/mastsif &&
