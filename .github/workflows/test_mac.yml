@@ -27,7 +27,7 @@ jobs:
       run: |
         brew tap optimizers/cutest &&
         brew install cutest
-        sudo ln -s $GITHUB_WORKSPACE/pycutest/tests/problems /opt/homebrew/opt/mastsif &&
+        sudo ln -s $GITHUB_WORKSPACE/pycutest/tests/problems /opt/homebrew/opt/mastsif/share/mastsif &&
         mkdir $GITHUB_WORKSPACE/pycutest_cache
         python -m pip install .
     - name: Tests
