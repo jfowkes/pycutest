@@ -26,7 +26,7 @@ jobs:
     - name: Install dependencies
       run: |
         brew tap optimizers/cutest &&
-        brew install cutest --without-single
+        brew install cutest
         sudo ln -s $GITHUB_WORKSPACE/pycutest/tests/problems /opt/homebrew/opt/mastsif &&
         mkdir $GITHUB_WORKSPACE/pycutest_cache
         python -m pip install .

@@ -72,7 +72,7 @@ Then you can easily install CUTEst:
  .. code-block:: bash
 
     $ brew tap optimizers/cutest
-    $ brew install cutest --without-single --with-matlab # if using Matlab interface
+    $ brew install cutest
     $ brew install mastsif  # if you want all the test problems
     $ for f in "archdefs" "mastsif" "sifdecode" "cutest"; do \
     $   echo ". $(brew --prefix $f)/$f.bashrc" >> ~/.bashrc; \
