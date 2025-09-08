@@ -74,7 +74,7 @@ Then you can easily install CUTEst:
     $ brew tap optimizers/cutest
     $ brew install cutest
     $ brew install mastsif  # if you want all the test problems
-    $ for f in "archdefs" "mastsif" "sifdecode" "cutest"; do \
+    $ for f in "mastsif" "sifdecode" "cutest"; do \
     $   echo ". $(brew --prefix $f)/$f.bashrc" >> ~/.bashrc; \
     $ done
 

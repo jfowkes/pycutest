@@ -32,7 +32,6 @@ jobs:
         python -m pip install .
     - name: Tests
       run: |
-        source /opt/homebrew/opt/archdefs/archdefs.bashrc &&
         source /opt/homebrew/opt/sifdecode/sifdecode.bashrc &&
         export MASTSIF=/opt/homebrew/opt/mastsif/ &&
         source /opt/homebrew/opt/cutest/cutest.bashrc
