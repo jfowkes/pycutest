@@ -24,7 +24,7 @@ def print_available_sif_params(problemName):
     try:
         # Start sifdecode
         p = subprocess.Popen(
-            [get_sifdecoder_path()] + ['-show'] + [problemName],
+            [get_sifdecoder_path()] + ['-show'] + [get_mastsif_path()] + [problemName] + ['.SIF'],
             universal_newlines=True,
             stdout=subprocess.PIPE, stderr=subprocess.STDOUT
         )
