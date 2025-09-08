@@ -177,7 +177,7 @@ def decode_and_compile_problem(problemName, destination=None, sifParams=None, si
     try:
         # Start sifdecode
         p = subprocess.Popen(
-            [get_sifdecoder_path()] + args + [get_mastsif_path()] + [problemName] + ['.SIF'],
+            [get_sifdecoder_path()] + args + [os.path.join(get_mastsif_path(), problemName + '.SIF')],
             universal_newlines=True,
             stdout=subprocess.PIPE, stderr=subprocess.STDOUT
         )
