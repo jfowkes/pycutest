@@ -35,6 +35,11 @@ def get_cutest_path():
             cutest_path = os.path.join(os.environ['CUTEST'], 'objects', os.environ['MYARCH'], 'double', 'libcutest.a')
             if os.path.isfile(cutest_path):
                 return cutest_path
+        # New meson default homebrew location (library is named libcutest_double.a)
+        homebrew_path = os.path.join(homebrew_prefix, 'opt', 'cutest', 'lib', 'libcutest_double.a')  # HOMEBREW_PREFIX/opt/cutest/lib/libcutest_double.a
+        if os.path.isfile(homebrew_path):
+            return homebrew_path
+        # Old build-system homebrew location (library is named libcutest.a)
         homebrew_path = os.path.join(homebrew_prefix, 'opt', 'cutest', 'lib', 'libcutest.a')  # HOMEBREW_PREFIX/opt/cutest/lib/libcutest.a
         if os.path.isfile(homebrew_path):
             return homebrew_path
