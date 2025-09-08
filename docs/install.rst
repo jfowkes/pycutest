@@ -74,11 +74,6 @@ Then you can easily install CUTEst:
     $ brew tap optimizers/cutest
     $ brew install cutest
     $ brew install mastsif  # if you want all the test problems
-    $ for f in "mastsif" "sifdecode" "cutest"; do \
-    $   echo ". $(brew --prefix $f)/$f.bashrc" >> ~/.bashrc; \
-    $ done
-
-**Anaconda Users:** *please ensure that* :code:`~/.bashrc` *is sourced in your conda environment (you can do this with the command* :code:`source ~/.bashrc` *) otherwise you may encounter errors using PyCUTEst.*
 
 **Please Note:** *you may see warnings such as* :code:`ld: warning: object file (RANGE.o) was built for newer macOS version (11.5) than being linked (10.15)` *. To suppress these warnings please set the environment variable* :code:`MACOSX_DEPLOYMENT_TARGET` *to your current macOS version (e.g.* :code:`export MACOSX_DEPLOYMENT_TARGET=11.5` *in this example, you can make this permanent by adding it to your* :code:`~/.bashrc` *file).*
 
