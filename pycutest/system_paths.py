@@ -65,11 +65,6 @@ def get_sifdecoder_path():
             sifdecoder_path = os.path.join(os.environ['SIFDECODE'], 'bin', 'sifdecoder')
             if os.path.isfile(sifdecoder_path):
                 return sifdecoder_path
-        # New meson default homebrew location (binary is named sifdecoder_standalone)
-        homebrew_path = os.path.join(homebrew_prefix, 'opt', 'sifdecode', 'bin', 'sifdecoder_standalone')  # HOMEBREW_PREFIX/opt/sifdecode/bin/sifdecoder_standalone
-        if os.path.isfile(homebrew_path):
-            return homebrew_path
-        # Old build-system homebrew location (binary is named sifdecoder)
         homebrew_path = os.path.join(homebrew_prefix, 'opt', 'sifdecode', 'bin', 'sifdecoder')  # HOMEBREW_PREFIX/opt/sifdecode/bin/sifdecoder
         if os.path.isfile(homebrew_path):
             return homebrew_path
