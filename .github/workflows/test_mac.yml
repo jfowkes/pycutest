@@ -25,6 +25,8 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
+        sudo ln -s /opt/homebrew/bin/gfortran-13 /opt/homebrew/bin/gfortran
+        sudo ln -s /opt/homebrew/Cellar/gcc/13.*/lib/gcc/13/*.dylib /opt/homebrew/lib/
         brew tap optimizers/cutest &&
         brew install cutest
         brew install mastsif
