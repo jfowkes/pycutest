@@ -70,13 +70,16 @@ setup(
 #
 setupScriptLinux="""
 define_macros=[('LINUX', None)]
-include_dirs=[np.get_include(),os.environ['CUTEST']+'/include/']
+try: # make build system path
+    include_dirs=[np.get_include(),os.environ['CUTEST']+'/include/']
+except: # meson build system path
+    include_dirs=[np.get_include(),'/usr/local/include/']
 objFileList=glob('*.o')
-objFileList.append(os.environ['CUTEST']+'/objects/'+os.environ['MYARCH']+'/double/libcutest.a')
+objFileList.append('%s')
 libraries=['gfortran']
 library_dirs=[]
 extra_link_args=[]
-"""
+""" % get_cutest_path()
 
 #
 # Mac-specific part of setup.py
