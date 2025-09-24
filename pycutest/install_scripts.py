@@ -14,7 +14,7 @@ __all__ = ['get_setup_script']
 #
 setupScript="""#!/usr/bin/env python
 # (C)2011 Arpad Buermen
-# (C)2022 Jaroslav Fowkes, Lindon Roberts
+# (C)2025 Jaroslav Fowkes, Lindon Roberts
 # Licensed under GNU GPL V3
 
 #
@@ -89,7 +89,10 @@ import subprocess
 # extract the homebrew prefix
 homebrew_prefix = subprocess.check_output(['brew', '--prefix']).decode('utf-8')[:-1]
 define_macros=[('LINUX', None)]
-include_dirs=[np.get_include(),os.environ['CUTEST']+'/include/']
+try: # old homebrew path
+    include_dirs=[np.get_include(),os.environ['CUTEST']+'/include/']
+except: # new homebrew path
+    include_dirs=[np.get_include(),homebrew_prefix+'/include/']
 objFileList=glob('*.o')
 objFileList.append('%s')
 libraries=['gfortran']
