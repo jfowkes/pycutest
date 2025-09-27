@@ -1,4 +1,4 @@
-name: Linux-Tests
+name: Linux-Tests-Meson
 
 on:
   push:
@@ -27,17 +27,23 @@ jobs:
       run: |
         sudo apt-get install -qq gfortran
         mkdir cutest &&
-        git clone https://github.com/ralna/ARCHDefs ./cutest/archdefs &&
         git clone https://github.com/ralna/SIFDecode ./cutest/sifdecode &&
         git clone https://github.com/ralna/CUTEst ./cutest/cutest &&
         ln -s $GITHUB_WORKSPACE/pycutest/tests/problems ./cutest/mastsif &&
-        source ./.cutest.env &&
-        ./.install_cutest.sh
+        export MASTSIF=$GITHUB_WORKSPACE/cutest/mastsif/
+        cd ./cutest/sifdecode &&
+        meson setup builddir &&
+        meson compile -C builddir &&
+        sudo meson install -C builddir
+        cd ../cutest &&
+        meson setup builddir &&
+        meson compile -C builddir &&
+        sudo meson install -C builddir
         mkdir $GITHUB_WORKSPACE/pycutest_cache
         python -m pip install .
     - name: Tests
       run: |
-        source ./.cutest.env
+        export MASTSIF=$GITHUB_WORKSPACE/cutest/mastsif/
         export PYCUTEST_CACHE="$GITHUB_WORKSPACE/pycutest_cache"
         export TERM=xterm
         python -m unittest pycutest.tests.test_sifdecode_extras
