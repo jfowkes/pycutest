@@ -51,7 +51,7 @@ def get_cutest_path():
             cutest_path = os.path.join(os.environ['CUTEST'], 'objects', os.environ['MYARCH'], 'double', 'libcutest.a')
             if os.path.isfile(cutest_path):
                 return cutest_path
-        local_path = os.path.join('usr', 'local', 'lib', 'libcutest_double.a')
+        local_path = os.path.join(os.path.abspath(os.sep), 'usr', 'local', 'lib', 'libcutest_double.a')
         if os.path.isfile(local_path):
             return local_path
         else:
@@ -76,7 +76,7 @@ def get_sifdecoder_path():
             sifdecoder_path = os.path.join(os.environ['SIFDECODE'], 'bin', 'sifdecoder')
             if os.path.isfile(sifdecoder_path):
                 return sifdecoder_path
-        local_path = os.path.join('usr', 'local', 'bin', 'sifdecoder')
+        local_path = os.path.join(os.path.abspath(os.sep), 'usr', 'local', 'bin', 'sifdecoder')
         if os.path.isfile(local_path):
             return local_path
         else:
