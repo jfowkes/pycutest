@@ -25,6 +25,8 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
+        sudo ln -s /opt/homebrew/bin/gfortran-14 /opt/homebrew/bin/gfortran
+        sudo ln -s /opt/homebrew/Cellar/gcc/14.*/lib/gcc/14/*.dylib /opt/homebrew/lib/
         mkdir cutest &&
         git clone https://github.com/ralna/ARCHDefs ./cutest/archdefs &&
         git clone https://github.com/ralna/SIFDecode ./cutest/sifdecode &&
