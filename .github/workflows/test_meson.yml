@@ -39,7 +39,8 @@ jobs:
         meson setup builddir &&
         meson compile -C builddir &&
         sudo meson install -C builddir
-        mkdir $GITHUB_WORKSPACE/pycutest_cache
+        cd .. &&
+        mkdir $GITHUB_WORKSPACE/pycutest_cache &&
         python -m pip install .
     - name: Tests
       run: |
