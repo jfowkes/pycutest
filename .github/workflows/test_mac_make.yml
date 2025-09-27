@@ -36,7 +36,7 @@ jobs:
         python -m pip install .
     - name: Tests
       run: |
-        source ./.cutest.env
+        source ./.cutest_mac.env
         export PYCUTEST_CACHE="$GITHUB_WORKSPACE/pycutest_cache"
         export TERM=xterm
         python -m unittest pycutest.tests.test_sifdecode_extras
