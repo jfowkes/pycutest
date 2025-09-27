@@ -1,0 +1,57 @@
+name: Linux-Tests-Meson
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  schedule:
+    - cron: '30 3 * * 0'
+
+jobs:
+  build:
+
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        sudo ln -s /opt/homebrew/bin/gfortran-14 /opt/homebrew/bin/gfortran
+        sudo ln -s /opt/homebrew/Cellar/gcc/14.*/lib/gcc/14/*.dylib /opt/homebrew/lib/
+        brew install meson
+        mkdir cutest &&
+        git clone https://github.com/ralna/SIFDecode ./cutest/sifdecode &&
+        git clone https://github.com/ralna/CUTEst ./cutest/cutest &&
+        ln -s $GITHUB_WORKSPACE/pycutest/tests/problems ./cutest/mastsif &&
+        export MASTSIF=$GITHUB_WORKSPACE/cutest/mastsif/
+        cd ./cutest/sifdecode &&
+        meson setup builddir &&
+        meson compile -C builddir &&
+        sudo meson install -C builddir
+        cd ../cutest &&
+        meson setup builddir -Dmodules=false &&
+        meson compile -C builddir &&
+        sudo meson install -C builddir
+        cd ../.. &&
+        mkdir $GITHUB_WORKSPACE/pycutest_cache &&
+        python -m pip install .
+    - name: Tests
+      run: |
+        export MASTSIF=$GITHUB_WORKSPACE/cutest/mastsif/
+        export PYCUTEST_CACHE="$GITHUB_WORKSPACE/pycutest_cache"
+        export TERM=xterm
+        python -m unittest pycutest.tests.test_sifdecode_extras
+        python -m unittest pycutest.tests.test_basic_functionality
+        python -m unittest pycutest.tests.test_sparse_functionality
+        python -m unittest pycutest.tests.test_sifparam_chars
+        python -m unittest pycutest.tests.test_multiple_instances
+        python -m unittest pycutest.tests.test_restore_cwd
