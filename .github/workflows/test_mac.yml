@@ -29,7 +29,7 @@ jobs:
         sudo ln -s /opt/homebrew/Cellar/gcc/14.*/lib/gcc/14/*.dylib /opt/homebrew/lib/
         brew tap optimizers/cutest &&
         brew install cutest
-        brew install mastsif
+        sudo ln -s $GITHUB_WORKSPACE/pycutest/tests/problems /opt/homebrew/opt/mastsif
         mkdir $GITHUB_WORKSPACE/pycutest_cache
         python -m pip install .
     - name: Tests
