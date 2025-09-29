@@ -67,12 +67,12 @@ class TestRemoval(unittest.TestCase):
             self.assertFalse((p, sifParams) in all_probs, msg="Found %s in cached problems" % p)
 
 
-#class TestParamError(unittest.TestCase):
-#    def runTest(self):
-#        prob = 'NGONE'
-#        bad_params = {'HNS': 4}
-#        pycutest.clear_cache(prob, sifParams=bad_params)
-#        self.assertRaises(RuntimeError, pycutest.import_problem, prob, sifParams=bad_params)
+class TestParamError(unittest.TestCase):
+    def runTest(self):
+        prob = 'NGONE'
+        bad_params = {'HNS': 4}
+        pycutest.clear_cache(prob, sifParams=bad_params)
+        self.assertRaises(RuntimeError, pycutest.import_problem, prob, sifParams=bad_params)
 
 
 class TestALLINITU(unittest.TestCase):
@@ -184,7 +184,6 @@ class TestALLINITC_with_fixed(unittest.TestCase):
         self.assertFalse(p.eq_cons_first, msg="eq_cons_first is True")
         self.assertFalse(p.linear_cons_first, msg="linear_cons_first is True")
         self.assertFalse(p.nonlinear_vars_first, msg="Nonlinear variables listed first")
-        print(p.bl)
         self.assertTrue(array_compare(p.bl, np.array([-1e20, 1.0, -1e10, 2.0])), msg="Wrong lower bounds")
         self.assertTrue(array_compare(p.bu, np.array([1e20, 1e20, 1.0, 2.0])), msg="Wrong upper bounds")
         self.assertEqual(p.nnzj, 2, msg="Wrong nnzj")
