@@ -1,4 +1,4 @@
-name: Linux-Tests-Meson
+name: Mac-Tests-Meson
 
 on:
   push:

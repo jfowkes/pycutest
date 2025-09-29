@@ -39,6 +39,10 @@ def get_cutest_path():
         homebrew_path = os.path.join(homebrew_prefix, 'opt', 'cutest', 'lib', 'libcutest_double.a')  # HOMEBREW_PREFIX/opt/cutest/lib/libcutest_double.a
         if os.path.isfile(homebrew_path):
             return homebrew_path
+        # New meson default manual install location (library is named libcutest_double.a)
+        homebrew_path = os.path.join(homebrew_prefix, 'lib', 'libcutest_double.a')  # HOMEBREW_PREFIX/lib/libcutest_double.a
+        if os.path.isfile(homebrew_path):
+            return homebrew_path
         # Old build-system homebrew location (library is named libcutest.a)
         homebrew_path = os.path.join(homebrew_prefix, 'opt', 'cutest', 'lib', 'libcutest.a')  # HOMEBREW_PREFIX/opt/cutest/lib/libcutest.a
         if os.path.isfile(homebrew_path):
@@ -65,7 +69,12 @@ def get_sifdecoder_path():
             sifdecoder_path = os.path.join(os.environ['SIFDECODE'], 'bin', 'sifdecoder')
             if os.path.isfile(sifdecoder_path):
                 return sifdecoder_path
+        # New meson default homebrew location
         homebrew_path = os.path.join(homebrew_prefix, 'opt', 'sifdecode', 'bin', 'sifdecoder')  # HOMEBREW_PREFIX/opt/sifdecode/bin/sifdecoder
+        if os.path.isfile(homebrew_path):
+            return homebrew_path
+        # New meson default manual install location
+        homebrew_path = os.path.join(homebrew_prefix, 'bin', 'sifdecoder')  # HOMEBREW_PREFIX/bin/sifdecoder
         if os.path.isfile(homebrew_path):
             return homebrew_path
         else:
