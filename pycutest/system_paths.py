@@ -32,12 +32,17 @@ def check_environment_vars_exist(vars):
 
 def get_cutest_path():
     if sys.platform == 'darwin':  # Mac
-        # First try environment variables for old build system
+        # First try environment variables for old build system (library is named libcutest.a)
         if 'CUTEST' in os.environ and 'MYARCH' in os.environ:
             cutest_path = os.path.join(os.environ['CUTEST'], 'objects', os.environ['MYARCH'], 'double', 'libcutest.a')
             if os.path.isfile(cutest_path):
                 return cutest_path
-        # Then try default homebrew location for meson build system (library is named libcutest_double.a)
+        # Then try environment variable for new build system (library is named libcutest_double.a)
+        if 'CUTEST' in os.environ:
+            cutest_path = os.path.join(os.environ['CUTEST'], 'lib', 'libcutest_double.a')
+            if os.path.isfile(cutest_path):
+                return cutest_path
+        # Then try default homebrew location for new build system (library is named libcutest_double.a)
         homebrew_path = os.path.join(homebrew_prefix, 'opt', 'cutest', 'lib', 'libcutest_double.a')
         if os.path.isfile(homebrew_path):
             return homebrew_path
@@ -52,9 +57,14 @@ def get_cutest_path():
         # Raise error if cutest library not found
         raise RuntimeError('Could not find CUTEST installation - have CUTEST and/or MYARCH environment variables been set correctly?')
     else:  # Linux
-        # First try environment variables for old build system
+        # First try environment variables for old build system (library is named libcutest.a)
         if 'CUTEST' in os.environ and 'MYARCH' in os.environ:
             cutest_path = os.path.join(os.environ['CUTEST'], 'objects', os.environ['MYARCH'], 'double', 'libcutest.a')
+            if os.path.isfile(cutest_path):
+                return cutest_path
+        # Then try environment variable for new build system (library is named libcutest_double.a)
+        if 'CUTEST' in os.environ:
+            cutest_path = os.path.join(os.environ['CUTEST'], 'lib', 'libcutest_double.a')
             if os.path.isfile(cutest_path):
                 return cutest_path
         # Otherwise try default meson manual install location (library is named libcutest_double.a)
@@ -67,7 +77,7 @@ def get_cutest_path():
 
 def get_cutest_include_path():
     if sys.platform == 'darwin':  # Mac
-        # First try environment variable for old build system
+        # First try environment variable (for old and new build systems)
         if 'CUTEST' in os.environ:
             cutest_include_path = os.path.join(os.environ['CUTEST'], 'include')
             if os.path.isfile(os.path.join(cutest_include_path, 'cutest.h')):
@@ -79,7 +89,7 @@ def get_cutest_include_path():
         # Raise error if cutest header not found
         raise RuntimeError('Could not find CUTEST installation - has CUTEST environment variable been set correctly?')
     else:  # Linux
-        # First try environment variable
+        # First try environment variable (for old and new build systems)
         if 'CUTEST' in os.environ:
             cutest_include_path = os.path.join(os.environ['CUTEST'], 'include')
             if os.path.isfile(os.path.join(cutest_include_path, 'cutest.h')):
@@ -94,7 +104,7 @@ def get_cutest_include_path():
 
 def get_sifdecoder_path():
     if sys.platform == 'darwin':  # Mac
-        # First try environment variable for old build system
+        # First try environment variable (for old and new build systems)
         if 'SIFDECODE' in os.environ:
             sifdecoder_path = os.path.join(os.environ['SIFDECODE'], 'bin', 'sifdecoder')
             if os.path.isfile(sifdecoder_path):
@@ -110,7 +120,7 @@ def get_sifdecoder_path():
         # Raise error if sifdecoder not found
         raise RuntimeError('Could not find SIFDECODE installation - has SIFDECODE environment variable been set correctly?')
     else:  # Linux
-        # First try environment variable
+        # First try environment variable (for old and new build systems)
         if 'SIFDECODE' in os.environ:
             sifdecoder_path = os.path.join(os.environ['SIFDECODE'], 'bin', 'sifdecoder')
             if os.path.isfile(sifdecoder_path):
@@ -125,7 +135,7 @@ def get_sifdecoder_path():
 
 def get_mastsif_path():
     if sys.platform == 'darwin':  # Mac
-        # First try environment variable
+        # First try environment variable (for old and new build systems)
         if 'MASTSIF' in os.environ:
             mastsif_path = os.environ['MASTSIF']
             if os.path.isdir(mastsif_path):
@@ -137,7 +147,7 @@ def get_mastsif_path():
         # Raise error if mastsif not found
         raise RuntimeError('Could not find MASTSIF folder - has MASTSIF environment variable been set correctly?')
     else:  # Linux
-        # Always use environment variable
+        # Always use environment variable (for old and new build systems)
         check_environment_vars_exist(['MASTSIF'])
         mastsif_path = os.environ['MASTSIF']
         if os.path.isdir(mastsif_path):
