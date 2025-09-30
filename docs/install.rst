@@ -17,7 +17,10 @@ Note that CUTEst must be installed in order for PyCUTEst to work.
 
 Installing CUTEst on Linux
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
-These instructions do not include installation of the MATLAB interface. You will need to install four packages: `archdefs <https://github.com/ralna/ARCHDefs>`_, `SIFDecode <https://github.com/ralna/SIFDecode>`_, `CUTEst <https://github.com/ralna/CUTEst>`_ and `MASTSIF <https://bitbucket.org/optrove/sif>`_. To keep things simple, install all four packages in the same directory:
+
+Installing CUTEst using Bash Script
+"""""""""""""""""""""""""""""""""""
+You will need to install four packages: `archdefs <https://github.com/ralna/ARCHDefs>`_, `SIFDecode <https://github.com/ralna/SIFDecode>`_, `CUTEst <https://github.com/ralna/CUTEst>`_ and `MASTSIF <https://bitbucket.org/optrove/sif>`_. To keep things simple, install all four packages in the same directory:
 
  .. code-block:: bash
 
@@ -59,8 +62,68 @@ And CUTEst should run from here. To test that the installation works, issue the 
 
 **Please Note:** *currently PyCUTEst only supports gfortran and uses the default version on your path (as returned by* :code:`gfortran -v` *). Please ensure this is the same version that you install CUTEst with above otherwise you may experience segmentation faults.*
 
+Installing CUTEst using Meson
+"""""""""""""""""""""""""""""
+CUTEst can now be installed using the `meson build system <https://mesonbuild.com/>`_.
+You will need to install meson (:code:`apt install meson` on Ubuntu) and three packages: SIFDecode, CUTEst and MASTSIF. To keep things simple, clone all three packages into the same directory:
+
+.. code-block:: bash
+
+    $ mkdir cutest
+    $ cd cutest
+    $ git clone https://github.com/ralna/SIFDecode ./sifdecode
+    $ git clone https://github.com/ralna/CUTEst ./cutest
+    $ git clone https://bitbucket.org/optrove/sif ./mastsif
+
+Note that :code:`mastsif` contains all the test problem definitions and
+is therefore quite large. If you're short on space you may want to copy
+only the ``*.SIF`` files for the problems you wish to test on.
+
+First we need to compile and install SIFDecode (requires :code:`gfortran` and :code:`gcc`):
+
+.. code-block:: bash
+
+    $ cd sifdecode
+    $ meson setup builddir
+    $ meson compile -C builddir
+    $ sudo meson install -C builddir
+
+And SIFDecode should run from here. To test that the installation works, issue the command:
+
+.. code-block:: bash
+
+    $ meson test -C builddir
+
+Now we are ready to install CUTEst in double precision (requires :code:`gfortran` and :code:`gcc`):
+
+.. code-block:: bash
+
+    $ cd ../cutest
+    $ meson setup builddir
+    $ meson compile -C builddir
+    $ sudo meson install -C builddir
+
+And CUTEst should run from here. To test that the installation works, issue the command:
+
+.. code-block:: bash
+
+    $ meson test -C builddir
+
+Finally set the following environment variable in your :code:`~/.bashrc` to point to the MASTSIF installation directory used above:
+
+ .. code-block:: bash
+
+    # CUTEst
+    export MASTSIF=/path/to/cutest/mastsif/
+
+It is also possible to install SIFDecode and CUTEst to custom locations using the :code:`--prefix` argument to :code:`meson setup`.
+In this case you will also need to set the :code:`SIFDECODE` and :code:`CUTEST` environment variables to the install prefix.
+
 Installing CUTEst on Mac
 ^^^^^^^^^^^^^^^^^^^^^^^^
+
+Installing CUTEst using Homebrew
+""""""""""""""""""""""""""""""""
 Install CUTEst using Homebrew as detailed below (installing CUTEst manually on Mac is not supported). First it is important to ensure that you have the latest version of Xcode Command Line Tools installed (or the latest version of Xcode), please ensure this is the case by following `this guide <https://mac.install.guide/commandlinetools/index.html>`_. Now install the Homebrew package manager:
 
  .. code-block:: bash
@@ -74,8 +137,109 @@ Then you can easily install CUTEst:
     $ brew tap optimizers/cutest
     $ brew install cutest
     $ brew install mastsif  # if you want all the test problems
+    $ cat "$(brew --prefix mastsif)/mastsif.bashrc" >> ~/.bashrc
+**Anaconda Users:** *please ensure that* :code:`~/.bashrc` *is sourced in your conda environment (you can do this with the command* :code:`source ~/.bashrc` *) otherwise you may encounter errors using PyCUTEst.*
 
-**Please Note:** *you may see warnings such as* :code:`ld: warning: object file (RANGE.o) was built for newer macOS version (11.5) than being linked (10.15)` *. To suppress these warnings please set the environment variable* :code:`MACOSX_DEPLOYMENT_TARGET` *to your current macOS version (e.g.* :code:`export MACOSX_DEPLOYMENT_TARGET=11.5` *in this example, you can make this permanent by adding it to your* :code:`~/.bashrc` *file).*
+**Please Note:** *you may see warnings such as* :code:`ld: warning: object file (RANGE.o) was built for newer macOS version (15.0) than being linked (14.0)` *. To suppress these warnings please set the environment variable* :code:`MACOSX_DEPLOYMENT_TARGET` *to your current macOS version (e.g.* :code:`export MACOSX_DEPLOYMENT_TARGET=15.0` *in this example, you can make this permanent by adding it to your* :code:`~/.bashrc` *file).*
+
+Installing CUTEst using Bash Script
+"""""""""""""""""""""""""""""""""""
+You will need to install gcc (:code:`brew install gcc` using Homebrew) and four packages: ARCHDefs, SIFDecode, CUTEst and MASTSIF. To keep things simple, install all four packages in the same directory:
+
+ .. code-block:: bash
+
+    $ mkdir cutest
+    $ cd cutest
+    $ git clone https://github.com/ralna/ARCHDefs ./archdefs
+    $ git clone https://github.com/ralna/SIFDecode ./sifdecode
+    $ git clone https://github.com/ralna/CUTEst ./cutest
+    $ git clone https://bitbucket.org/optrove/sif ./mastsif
+
+Note that :code:`mastsif` contains all the test problem definitions and
+is therefore quite large. If you're short on space you may want to copy
+only the ``*.SIF`` files for the problems you wish to test on.
+
+Next set the following environment variables in your :code:`~/.bashrc` to point to the installation directories used above:
+
+ .. code-block:: bash
+
+    # CUTEst
+    export ARCHDEFS=/path/to/cutest/archdefs/
+    export SIFDECODE=/path/to/cutest/sifdecode/
+    export MASTSIF=/path/to/cutest/mastsif/
+    export CUTEST=/path/to/cutest/cutest/
+    export MYARCH="mac64.osx.gfo"
+
+Now we are ready to install CUTEst in double precision (requires :code:`gfortran` and :code:`gcc`):
+
+ .. code-block:: bash
+
+    $ source ~/.bashrc # load above environment variables
+    $ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/jfowkes/pycutest/master/.install_cutest_mac.sh)"
+
+And CUTEst should run from here. To test that the installation works, issue the commands:
+
+ .. code-block:: bash
+
+    $ cd $SIFDECODE/src ; make -f $SIFDECODE/makefiles/$MYARCH test
+    $ cd $CUTEST/src ; make -f $CUTEST/makefiles/$MYARCH test
+
+Installing CUTEst using Meson
+"""""""""""""""""""""""""""""
+CUTEst can now be installed using the `meson build system <https://mesonbuild.com/>`_.
+You will need to install meson (:code:`brew install meson` using Homebrew) and three packages: SIFDecode, CUTEst and MASTSIF. To keep things simple, clone all three packages into the same directory:
+
+.. code-block:: bash
+
+    $ mkdir cutest
+    $ cd cutest
+    $ git clone https://github.com/ralna/SIFDecode ./sifdecode
+    $ git clone https://github.com/ralna/CUTEst ./cutest
+    $ git clone https://bitbucket.org/optrove/sif ./mastsif
+
+Note that :code:`mastsif` contains all the test problem definitions and
+is therefore quite large. If you're short on space you may want to copy
+only the ``*.SIF`` files for the problems you wish to test on.
+
+First we need to compile and install SIFDecode (requires :code:`gfortran` and :code:`gcc`):
+
+.. code-block:: bash
+
+    $ cd sifdecode
+    $ meson setup builddir
+    $ meson compile -C builddir
+    $ sudo meson install -C builddir
+
+And SIFDecode should run from here. To test that the installation works, issue the command:
+
+.. code-block:: bash
+
+    $ meson test -C builddir
+
+Now we are ready to install CUTEst in double precision (requires :code:`gfortran` and :code:`gcc`):
+
+.. code-block:: bash
+
+    $ cd ../cutest
+    $ meson setup builddir
+    $ meson compile -C builddir
+    $ sudo meson install -C builddir
+
+And CUTEst should run from here. To test that the installation works, issue the command:
+
+.. code-block:: bash
+
+    $ meson test -C builddir
+
+Finally set the following environment variable in your :code:`~/.bashrc` to point to the MASTSIF installation directory used above:
+
+ .. code-block:: bash
+
+    # CUTEst
+    export MASTSIF=/path/to/cutest/mastsif/
+
+It is also possible to install SIFDecode and CUTEst to custom locations using the :code:`--prefix` argument to :code:`meson setup`.
+In this case you will also need to set the :code:`SIFDECODE` and :code:`CUTEST` environment variables to the install prefix.
 
 CUTEst Docker Container
 ^^^^^^^^^^^^^^^^^^^^^^^
