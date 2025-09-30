@@ -166,7 +166,7 @@ class TestALLINITC_with_fixed(unittest.TestCase):
         # ALLINITC has the same objective function as above, but extra constraints:
         # Bounds:
         # x[1] >= 1
-        # -1e10 <= x[2] <= 1
+        # -1e20 <= x[2] <= 1
         # x[3] == 2
         # Nonlinear constraint
         # x[0]**2 + x[1]**2 - 1 == 0
@@ -184,7 +184,7 @@ class TestALLINITC_with_fixed(unittest.TestCase):
         self.assertFalse(p.eq_cons_first, msg="eq_cons_first is True")
         self.assertFalse(p.linear_cons_first, msg="linear_cons_first is True")
         self.assertFalse(p.nonlinear_vars_first, msg="Nonlinear variables listed first")
-        self.assertTrue(array_compare(p.bl, np.array([-1e20, 1.0, -1e10, 2.0])), msg="Wrong lower bounds")
+        self.assertTrue(array_compare(p.bl, np.array([-1e20, 1.0, -1e20, 2.0])), msg="Wrong lower bounds")
         self.assertTrue(array_compare(p.bu, np.array([1e20, 1e20, 1.0, 2.0])), msg="Wrong upper bounds")
         self.assertEqual(p.nnzj, 2, msg="Wrong nnzj")
         self.assertTrue(array_compare(p.v0, np.array([0.0])), msg="Wrong v0")
@@ -315,7 +315,7 @@ class TestALLINITC_with_free(unittest.TestCase):
         # ALLINITC has the same objective function as above, but extra constraints:
         # Bounds:
         # x[1] >= 1
-        # -1e10 <= x[2] <= 1
+        # -1e20 <= x[2] <= 1
         # x[3] == 2
         # Nonlinear constraint
         # x[0]**2 + x[1]**2 - 1 <= 0
@@ -334,7 +334,7 @@ class TestALLINITC_with_free(unittest.TestCase):
         self.assertFalse(p.eq_cons_first, msg="eq_cons_first is True")
         self.assertFalse(p.linear_cons_first, msg="linear_cons_first is True")
         self.assertFalse(p.nonlinear_vars_first, msg="Nonlinear variables listed first")
-        self.assertTrue(array_compare(p.bl, np.array([-1e20, 1.0, -1e10])), msg="Wrong lower bounds")
+        self.assertTrue(array_compare(p.bl, np.array([-1e20, 1.0, -1e20])), msg="Wrong lower bounds")
         self.assertTrue(array_compare(p.bu, np.array([1e20, 1e20, 1.0])), msg="Wrong upper bounds")
         self.assertEqual(p.nnzj, 2, msg="Wrong nnzj")
         self.assertTrue(array_compare(p.v0, np.array([0.0])), msg="Wrong v0")
