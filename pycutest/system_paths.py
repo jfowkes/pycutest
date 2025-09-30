@@ -3,6 +3,7 @@ Depending on the platform, find the correct paths to the CUTEst installation
 """
 
 import os, sys
+from glob import glob
 
 __all__ = ['check_platform', 'get_cutest_path', 'get_cutest_include_path', 'get_sifdecoder_path', 'get_mastsif_path', 'get_homebrew_gfortran_path', 'get_cache_path']
 
