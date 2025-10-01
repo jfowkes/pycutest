@@ -9,7 +9,7 @@ PyCUTEst requires the following software to be installed:
 * Python 3 Headers (:code:`apt install python3-dev` on Ubuntu, already included on macOS)
 * CUTEst (see below)
 
-**Please Note:** Currently PyCUTEst only supports Mac and Linux. For Windows 10 (or later), PyCUTEst can be used through the `Windows Subsystem for Linux <https://docs.microsoft.com/en-us/windows/wsl/>`_, following the Linux installation instructions.
+**Please Note:** Currently PyCUTEst only supports Mac and Linux. For Windows, PyCUTEst can be used through the `Windows Subsystem for Linux <https://docs.microsoft.com/en-us/windows/wsl/>`_, following the Linux installation instructions.
 
 Installing CUTEst
 -----------------
@@ -20,6 +20,7 @@ Installing CUTEst on Linux
 
 Installing CUTEst using Bash Script
 """""""""""""""""""""""""""""""""""
+This is the traditional installation approach, alternative installation approaches are detailed below.
 You will need to install four packages: `archdefs <https://github.com/ralna/ARCHDefs>`_, `SIFDecode <https://github.com/ralna/SIFDecode>`_, `CUTEst <https://github.com/ralna/CUTEst>`_ and `MASTSIF <https://bitbucket.org/optrove/sif>`_. To keep things simple, install all four packages in the same directory:
 
  .. code-block:: bash
@@ -99,7 +100,7 @@ Now we are ready to install CUTEst in double precision (requires :code:`gfortran
 .. code-block:: bash
 
     $ cd ../cutest
-    $ meson setup builddir
+    $ meson setup builddir -Dmodules=false
     $ meson compile -C builddir
     $ sudo meson install -C builddir
 
@@ -124,7 +125,8 @@ Installing CUTEst on Mac
 
 Installing CUTEst using Homebrew
 """"""""""""""""""""""""""""""""
-Install CUTEst using Homebrew as detailed below (installing CUTEst manually on Mac is not supported). First it is important to ensure that you have the latest version of Xcode Command Line Tools installed (or the latest version of Xcode), please ensure this is the case by following `this guide <https://mac.install.guide/commandlinetools/index.html>`_. Now install the Homebrew package manager:
+This is the simplest installation approach, alternative installation approaches are detailed below.
+Install CUTEst using Homebrew as detailed below. First it is important to ensure that you have the latest version of Xcode Command Line Tools installed (or the latest version of Xcode), please ensure this is the case by following `this guide <https://mac.install.guide/commandlinetools/index.html>`_. Now install the Homebrew package manager:
 
  .. code-block:: bash
 
@@ -138,12 +140,14 @@ Then you can easily install CUTEst:
     $ brew install cutest
     $ brew install mastsif  # if you want all the test problems
     $ cat "$(brew --prefix mastsif)/mastsif.bashrc" >> ~/.bashrc
+
 **Anaconda Users:** *please ensure that* :code:`~/.bashrc` *is sourced in your conda environment (you can do this with the command* :code:`source ~/.bashrc` *) otherwise you may encounter errors using PyCUTEst.*
 
 **Please Note:** *you may see warnings such as* :code:`ld: warning: object file (RANGE.o) was built for newer macOS version (15.0) than being linked (14.0)` *. To suppress these warnings please set the environment variable* :code:`MACOSX_DEPLOYMENT_TARGET` *to your current macOS version (e.g.* :code:`export MACOSX_DEPLOYMENT_TARGET=15.0` *in this example, you can make this permanent by adding it to your* :code:`~/.bashrc` *file).*
 
 Installing CUTEst using Bash Script
 """""""""""""""""""""""""""""""""""
+This is the traditional installation approach.
 You will need to install gcc (:code:`brew install gcc` using Homebrew) and four packages: ARCHDefs, SIFDecode, CUTEst and MASTSIF. To keep things simple, install all four packages in the same directory:
 
  .. code-block:: bash
@@ -184,6 +188,10 @@ And CUTEst should run from here. To test that the installation works, issue the 
     $ cd $SIFDECODE/src ; make -f $SIFDECODE/makefiles/$MYARCH test
     $ cd $CUTEST/src ; make -f $CUTEST/makefiles/$MYARCH test
 
+**Anaconda Users:** *please ensure that* :code:`~/.bashrc` *is sourced in your conda environment (you can do this with the command* :code:`source ~/.bashrc` *) otherwise you may encounter errors using PyCUTEst.*
+
+**Please Note:** *you may see warnings such as* :code:`ld: warning: object file (RANGE.o) was built for newer macOS version (15.0) than being linked (14.0)` *. To suppress these warnings please set the environment variable* :code:`MACOSX_DEPLOYMENT_TARGET` *to your current macOS version (e.g.* :code:`export MACOSX_DEPLOYMENT_TARGET=15.0` *in this example, you can make this permanent by adding it to your* :code:`~/.bashrc` *file).*
+
 Installing CUTEst using Meson
 """""""""""""""""""""""""""""
 CUTEst can now be installed using the `meson build system <https://mesonbuild.com/>`_.
@@ -201,7 +209,7 @@ Note that :code:`mastsif` contains all the test problem definitions and
 is therefore quite large. If you're short on space you may want to copy
 only the ``*.SIF`` files for the problems you wish to test on.
 
-First we need to compile and install SIFDecode (requires :code:`gfortran` and :code:`gcc`):
+First we need to compile and install SIFDecode (requires Homebrew :code:`gcc`):
 
 .. code-block:: bash
 
@@ -216,12 +224,12 @@ And SIFDecode should run from here. To test that the installation works, issue t
 
     $ meson test -C builddir
 
-Now we are ready to install CUTEst in double precision (requires :code:`gfortran` and :code:`gcc`):
+Now we are ready to install CUTEst in double precision (requires Homebrew :code:`gcc`):
 
 .. code-block:: bash
 
     $ cd ../cutest
-    $ meson setup builddir
+    $ meson setup builddir -Dmodules=false
     $ meson compile -C builddir
     $ sudo meson install -C builddir
 
