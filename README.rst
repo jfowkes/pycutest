@@ -64,7 +64,7 @@ And CUTEst should run from here. To test that the installation works, issue the 
 Installing CUTEst on Mac
 ------------------------
 Here we detail the traditional installation approach, alternative installation approaches (including installation using Meson) are described in the `install docs <https://jfowkes.github.io/pycutest/_build/html/install.html#installing-cutest-on-mac>`_.
-First it is important to ensure that you have the latest version of Xcode Command Line Tools installed (or the latest version of Xcode), please ensure this is the case by following `this guide <https://mac.install.guide/commandlinetools/index.html>`_. Now install the Homebrew package manager:
+First it is important to ensure that you have the latest version of Xcode Command Line Tools installed (or the latest version of Xcode), please ensure this is the case by following `this guide <https://mac.install.guide/commandlinetools/4>`_. Now install the Homebrew package manager:
 
  .. code-block:: bash
 
