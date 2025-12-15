@@ -123,32 +123,22 @@ In this case you will also need to set the :code:`SIFDECODE` and :code:`CUTEST` 
 Installing CUTEst on Mac
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-Installing CUTEst using Homebrew
-""""""""""""""""""""""""""""""""
-This is the simplest installation approach, alternative installation approaches are detailed below.
-Install CUTEst using Homebrew as detailed below. First it is important to ensure that you have the latest version of Xcode Command Line Tools installed (or the latest version of Xcode), please ensure this is the case by following `this guide <https://mac.install.guide/commandlinetools/index.html>`_. Now install the Homebrew package manager:
+Installing CUTEst using Bash Script
+"""""""""""""""""""""""""""""""""""
+This is the traditional installation approach, alternative installation approaches are detailed below.
+First it is important to ensure that you have the latest version of Xcode Command Line Tools installed (or the latest version of Xcode), please ensure this is the case by following `this guide <https://mac.install.guide/commandlinetools/index.html>`_. Now install the Homebrew package manager:
 
  .. code-block:: bash
 
     $ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-Then you can easily install CUTEst:
+Then you can easily install :code:`gfortran` and :code:`gcc`:
 
  .. code-block:: bash
 
-    $ brew tap optimizers/cutest
-    $ brew install cutest
-    $ brew install mastsif  # if you want all the test problems
-    $ cat "$(brew --prefix mastsif)/mastsif.bashrc" >> ~/.bashrc
+    $ brew install gcc
 
-**Anaconda Users:** *please ensure that* :code:`~/.bashrc` *is sourced in your conda environment (you can do this with the command* :code:`source ~/.bashrc` *) otherwise you may encounter errors using PyCUTEst.*
-
-**Please Note:** *you may see warnings such as* :code:`ld: warning: object file (RANGE.o) was built for newer macOS version (15.0) than being linked (14.0)` *. To suppress these warnings please set the environment variable* :code:`MACOSX_DEPLOYMENT_TARGET` *to your current macOS version (e.g.* :code:`export MACOSX_DEPLOYMENT_TARGET=15.0` *in this example, you can make this permanent by adding it to your* :code:`~/.bashrc` *file).*
-
-Installing CUTEst using Bash Script
-"""""""""""""""""""""""""""""""""""
-This is the traditional installation approach.
-You will need to install gcc (:code:`brew install gcc` using Homebrew) and four packages: ARCHDefs, SIFDecode, CUTEst and MASTSIF. To keep things simple, install all four packages in the same directory:
+Next you will need to install four packages: ARCHDefs, SIFDecode, CUTEst and MASTSIF. To keep things simple, install all four packages in the same directory:
 
  .. code-block:: bash
 
@@ -174,7 +164,7 @@ Next set the following environment variables in your :code:`~/.bashrc` to point 
     export CUTEST=/path/to/cutest/cutest/
     export MYARCH="mac64.osx.gfo"
 
-Now we are ready to install CUTEst in double precision (requires :code:`gfortran` and :code:`gcc`):
+Now we are ready to install CUTEst in double precision (requires :code:`gfortran` and :code:`gcc` from Homebrew):
 
  .. code-block:: bash
 
