@@ -19,7 +19,7 @@ jobs:
       - name: Build
         run: python -m build
 
-      - uses: pypa/gh-action-pypi-publish@v1.5.0
+      - uses: pypa/gh-action-pypi-publish@v1.13.0
         with:
           user: __token__
           password: ${{ secrets.pypi_password }}
