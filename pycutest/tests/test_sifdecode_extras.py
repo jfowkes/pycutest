@@ -75,7 +75,7 @@ class TestAvailableParamsBRATU(unittest.TestCase):
              RE LAMBDA              4.0            $-PARAMETER > 0
             """
             self.assertTrue(prob in output_string, msg="Output missing problem name")
-            self.assertTrue("P = 7 (int, n=P**2 original value)" in output_string, msg="Missing option P=7")
+            self.assertTrue("P = 7 (int, n=P**2 original value)" in output_string or "P = 7 (int, n=P**2   original value)" in output_string, msg="Missing option P=7")
             self.assertTrue("P = 10 (int, n=P**2)" in output_string, msg="Missing option P=10")
             self.assertTrue("P = 22 (int, n=P**2)" in output_string, msg="Missing option P=22")
             self.assertTrue("P = 32 (int, n=P**2)" in output_string, msg="Missing option P=32")

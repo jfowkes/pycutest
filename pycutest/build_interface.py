@@ -8,7 +8,7 @@ import subprocess
 import importlib
 from glob import glob
 
-from .system_paths import get_cache_path, get_sifdecoder_path
+from .system_paths import get_cache_path, get_sifdecoder_path, get_mastsif_path
 from .c_interface import itf_c_source
 from .install_scripts import get_setup_script
 from .python_interface import get_init_script
@@ -118,7 +118,7 @@ def prepare_cache(cachedName, sifParams=None):
 def decode_and_compile_problem(problemName, destination=None, sifParams=None, sifOptions=None, quiet=True):
     """
     Call sifdecode on given problem and compile the resulting .f files.
-    Use gfortran with ``-fPIC`` option for compiling.
+    Use gfortran with ``-fPIC`` and ``-O2`` options for compiling.
     Collect the resulting object file names and return them.
     This function is OS dependent. Currently works only for Linux and MacOS.
 
@@ -177,7 +177,7 @@ def decode_and_compile_problem(problemName, destination=None, sifParams=None, si
     try:
         # Start sifdecode
         p = subprocess.Popen(
-            [get_sifdecoder_path()] + args + [problemName],
+            [get_sifdecoder_path()] + args + [os.path.join(get_mastsif_path(), problemName + '.SIF')],
             universal_newlines=True,
             stdout=subprocess.PIPE, stderr=subprocess.STDOUT
         )
@@ -220,7 +220,7 @@ def decode_and_compile_problem(problemName, destination=None, sifParams=None, si
 
     # Compile FORTRAN files
     for filename in filelist:
-        cmd=['gfortran', '-fPIC', '-c', filename]
+        cmd=['gfortran', '-fPIC', '-O2', '-c', filename]
         if not quiet:
             for s in cmd:
                 print(s, end=' ')

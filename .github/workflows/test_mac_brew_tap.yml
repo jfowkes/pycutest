@@ -1,12 +1,13 @@
-name: Mac-Tests
+name: Mac-Tests-Homebrew-Tap
 
 on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
-  schedule:
-    - cron: '30 3 * * 0'
+  # disabled until upstream gets fixed
+  #push:
+  #  branches: [ master ]
+  #pull_request:
+  #  branches: [ master ]
+  #schedule:
+  #  - cron: '30 3 * * 0'
 
 jobs:
   build:
@@ -27,19 +28,16 @@ jobs:
       run: |
         sudo ln -s /opt/homebrew/bin/gfortran-14 /opt/homebrew/bin/gfortran
         sudo ln -s /opt/homebrew/Cellar/gcc/14.*/lib/gcc/14/*.dylib /opt/homebrew/lib/
-        mkdir cutest &&
-        git clone https://github.com/ralna/ARCHDefs ./cutest/archdefs &&
-        git clone https://github.com/ralna/SIFDecode ./cutest/sifdecode &&
-        git clone https://github.com/ralna/CUTEst ./cutest/cutest &&
-        ln -s $GITHUB_WORKSPACE/pycutest/tests/problems ./cutest/mastsif &&
-        source ./.cutest_mac.env &&
-        ./.install_cutest_mac.sh
+        brew tap optimizers/cutest &&
+        brew install cutest
+        sudo mkdir -p /opt/homebrew/opt/mastsif/share &&
+        sudo ln -s $GITHUB_WORKSPACE/pycutest/tests/problems /opt/homebrew/opt/mastsif/share/mastsif
         mkdir $GITHUB_WORKSPACE/pycutest_cache
         python -m pip install .
     - name: Tests
       run: |
-        source ./.cutest_mac.env
         export PYCUTEST_CACHE="$GITHUB_WORKSPACE/pycutest_cache"
+        export MACOSX_DEPLOYMENT_TARGET=15.0
         export TERM=xterm
         python -m unittest pycutest.tests.test_sifdecode_extras
         python -m unittest pycutest.tests.test_basic_functionality

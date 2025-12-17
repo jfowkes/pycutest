@@ -52,7 +52,7 @@ BOUNDS
 
  FR ALLINITC  X1
  LO ALLINITC  X2        1.0
- LO ALLINITC  X3        -1.0D+10
+ LO ALLINITC  X3        -1.0D+20
  UP ALLINITC  X3        1.0
  FX ALLINITC  X4        2.0
 

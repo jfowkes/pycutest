@@ -4,7 +4,7 @@ Installation scripts for individual problems
 
 import sys
 
-from .system_paths import get_cutest_path
+from .system_paths import get_cutest_path, get_cutest_include_path, get_homebrew_gfortran_path
 from pycutest import __version__
 
 __all__ = ['get_setup_script']
@@ -14,7 +14,7 @@ __all__ = ['get_setup_script']
 #
 setupScript="""#!/usr/bin/env python
 # (C)2011 Arpad Buermen
-# (C)2022 Jaroslav Fowkes, Lindon Roberts
+# (C)2025 Jaroslav Fowkes, Lindon Roberts
 # Licensed under GNU GPL V3
 
 #
@@ -70,33 +70,31 @@ setup(
 #
 setupScriptLinux="""
 define_macros=[('LINUX', None)]
-include_dirs=[np.get_include(),os.environ['CUTEST']+'/include/']
+include_dirs=[np.get_include(),'%s']
 objFileList=glob('*.o')
-objFileList.append(os.environ['CUTEST']+'/objects/'+os.environ['MYARCH']+'/double/libcutest.a')
+objFileList.append('%s')
 libraries=['gfortran']
 library_dirs=[]
 extra_link_args=[]
-"""
+""" % (get_cutest_include_path(), get_cutest_path())
 
 #
 # Mac-specific part of setup.py
 #
 setupScriptMac="""
 import subprocess
-# extract the homebrew prefix
-homebrew_prefix = subprocess.check_output(['brew', '--prefix']).decode('utf-8')[:-1]
 define_macros=[('LINUX', None)]
-include_dirs=[np.get_include(),os.environ['CUTEST']+'/include/']
+include_dirs=[np.get_include(),'%s']
 objFileList=glob('*.o')
 objFileList.append('%s')
 libraries=['gfortran']
-library_dirs=[max(glob(homebrew_prefix + '/Cellar/gcc/*/lib/gcc/*/'),key=os.path.getmtime)]
+library_dirs=['%s']
 extra_link_args=['-Wl,-no_compact_unwind']
-""" % get_cutest_path()  # will probably get the homebrew location, but may revert to environment variables
+""" % (get_cutest_include_path(), get_cutest_path(), get_homebrew_gfortran_path())
 
 
 def get_setup_script():
     if sys.platform == "linux":
         return setupScript % (setupScriptLinux,__version__)
-    else:
+    else:  # darwin (Mac)
         return setupScript % (setupScriptMac,__version__)
