@@ -2,6 +2,19 @@ Version History
 ===============
 This section lists the different versions of PyCUTEst and the updates between them.
 
+Version 1.8.0 (17 Dec 2025)
+---------------------------
+* Support CUTEst/SIFDecode installs with Meson (both default install locations and custom install locations)
+* Document how to install CUTEst/SIFDecode using Meson (for both Linux and macOS)
+* Document how to install CUTEst/SIFDecode using the Make build system on macOS and provide scripts for this
+* Add tests for the alternative installation methods on Linux and macOS (Meson, Make build system)
+* Use absolute paths to SIF problems (required when using new non-bash sifdecoder that comes with Meson installs)
+* Update SIFDecode test to handle slightly different format for -show used by the Meson sifdecoder
+* Remove hardcoded paths from install_scripts.py and move them to system_paths.py for consistency
+* Compile CUTEst problems with -02 compiler optimizations
+* Update ALLINITC to reflect upstream bugfix to it
+* Update tests to reflect updated ALLINITC
+
 Version 1.7.2 (10 Dec 2024)
 ---------------------------
 * Handle Fortran D exponents in SIF files

@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Installation &mdash; PyCUTEst v1.7.2 documentation</title>
+  <title>Installation &mdash; PyCUTEst v1.8.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=908dc885"></script>
+      <script src="_static/documentation_options.js?v=b51e6972"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -47,8 +47,16 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#requirements">Requirements</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#installing-cutest">Installing CUTEst</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#installing-cutest-on-linux">Installing CUTEst on Linux</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#installing-cutest-on-mac">Installing CUTEst on Mac</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#installing-cutest-on-linux">Installing CUTEst on Linux</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#new-approach-installing-cutest-using-meson">New Approach: Installing CUTEst using Meson</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#traditional-approach-installing-cutest-using-bash-script">Traditional Approach: Installing CUTEst using Bash Script</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#installing-cutest-on-mac">Installing CUTEst on Mac</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id4">New Approach: Installing CUTEst using Meson</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id11">Traditional Approach: Installing CUTEst using Bash Script</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#cutest-docker-container">CUTEst Docker Container</a></li>
 </ul>
 </li>
@@ -97,14 +105,73 @@
 <li><p>Python 3 Headers (<code class="code docutils literal notranslate"><span class="pre">apt</span> <span class="pre">install</span> <span class="pre">python3-dev</span></code> on Ubuntu, already included on macOS)</p></li>
 <li><p>CUTEst (see below)</p></li>
 </ul>
-<p><strong>Please Note:</strong> Currently PyCUTEst only supports Mac and Linux. For Windows 10 (or later), PyCUTEst can be used through the <a class="reference external" href="https://docs.microsoft.com/en-us/windows/wsl/">Windows Subsystem for Linux</a>, following the Linux installation instructions.</p>
+<p><strong>Please Note:</strong> Currently PyCUTEst only supports Mac and Linux. For Windows, PyCUTEst can be used through the <a class="reference external" href="https://docs.microsoft.com/en-us/windows/wsl/">Windows Subsystem for Linux</a>, following the Linux installation instructions.</p>
 </section>
 <section id="installing-cutest">
 <h2>Installing CUTEst<a class="headerlink" href="#installing-cutest" title="Link to this heading"></a></h2>
 <p>Note that CUTEst must be installed in order for PyCUTEst to work.</p>
 <section id="installing-cutest-on-linux">
 <h3>Installing CUTEst on Linux<a class="headerlink" href="#installing-cutest-on-linux" title="Link to this heading"></a></h3>
-<p>These instructions do not include installation of the MATLAB interface. You will need to install four packages: <a class="reference external" href="https://github.com/ralna/ARCHDefs">archdefs</a>, <a class="reference external" href="https://github.com/ralna/SIFDecode">SIFDecode</a>, <a class="reference external" href="https://github.com/ralna/CUTEst">CUTEst</a> and <a class="reference external" href="https://bitbucket.org/optrove/sif">MASTSIF</a>. To keep things simple, install all four packages in the same directory:</p>
+<section id="new-approach-installing-cutest-using-meson">
+<h4>New Approach: Installing CUTEst using Meson<a class="headerlink" href="#new-approach-installing-cutest-using-meson" title="Link to this heading"></a></h4>
+<p>This is the new installation approach using the <a class="reference external" href="https://mesonbuild.com/">meson build system</a>, alternative installation approaches are detailed below.
+You will need to install meson (<code class="code docutils literal notranslate"><span class="pre">apt</span> <span class="pre">install</span> <span class="pre">meson</span></code> on Ubuntu) and three packages: <a class="reference external" href="https://github.com/ralna/SIFDecode">SIFDecode</a>, <a class="reference external" href="https://github.com/ralna/CUTEst">CUTEst</a> and <a class="reference external" href="https://bitbucket.org/optrove/sif">MASTSIF</a>. To keep things simple, clone all three packages into the same directory:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>mkdir<span class="w"> </span>cutest
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>cutest
+$<span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/ralna/SIFDecode<span class="w"> </span>./sifdecode
+$<span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/ralna/CUTEst<span class="w"> </span>./cutest
+$<span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>https://bitbucket.org/optrove/sif<span class="w"> </span>./mastsif
+</pre></div>
+</div>
+</div></blockquote>
+<p>Note that <code class="code docutils literal notranslate"><span class="pre">mastsif</span></code> contains all the test problem definitions and
+is therefore quite large. If you’re short on space you may want to copy
+only the <code class="docutils literal notranslate"><span class="pre">*.SIF</span></code> files for the problems you wish to test on.</p>
+<p>First we need to compile and install SIFDecode (requires <code class="code docutils literal notranslate"><span class="pre">gfortran</span></code> and <code class="code docutils literal notranslate"><span class="pre">gcc</span></code>):</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>sifdecode
+$<span class="w"> </span>meson<span class="w"> </span>setup<span class="w"> </span>builddir
+$<span class="w"> </span>meson<span class="w"> </span>compile<span class="w"> </span>-C<span class="w"> </span>builddir
+$<span class="w"> </span>sudo<span class="w"> </span>meson<span class="w"> </span>install<span class="w"> </span>-C<span class="w"> </span>builddir
+</pre></div>
+</div>
+</div></blockquote>
+<p>And SIFDecode should run from here. To test that the installation works, issue the command:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>meson<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-C<span class="w"> </span>builddir
+</pre></div>
+</div>
+</div></blockquote>
+<p>Now we are ready to install CUTEst in double precision (requires <code class="code docutils literal notranslate"><span class="pre">gfortran</span></code> and <code class="code docutils literal notranslate"><span class="pre">gcc</span></code>):</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>../cutest
+$<span class="w"> </span>meson<span class="w"> </span>setup<span class="w"> </span>builddir<span class="w"> </span>-Dmodules<span class="o">=</span><span class="nb">false</span>
+$<span class="w"> </span>meson<span class="w"> </span>compile<span class="w"> </span>-C<span class="w"> </span>builddir
+$<span class="w"> </span>sudo<span class="w"> </span>meson<span class="w"> </span>install<span class="w"> </span>-C<span class="w"> </span>builddir
+</pre></div>
+</div>
+</div></blockquote>
+<p>And CUTEst should run from here. To test that the installation works, issue the command:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>meson<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-C<span class="w"> </span>builddir
+</pre></div>
+</div>
+</div></blockquote>
+<p>Finally set the following environment variable in your <code class="code docutils literal notranslate"><span class="pre">~/.bashrc</span></code> to point to the MASTSIF installation directory used above:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># CUTEst</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">MASTSIF</span><span class="o">=</span>/path/to/cutest/mastsif/
+</pre></div>
+</div>
+</div></blockquote>
+<p>It is also possible to install SIFDecode and CUTEst to custom locations using the <code class="code docutils literal notranslate"><span class="pre">--prefix</span></code> argument to <code class="code docutils literal notranslate"><span class="pre">meson</span> <span class="pre">setup</span></code>.
+In this case you will also need to set the <code class="code docutils literal notranslate"><span class="pre">SIFDECODE</span></code> and <code class="code docutils literal notranslate"><span class="pre">CUTEST</span></code> environment variables to the install prefix.</p>
+</section>
+<section id="traditional-approach-installing-cutest-using-bash-script">
+<h4>Traditional Approach: Installing CUTEst using Bash Script<a class="headerlink" href="#traditional-approach-installing-cutest-using-bash-script" title="Link to this heading"></a></h4>
+<p>This is the traditional installation approach using the bash install script.
+You will need to install four packages: <a class="reference external" href="https://github.com/ralna/ARCHDefs">ARCHDefs</a>, <a class="reference external" href="https://github.com/ralna/SIFDecode">SIFDecode</a>, <a class="reference external" href="https://github.com/ralna/CUTEst">CUTEst</a> and <a class="reference external" href="https://bitbucket.org/optrove/sif">MASTSIF</a>. To keep things simple, install all four packages in the same directory:</p>
 <blockquote>
 <div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>mkdir<span class="w"> </span>cutest
 $<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>cutest
@@ -145,27 +212,136 @@ $<span class="w"> </span><span class="nb">cd</span><span class="w"> </span><span
 </div></blockquote>
 <p><strong>Please Note:</strong> <em>currently PyCUTEst only supports gfortran and uses the default version on your path (as returned by</em> <code class="code docutils literal notranslate"><span class="pre">gfortran</span> <span class="pre">-v</span></code> <em>). Please ensure this is the same version that you install CUTEst with above otherwise you may experience segmentation faults.</em></p>
 </section>
+</section>
 <section id="installing-cutest-on-mac">
 <h3>Installing CUTEst on Mac<a class="headerlink" href="#installing-cutest-on-mac" title="Link to this heading"></a></h3>
-<p>Install CUTEst using Homebrew as detailed below (installing CUTEst manually on Mac is not supported). First it is important to ensure that you have the latest version of Xcode Command Line Tools installed (or the latest version of Xcode), please ensure this is the case by following <a class="reference external" href="https://mac.install.guide/commandlinetools/index.html">this guide</a>. Now install the Homebrew package manager:</p>
+<section id="id4">
+<h4>New Approach: Installing CUTEst using Meson<a class="headerlink" href="#id4" title="Link to this heading"></a></h4>
+<p>This is the new installation approach using the <a class="reference external" href="https://mesonbuild.com/">meson build system</a>, alternative installation approaches are detailed below.
+First it is important to ensure that you have the latest version of Xcode Command Line Tools installed (or the latest version of Xcode), please ensure this is the case by following <a class="reference external" href="https://mac.install.guide/commandlinetools/4">this guide</a>. Now install the Homebrew package manager:</p>
 <blockquote>
 <div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>/bin/bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh<span class="k">)</span><span class="s2">&quot;</span>
 </pre></div>
 </div>
 </div></blockquote>
-<p>Then you can easily install CUTEst:</p>
+<p>Then you can easily install <a class="reference external" href="https://gcc.gnu.org/">GCC</a> and the <a class="reference external" href="https://mesonbuild.com/">meson build system</a>:</p>
 <blockquote>
-<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>brew<span class="w"> </span>tap<span class="w"> </span>optimizers/cutest
-$<span class="w"> </span>brew<span class="w"> </span>install<span class="w"> </span>cutest<span class="w"> </span>--without-single<span class="w"> </span>--with-matlab<span class="w"> </span><span class="c1"># if using Matlab interface</span>
-$<span class="w"> </span>brew<span class="w"> </span>install<span class="w"> </span>mastsif<span class="w">  </span><span class="c1"># if you want all the test problems</span>
-$<span class="w"> </span><span class="k">for</span><span class="w"> </span>f<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="s2">&quot;archdefs&quot;</span><span class="w"> </span><span class="s2">&quot;mastsif&quot;</span><span class="w"> </span><span class="s2">&quot;sifdecode&quot;</span><span class="w"> </span><span class="s2">&quot;cutest&quot;</span><span class="p">;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="se">\</span>
-$<span class="w">   </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;. </span><span class="k">$(</span>brew<span class="w"> </span>--prefix<span class="w"> </span><span class="nv">$f</span><span class="k">)</span><span class="s2">/</span><span class="nv">$f</span><span class="s2">.bashrc&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>~/.bashrc<span class="p">;</span><span class="w"> </span><span class="se">\</span>
-$<span class="w"> </span><span class="k">done</span>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>brew<span class="w"> </span>install<span class="w"> </span>gcc<span class="w"> </span>meson
 </pre></div>
 </div>
 </div></blockquote>
-<p><strong>Anaconda Users:</strong> <em>please ensure that</em> <code class="code docutils literal notranslate"><span class="pre">~/.bashrc</span></code> <em>is sourced in your conda environment (you can do this with the command</em> <code class="code docutils literal notranslate"><span class="pre">source</span> <span class="pre">~/.bashrc</span></code> <em>) otherwise you may encounter errors using PyCUTEst.</em></p>
-<p><strong>Please Note:</strong> <em>you may see warnings such as</em> <code class="code docutils literal notranslate"><span class="pre">ld:</span> <span class="pre">warning:</span> <span class="pre">object</span> <span class="pre">file</span> <span class="pre">(RANGE.o)</span> <span class="pre">was</span> <span class="pre">built</span> <span class="pre">for</span> <span class="pre">newer</span> <span class="pre">macOS</span> <span class="pre">version</span> <span class="pre">(11.5)</span> <span class="pre">than</span> <span class="pre">being</span> <span class="pre">linked</span> <span class="pre">(10.15)</span></code> <em>. To suppress these warnings please set the environment variable</em> <code class="code docutils literal notranslate"><span class="pre">MACOSX_DEPLOYMENT_TARGET</span></code> <em>to your current macOS version (e.g.</em> <code class="code docutils literal notranslate"><span class="pre">export</span> <span class="pre">MACOSX_DEPLOYMENT_TARGET=11.5</span></code> <em>in this example, you can make this permanent by adding it to your</em> <code class="code docutils literal notranslate"><span class="pre">~/.bashrc</span></code> <em>file).</em></p>
+<p>CUTEst can now be installed using the <a class="reference external" href="https://mesonbuild.com/">meson build system</a>. You will need to install three packages: <a class="reference external" href="https://github.com/ralna/SIFDecode">SIFDecode</a>, <a class="reference external" href="https://github.com/ralna/CUTEst">CUTEst</a> and <a class="reference external" href="https://bitbucket.org/optrove/sif">MASTSIF</a>. To keep things simple, clone all three packages into the same directory:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>mkdir<span class="w"> </span>cutest
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>cutest
+$<span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/ralna/SIFDecode<span class="w"> </span>./sifdecode
+$<span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/ralna/CUTEst<span class="w"> </span>./cutest
+$<span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>https://bitbucket.org/optrove/sif<span class="w"> </span>./mastsif
+</pre></div>
+</div>
+</div></blockquote>
+<p>Note that <code class="code docutils literal notranslate"><span class="pre">mastsif</span></code> contains all the test problem definitions and
+is therefore quite large. If you’re short on space you may want to copy
+only the <code class="docutils literal notranslate"><span class="pre">*.SIF</span></code> files for the problems you wish to test on.</p>
+<p>First we need to compile and install SIFDecode (requires Homebrew <code class="code docutils literal notranslate"><span class="pre">gcc</span></code>):</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>sifdecode
+$<span class="w"> </span>meson<span class="w"> </span>setup<span class="w"> </span>builddir
+$<span class="w"> </span>meson<span class="w"> </span>compile<span class="w"> </span>-C<span class="w"> </span>builddir
+$<span class="w"> </span>sudo<span class="w"> </span>meson<span class="w"> </span>install<span class="w"> </span>-C<span class="w"> </span>builddir
+</pre></div>
+</div>
+</div></blockquote>
+<p>And SIFDecode should run from here. To test that the installation works, issue the command:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>meson<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-C<span class="w"> </span>builddir
+</pre></div>
+</div>
+</div></blockquote>
+<p>Now we are ready to install CUTEst in double precision (requires Homebrew <code class="code docutils literal notranslate"><span class="pre">gcc</span></code>):</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>../cutest
+$<span class="w"> </span>meson<span class="w"> </span>setup<span class="w"> </span>builddir<span class="w"> </span>-Dmodules<span class="o">=</span><span class="nb">false</span>
+$<span class="w"> </span>meson<span class="w"> </span>compile<span class="w"> </span>-C<span class="w"> </span>builddir
+$<span class="w"> </span>sudo<span class="w"> </span>meson<span class="w"> </span>install<span class="w"> </span>-C<span class="w"> </span>builddir
+</pre></div>
+</div>
+</div></blockquote>
+<p>And CUTEst should run from here. To test that the installation works, issue the command:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>meson<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-C<span class="w"> </span>builddir
+</pre></div>
+</div>
+</div></blockquote>
+<p>Finally set the following environment variable in your <code class="code docutils literal notranslate"><span class="pre">~/.zshrc</span></code> or <code class="code docutils literal notranslate"><span class="pre">~/.bashrc</span></code> to point to the MASTSIF installation directory used above:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># CUTEst</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">MASTSIF</span><span class="o">=</span>/path/to/cutest/mastsif/
+</pre></div>
+</div>
+</div></blockquote>
+<p>It is also possible to install SIFDecode and CUTEst to custom locations using the <code class="code docutils literal notranslate"><span class="pre">--prefix</span></code> argument to <code class="code docutils literal notranslate"><span class="pre">meson</span> <span class="pre">setup</span></code>.
+In this case you will also need to set the <code class="code docutils literal notranslate"><span class="pre">SIFDECODE</span></code> and <code class="code docutils literal notranslate"><span class="pre">CUTEST</span></code> environment variables to the install prefix.</p>
+<p><strong>Anaconda Users:</strong> <em>please ensure that</em> <code class="code docutils literal notranslate"><span class="pre">~/.zshrc</span></code> or <code class="code docutils literal notranslate"><span class="pre">~/.bashrc</span></code> <em>is sourced in your conda environment (you can do this with the command</em> <code class="code docutils literal notranslate"><span class="pre">source</span> <span class="pre">~/.zshrc</span></code> or <code class="code docutils literal notranslate"><span class="pre">source</span> <span class="pre">~/.bashrc</span></code> <em>) otherwise you may encounter errors using PyCUTEst.</em></p>
+<p><strong>Please Note:</strong> <em>you may see warnings such as</em> <code class="code docutils literal notranslate"><span class="pre">ld:</span> <span class="pre">warning:</span> <span class="pre">object</span> <span class="pre">file</span> <span class="pre">(RANGE.o)</span> <span class="pre">was</span> <span class="pre">built</span> <span class="pre">for</span> <span class="pre">newer</span> <span class="pre">macOS</span> <span class="pre">version</span> <span class="pre">(15.0)</span> <span class="pre">than</span> <span class="pre">being</span> <span class="pre">linked</span> <span class="pre">(14.0)</span></code> <em>. To suppress these warnings please set the environment variable</em> <code class="code docutils literal notranslate"><span class="pre">MACOSX_DEPLOYMENT_TARGET</span></code> <em>to your current macOS version (e.g.</em> <code class="code docutils literal notranslate"><span class="pre">export</span> <span class="pre">MACOSX_DEPLOYMENT_TARGET=15.0</span></code> <em>in this example, you can make this permanent by adding it to your</em> <code class="code docutils literal notranslate"><span class="pre">~/.zshrc</span></code> or <code class="code docutils literal notranslate"><span class="pre">~/.bashrc</span></code> <em>file).</em></p>
+</section>
+<section id="id11">
+<h4>Traditional Approach: Installing CUTEst using Bash Script<a class="headerlink" href="#id11" title="Link to this heading"></a></h4>
+<p>This is the traditional installation approach using the bash install script.
+First it is important to ensure that you have the latest version of Xcode Command Line Tools installed (or the latest version of Xcode), please ensure this is the case by following <a class="reference external" href="https://mac.install.guide/commandlinetools/4">this guide</a>. Now install the Homebrew package manager:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>/bin/bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh<span class="k">)</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Then you can easily install <code class="code docutils literal notranslate"><span class="pre">gfortran</span></code> and <code class="code docutils literal notranslate"><span class="pre">gcc</span></code>:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>brew<span class="w"> </span>install<span class="w"> </span>gcc
+</pre></div>
+</div>
+</div></blockquote>
+<p>Next you will need to install four packages: <a class="reference external" href="https://github.com/ralna/ARCHDefs">ARCHDefs</a>, <a class="reference external" href="https://github.com/ralna/SIFDecode">SIFDecode</a>, <a class="reference external" href="https://github.com/ralna/CUTEst">CUTEst</a> and <a class="reference external" href="https://bitbucket.org/optrove/sif">MASTSIF</a>. To keep things simple, install all four packages in the same directory:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>mkdir<span class="w"> </span>cutest
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>cutest
+$<span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/ralna/ARCHDefs<span class="w"> </span>./archdefs
+$<span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/ralna/SIFDecode<span class="w"> </span>./sifdecode
+$<span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/ralna/CUTEst<span class="w"> </span>./cutest
+$<span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>https://bitbucket.org/optrove/sif<span class="w"> </span>./mastsif
+</pre></div>
+</div>
+</div></blockquote>
+<p>Note that <code class="code docutils literal notranslate"><span class="pre">mastsif</span></code> contains all the test problem definitions and
+is therefore quite large. If you’re short on space you may want to copy
+only the <code class="docutils literal notranslate"><span class="pre">*.SIF</span></code> files for the problems you wish to test on.</p>
+<p>Next set the following environment variables in your <code class="code docutils literal notranslate"><span class="pre">~/.zshrc</span></code> (or <code class="code docutils literal notranslate"><span class="pre">~/.bashrc</span></code>) to point to the installation directories used above:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># CUTEst</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">ARCHDEFS</span><span class="o">=</span>/path/to/cutest/archdefs/
+<span class="nb">export</span><span class="w"> </span><span class="nv">SIFDECODE</span><span class="o">=</span>/path/to/cutest/sifdecode/
+<span class="nb">export</span><span class="w"> </span><span class="nv">MASTSIF</span><span class="o">=</span>/path/to/cutest/mastsif/
+<span class="nb">export</span><span class="w"> </span><span class="nv">CUTEST</span><span class="o">=</span>/path/to/cutest/cutest/
+<span class="nb">export</span><span class="w"> </span><span class="nv">MYARCH</span><span class="o">=</span><span class="s2">&quot;mac64.osx.gfo&quot;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Now we are ready to install CUTEst in double precision (requires <code class="code docutils literal notranslate"><span class="pre">gfortran</span></code> and <code class="code docutils literal notranslate"><span class="pre">gcc</span></code> from Homebrew):</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">source</span><span class="w"> </span>~/.zshrc<span class="w"> </span><span class="c1"># (or ~/.bashrc) load above environment variables</span>
+$<span class="w"> </span>/bin/bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://raw.githubusercontent.com/jfowkes/pycutest/master/.install_cutest_mac.sh<span class="k">)</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>And CUTEst should run from here. To test that the installation works, issue the commands:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span><span class="nv">$SIFDECODE</span>/src<span class="w"> </span><span class="p">;</span><span class="w"> </span>make<span class="w"> </span>-f<span class="w"> </span><span class="nv">$SIFDECODE</span>/makefiles/<span class="nv">$MYARCH</span><span class="w"> </span><span class="nb">test</span>
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span><span class="nv">$CUTEST</span>/src<span class="w"> </span><span class="p">;</span><span class="w"> </span>make<span class="w"> </span>-f<span class="w"> </span><span class="nv">$CUTEST</span>/makefiles/<span class="nv">$MYARCH</span><span class="w"> </span><span class="nb">test</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p><strong>Anaconda Users:</strong> <em>please ensure that</em> <code class="code docutils literal notranslate"><span class="pre">~/.zshrc</span></code> or <code class="code docutils literal notranslate"><span class="pre">~/.bashrc</span></code> <em>is sourced in your conda environment (you can do this with the command</em> <code class="code docutils literal notranslate"><span class="pre">source</span> <span class="pre">~/.zshrc</span></code> or <code class="code docutils literal notranslate"><span class="pre">source</span> <span class="pre">~/.bashrc</span></code> <em>) otherwise you may encounter errors using PyCUTEst.</em></p>
+<p><strong>Please Note:</strong> <em>you may see warnings such as</em> <code class="code docutils literal notranslate"><span class="pre">ld:</span> <span class="pre">warning:</span> <span class="pre">object</span> <span class="pre">file</span> <span class="pre">(RANGE.o)</span> <span class="pre">was</span> <span class="pre">built</span> <span class="pre">for</span> <span class="pre">newer</span> <span class="pre">macOS</span> <span class="pre">version</span> <span class="pre">(15.0)</span> <span class="pre">than</span> <span class="pre">being</span> <span class="pre">linked</span> <span class="pre">(14.0)</span></code> <em>. To suppress these warnings please set the environment variable</em> <code class="code docutils literal notranslate"><span class="pre">MACOSX_DEPLOYMENT_TARGET</span></code> <em>to your current macOS version (e.g.</em> <code class="code docutils literal notranslate"><span class="pre">export</span> <span class="pre">MACOSX_DEPLOYMENT_TARGET=15.0</span></code> <em>in this example, you can make this permanent by adding it to your</em> <code class="code docutils literal notranslate"><span class="pre">~/.zshrc</span></code> or <code class="code docutils literal notranslate"><span class="pre">~/.bashrc</span></code> <em>file).</em></p>
+</section>
 </section>
 <section id="cutest-docker-container">
 <h3>CUTEst Docker Container<a class="headerlink" href="#cutest-docker-container" title="Link to this heading"></a></h3>
@@ -225,6 +401,7 @@ $<span class="w"> </span><span class="nb">export</span><span class="w"> </span><
 </pre></div>
 </div>
 </div></blockquote>
+<p>You can make this permanent by adding the export to your <code class="code docutils literal notranslate"><span class="pre">~/.bashrc</span></code> file (or <code class="code docutils literal notranslate"><span class="pre">~/.zshrc</span></code> if using zsh on macOS).</p>
 <p>Note that you can uninstall PyCUTEst as follows:</p>
 <blockquote>
 <div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>pip<span class="w"> </span>uninstall<span class="w"> </span>pycutest

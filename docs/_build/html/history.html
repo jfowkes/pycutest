@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Version History &mdash; PyCUTEst v1.7.2 documentation</title>
+  <title>Version History &mdash; PyCUTEst v1.8.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=908dc885"></script>
+      <script src="_static/documentation_options.js?v=b51e6972"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -50,6 +50,7 @@
 <li class="toctree-l1"><a class="reference internal" href="support.html">Support</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Version History</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#version-1-8-0-17-dec-2025">Version 1.8.0 (17 Dec 2025)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-1-7-2-10-dec-2024">Version 1.7.2 (10 Dec 2024)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-1-7-1-15-aug-2024">Version 1.7.1 (15 Aug 2024)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-1-7-0-7-may-2024">Version 1.7.0 (7 May 2024)</a></li>
@@ -96,6 +97,21 @@
   <section id="version-history">
 <h1>Version History<a class="headerlink" href="#version-history" title="Link to this heading"></a></h1>
 <p>This section lists the different versions of PyCUTEst and the updates between them.</p>
+<section id="version-1-8-0-17-dec-2025">
+<h2>Version 1.8.0 (17 Dec 2025)<a class="headerlink" href="#version-1-8-0-17-dec-2025" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Support CUTEst/SIFDecode installs with Meson (both default install locations and custom install locations)</p></li>
+<li><p>Document how to install CUTEst/SIFDecode using Meson (for both Linux and macOS)</p></li>
+<li><p>Document how to install CUTEst/SIFDecode using the Make build system on macOS and provide scripts for this</p></li>
+<li><p>Add tests for the alternative installation methods on Linux and macOS (Meson, Make build system)</p></li>
+<li><p>Use absolute paths to SIF problems (required when using new non-bash sifdecoder that comes with Meson installs)</p></li>
+<li><p>Update SIFDecode test to handle slightly different format for -show used by the Meson sifdecoder</p></li>
+<li><p>Remove hardcoded paths from install_scripts.py and move them to system_paths.py for consistency</p></li>
+<li><p>Compile CUTEst problems with -02 compiler optimizations</p></li>
+<li><p>Update ALLINITC to reflect upstream bugfix to it</p></li>
+<li><p>Update tests to reflect updated ALLINITC</p></li>
+</ul>
+</section>
 <section id="version-1-7-2-10-dec-2024">
 <h2>Version 1.7.2 (10 Dec 2024)<a class="headerlink" href="#version-1-7-2-10-dec-2024" title="Link to this heading"></a></h2>
 <ul class="simple">
