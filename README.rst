@@ -134,7 +134,7 @@ And CUTEst should run from here. To test that the installation works, issue the 
 
     $ meson test -C builddir
 
-Finally set the following environment variable in your :code:`~/.bashrc` to point to the MASTSIF installation directory used above:
+Finally set the following environment variable in your :code:`~/.zshrc` or :code:`~/.bashrc` to point to the MASTSIF installation directory used above:
 
  .. code-block:: bash
 
@@ -143,6 +143,10 @@ Finally set the following environment variable in your :code:`~/.bashrc` to poin
 
 It is also possible to install SIFDecode and CUTEst to custom locations using the :code:`--prefix` argument to :code:`meson setup`.
 In this case you will also need to set the :code:`SIFDECODE` and :code:`CUTEST` environment variables to the install prefix.
+
+**Anaconda Users:** *please ensure that* :code:`~/.zshrc` or :code:`~/.bashrc` *is sourced in your conda environment (you can do this with the command* :code:`source ~/.zshrc` or :code:`source ~/.bashrc` *) otherwise you may encounter errors using PyCUTEst.*
+
+**Please Note:** *you may see warnings such as* :code:`ld: warning: object file (RANGE.o) was built for newer macOS version (15.0) than being linked (14.0)` *. To suppress these warnings please set the environment variable* :code:`MACOSX_DEPLOYMENT_TARGET` *to your current macOS version (e.g.* :code:`export MACOSX_DEPLOYMENT_TARGET=15.0` *in this example, you can make this permanent by adding it to your* :code:`~/.zshrc` or :code:`~/.bashrc` *file).*
 
 Installing PyCUTEst
 -------------------
