@@ -23,7 +23,7 @@ New Approach: Installing CUTEst using Meson
 This is the new installation approach using the `meson build system <https://mesonbuild.com/>`_, alternative installation approaches are detailed below.
 You will need to install meson (:code:`apt install meson` on Ubuntu) and three packages: `SIFDecode <https://github.com/ralna/SIFDecode>`_, `CUTEst <https://github.com/ralna/CUTEst>`_ and `MASTSIF <https://bitbucket.org/optrove/sif>`_. To keep things simple, clone all three packages into the same directory:
 
-.. code-block:: bash
+ .. code-block:: bash
 
     $ mkdir cutest
     $ cd cutest
@@ -37,7 +37,7 @@ only the ``*.SIF`` files for the problems you wish to test on.
 
 First we need to compile and install SIFDecode (requires :code:`gfortran` and :code:`gcc`):
 
-.. code-block:: bash
+ .. code-block:: bash
 
     $ cd sifdecode
     $ meson setup builddir
@@ -46,13 +46,13 @@ First we need to compile and install SIFDecode (requires :code:`gfortran` and :c
 
 And SIFDecode should run from here. To test that the installation works, issue the command:
 
-.. code-block:: bash
+ .. code-block:: bash
 
     $ meson test -C builddir
 
 Now we are ready to install CUTEst in double precision (requires :code:`gfortran` and :code:`gcc`):
 
-.. code-block:: bash
+ .. code-block:: bash
 
     $ cd ../cutest
     $ meson setup builddir -Dmodules=false
@@ -61,7 +61,7 @@ Now we are ready to install CUTEst in double precision (requires :code:`gfortran
 
 And CUTEst should run from here. To test that the installation works, issue the command:
 
-.. code-block:: bash
+ .. code-block:: bash
 
     $ meson test -C builddir
 
@@ -140,7 +140,7 @@ Then you can easily install `GCC <https://gcc.gnu.org/>`_ and the `meson build s
 
 CUTEst can now be installed using the `meson build system <https://mesonbuild.com/>`_. You will need to install three packages: `SIFDecode <https://github.com/ralna/SIFDecode>`_, `CUTEst <https://github.com/ralna/CUTEst>`_ and `MASTSIF <https://bitbucket.org/optrove/sif>`_. To keep things simple, clone all three packages into the same directory:
 
-.. code-block:: bash
+ .. code-block:: bash
 
     $ mkdir cutest
     $ cd cutest
@@ -154,7 +154,7 @@ only the ``*.SIF`` files for the problems you wish to test on.
 
 First we need to compile and install SIFDecode (requires Homebrew :code:`gcc`):
 
-.. code-block:: bash
+ .. code-block:: bash
 
     $ cd sifdecode
     $ meson setup builddir
@@ -163,13 +163,13 @@ First we need to compile and install SIFDecode (requires Homebrew :code:`gcc`):
 
 And SIFDecode should run from here. To test that the installation works, issue the command:
 
-.. code-block:: bash
+ .. code-block:: bash
 
     $ meson test -C builddir
 
 Now we are ready to install CUTEst in double precision (requires Homebrew :code:`gcc`):
 
-.. code-block:: bash
+ .. code-block:: bash
 
     $ cd ../cutest
     $ meson setup builddir -Dmodules=false
@@ -178,7 +178,7 @@ Now we are ready to install CUTEst in double precision (requires Homebrew :code:
 
 And CUTEst should run from here. To test that the installation works, issue the command:
 
-.. code-block:: bash
+ .. code-block:: bash
 
     $ meson test -C builddir
 
