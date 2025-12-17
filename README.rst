@@ -66,7 +66,7 @@ And CUTEst should run from here. To test that the installation works, issue the 
 
 Finally set the following environment variable in your :code:`~/.bashrc` to point to the MASTSIF installation directory used above:
 
- .. code-block:: bash
+.. code-block:: bash
 
     # CUTEst
     export MASTSIF=/path/to/cutest/mastsif/
@@ -80,13 +80,13 @@ Here we detail the new installation approach using the `meson build system <http
 
 First it is important to ensure that you have the latest version of Xcode Command Line Tools installed (or the latest version of Xcode), please ensure this is the case by following `this guide <https://mac.install.guide/commandlinetools/4>`_. Now install the Homebrew package manager:
 
- .. code-block:: bash
+.. code-block:: bash
 
     $ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
 Then you can easily install `GCC <https://gcc.gnu.org/>`_ and the `meson build system <https://mesonbuild.com/>`_:
 
- .. code-block:: bash
+.. code-block:: bash
 
     $ brew install gcc meson
 
@@ -136,7 +136,7 @@ And CUTEst should run from here. To test that the installation works, issue the 
 
 Finally set the following environment variable in your :code:`~/.zshrc` or :code:`~/.bashrc` to point to the MASTSIF installation directory used above:
 
- .. code-block:: bash
+.. code-block:: bash
 
     # CUTEst
     export MASTSIF=/path/to/cutest/mastsif/
@@ -152,13 +152,13 @@ Installing PyCUTEst
 -------------------
 For easy installation, use `pip <http://www.pip-installer.org/>`_:
 
- .. code-block:: bash
+.. code-block:: bash
 
     $ pip install pycutest
 
 Note that if an older install of PyCUTEst is present on your system you can use:
 
- .. code-block:: bash
+.. code-block:: bash
 
     $ pip install --upgrade pycutest
 
@@ -166,13 +166,13 @@ to upgrade PyCUTEst to the latest version.
 
 You will then need to create a folder which will store all your compiled problems:
 
- .. code-block:: bash
+.. code-block:: bash
 
     $ mkdir pycutest_cache
 
 And set an environment variable to tell PyCUTEst about this directory, by adding to your :code:`~/.bashrc` file:
 
- .. code-block:: bash
+.. code-block:: bash
 
     export PYCUTEST_CACHE="/path/to/pycutest_cache"
 
@@ -180,7 +180,7 @@ If you do not set this environment variable, then PyCUTEst will create a cache f
 
 Note that you can uninstall PyCUTEst as follows:
 
- .. code-block:: bash
+.. code-block:: bash
 
     $ pip uninstall pycutest
 
