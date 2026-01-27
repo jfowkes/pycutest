@@ -196,6 +196,28 @@ In this case you will also need to set the :code:`SIFDECODE` and :code:`CUTEST` 
 
 **Please Note:** *you may see warnings such as* :code:`ld: warning: object file (RANGE.o) was built for newer macOS version (15.0) than being linked (14.0)` *. To suppress these warnings please set the environment variable* :code:`MACOSX_DEPLOYMENT_TARGET` *to your current macOS version (e.g.* :code:`export MACOSX_DEPLOYMENT_TARGET=15.0` *in this example, you can make this permanent by adding it to your* :code:`~/.zshrc` or :code:`~/.bashrc` *file).*
 
+Alternative Approach: Installing CUTEst using Homebrew CUTEst Tap
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+This is an alternative installation approach using the Homebrew CUTEst Tap.
+First it is important to ensure that you have the latest version of Xcode Command Line Tools installed (or the latest version of Xcode), please ensure this is the case by following `this guide <https://mac.install.guide/commandlinetools/4>`_. Now install the Homebrew package manager:
+
+ .. code-block:: bash
+
+    $ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+Then you can easily install CUTEst using Homebrew:
+
+ .. code-block:: bash
+
+    $ brew tap optimizers/cutest
+    $ brew install cutest
+    $ brew install mastsif  # if you want all the test problems
+    $ cat "$(brew --prefix mastsif)/mastsif.bashrc" >> ~/.bashrc # or ~/.zshrc
+
+**Anaconda Users:** *please ensure that* :code:`~/.zshrc` or :code:`~/.bashrc` *is sourced in your conda environment (you can do this with the command* :code:`source ~/.zshrc` or :code:`source ~/.bashrc` *) otherwise you may encounter errors using PyCUTEst.*
+
+**Please Note:** *you may see warnings such as* :code:`ld: warning: object file (RANGE.o) was built for newer macOS version (15.0) than being linked (14.0)` *. To suppress these warnings please set the environment variable* :code:`MACOSX_DEPLOYMENT_TARGET` *to your current macOS version (e.g.* :code:`export MACOSX_DEPLOYMENT_TARGET=15.0` *in this example, you can make this permanent by adding it to your* :code:`~/.zshrc` or :code:`~/.bashrc` *file).*
+
 Traditional Approach: Installing CUTEst using Bash Script
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""
 This is the traditional installation approach using the bash install script.
