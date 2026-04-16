@@ -611,7 +611,7 @@ static PyObject *cutest_objcons(PyObject *self, PyObject *args) {
 
     CUTEST_cfn((integer *)&status, (integer *)&CUTEst_nvar, (integer *)&CUTEst_ncon, x, &f, c);
 
-    return Py_BuildValue("dO", f, Mc);
+    return Py_BuildValue("dN", f, Mc);
 }
 
 
@@ -665,7 +665,7 @@ static PyObject *cutest_obj(PyObject *self, PyObject *args) {
             return Py_BuildValue("d", f);
         } else {
             CUTEST_uofg((integer *)&status, (integer *)&CUTEst_nvar, x, &f, g, &somethingTrue);
-            return Py_BuildValue("dO", f, Mg);
+            return Py_BuildValue("dN", f, Mg);
         }
     } else {
         if (PyObject_Length(args)==1) {
@@ -673,7 +673,7 @@ static PyObject *cutest_obj(PyObject *self, PyObject *args) {
             return Py_BuildValue("d", f);
         } else {
             CUTEST_cofg((integer *)&status, (integer *)&CUTEst_nvar, x, &f, g, &somethingTrue);
-            return Py_BuildValue("dO", f, Mg);
+            return Py_BuildValue("dN", f, Mg);
         }
     }
 }
@@ -733,10 +733,10 @@ static PyObject *cutest_grad(PyObject *self, PyObject *args) {
 
     if (CUTEst_ncon == 0) {
         CUTEST_ugr((integer *)&status, (integer *)&CUTEst_nvar, x, g);
-        return Py_BuildValue("O", Mg);
+        return Py_BuildValue("N", Mg);
     } else {
         CUTEST_cigr((integer *)&status, (integer *)&CUTEst_nvar, (integer *)&icon, x, g);
-        return Py_BuildValue("O", Mg);
+        return Py_BuildValue("N", Mg);
     }
 }
 
@@ -836,7 +836,7 @@ static PyObject *cutest_cons(PyObject *self, PyObject *args) {
             CUTEST_ccfg((integer *)&status, (integer *)&CUTEst_nvar, (integer *)&CUTEst_ncon, x, c,
                     &somethingFalse, (integer *)&CUTEst_ncon, (integer *)&CUTEst_nvar, J,
                     &somethingTrue);
-            return Py_BuildValue("OO", Mc, MJ);
+            return Py_BuildValue("NN", Mc, MJ);
         }
     } else {
         if (!derivs) {
@@ -844,7 +844,7 @@ static PyObject *cutest_cons(PyObject *self, PyObject *args) {
             return (PyObject *)Mc;
         } else {
             CUTEST_ccifg((integer *)&status, (integer *)&CUTEst_nvar, (integer *)&icon, x, c, J, &somethingTrue);
-            return Py_BuildValue("OO", Mc, MJ);
+            return Py_BuildValue("NN", Mc, MJ);
         }
     }
 }
@@ -907,7 +907,7 @@ static PyObject *cutest_lag(PyObject *self, PyObject *args) {
         return Py_BuildValue("d", f);
     } else {
         CUTEST_clfg((integer *)&status, (integer *)&CUTEst_nvar, (integer *)&CUTEst_ncon, x, v, &f, g, &somethingTrue);
-        return Py_BuildValue("dO", f, Mg);
+        return Py_BuildValue("dN", f, Mg);
     }
 }
 
@@ -981,7 +981,7 @@ static PyObject *cutest_lagjac(PyObject *self, PyObject *args) {
             g, &somethingFalse, (integer *)&CUTEst_ncon, (integer *)&CUTEst_nvar, J);
     }
 
-    return Py_BuildValue("OO", Mg, MJ);
+    return Py_BuildValue("NN", Mg, MJ);
 }
 
 
@@ -1412,10 +1412,10 @@ static PyObject *cutest_gradhess(PyObject *self, PyObject *args) {
     if (CUTEst_ncon>0) {
         CUTEST_cgrdh((integer *)&status, (integer *)&CUTEst_nvar, (integer *)&CUTEst_ncon, x, v, (logical *)&grlagf,
                 g, &somethingFalse, (integer *)&CUTEst_ncon, (integer *)&CUTEst_nvar, J, (integer *)&CUTEst_nvar, H);
-        return Py_BuildValue("OOO", Mg, MJ, MH);
+        return Py_BuildValue("NNN", Mg, MJ, MH);
     } else {
         CUTEST_ugrdh((integer *)&status, (integer *)&CUTEst_nvar, x, g, (integer *)&CUTEst_nvar, H);
-        return Py_BuildValue("OO", Mg, MH);
+        return Py_BuildValue("NN", Mg, MH);
     }
 }
 
@@ -1480,7 +1480,7 @@ static PyObject *cutest_sobj(PyObject *self, PyObject *args) {
         free(si);
         free(sv);
 
-        return Py_BuildValue("dOO", f, Mgi, Mgv);
+        return Py_BuildValue("dNN", f, Mgi, Mgv);
     }
 }
 
@@ -1550,7 +1550,7 @@ static PyObject *cutest_sgrad(PyObject *self, PyObject *args) {
     free(si);
     free(sv);
 
-    return Py_BuildValue("OO", Mgi, Mgv);
+    return Py_BuildValue("NN", Mgi, Mgv);
 }
 
 
@@ -1637,7 +1637,7 @@ static PyObject *cutest_scons(PyObject *self, PyObject *args) {
             Jfi[i]--;
         }
 
-        return Py_BuildValue("OOOO", Mc, MJi, MJfi, MJv);
+        return Py_BuildValue("NNNN", Mc, MJi, MJfi, MJv);
     } else {
         x=(npy_double *)PyArray_DATA(arg1);
         si=(npy_int *)malloc(CUTEst_nvar*sizeof(npy_int));
@@ -1661,7 +1661,7 @@ static PyObject *cutest_scons(PyObject *self, PyObject *args) {
         free(si);
         free(sv);
 
-        return Py_BuildValue("OOO", Mc, Mgi, Mgv);
+        return Py_BuildValue("NNN", Mc, Mgi, Mgv);
     }
 }
 
@@ -1750,7 +1750,7 @@ static PyObject *cutest_slagjac(PyObject *self, PyObject *args) {
     free(sfi);
     free(sv);
 
-    return Py_BuildValue("OOOOO", Mgi, Mgv, MJi, MJfi, MJv);
+    return Py_BuildValue("NNNNN", Mgi, Mgv, MJi, MJfi, MJv);
 }
 
 
@@ -1836,7 +1836,7 @@ static PyObject *cutest_sphess(PyObject *self, PyObject *args) {
     free(sj);
     free(sv);
 
-    return Py_BuildValue("OOO", MHi, MHj, MHv);
+    return Py_BuildValue("NNN", MHi, MHj, MHv);
 }
 
 
@@ -1914,7 +1914,7 @@ static PyObject *cutest_isphess(PyObject *self, PyObject *args) {
     free(sj);
     free(sv);
 
-    return Py_BuildValue("OOO", MHi, MHj, MHv);
+    return Py_BuildValue("NNN", MHi, MHj, MHv);
 }
 
 
@@ -2048,9 +2048,9 @@ static PyObject *cutest_gradsphess(PyObject *self, PyObject *args) {
     free(sv);
 
     if (CUTEst_ncon>0) {
-        return Py_BuildValue("OOOOOOOO", Mgi, Mgv, MJi, MJfi, MJv, MHi, MHj, MHv);
+        return Py_BuildValue("NNNNNNNN", Mgi, Mgv, MJi, MJfi, MJv, MHi, MHj, MHv);
     } else {
-        return Py_BuildValue("OOOO", Mg, MHi, MHj, MHv);
+        return Py_BuildValue("NNNN", Mg, MHi, MHj, MHv);
     }
 }
 
