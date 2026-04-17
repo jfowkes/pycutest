@@ -2,6 +2,10 @@ Version History
 ===============
 This section lists the different versions of PyCUTEst and the updates between them.
 
+Version 1.8.1 (17 Apr 2026)
+---------------------------
+* Fix memory leaks in C interface due to incorrect use of Py_BuildValue
+
 Version 1.8.0 (17 Dec 2025)
 ---------------------------
 * Support CUTEst/SIFDecode installs with Meson (both default install locations and custom install locations)
