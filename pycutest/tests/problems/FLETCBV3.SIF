@@ -1,0 +1,179 @@
+***************************
+* SET UP THE INITIAL DATA *
+***************************
+
+NAME          FLETCBV3 
+
+*   Problem :
+*   *********
+
+*   Another Boundary Value problem.
+
+*   Source:  The first problem given by
+*   R. Fletcher,
+*   "An optimal positive definite update for sparse Hessian matrices"
+*   Numerical Analysis report NA/145, University of Dundee, 1992.
+
+*   Scaled version.
+
+*   SIF input: Nick Gould, Oct 1992.
+
+*   classification OUR2-AN-V-0
+
+*   The number of variables is N.
+
+*IE N                   10             $-PARAMETER     original value
+*IE N                   100            $-PARAMETER
+*IE N                   1000           $-PARAMETER
+ IE N                   5000           $-PARAMETER
+*IE N                   10000          $-PARAMETER
+
+*  KAPPA a parameter.
+
+ RE KAPPA               1.0            $-PARAMETER
+*RE KAPPA               0.0            $-PARAMETER
+
+ RE OBJSCALE            1.0D+8
+
+*   Define useful parameters
+
+ IE 0                   0
+ IE 1                   1
+ IE 2                   2
+ RE 1.0                 1.0
+ IA N-1       N         -1
+
+ R/ P         1.0                      OBJSCALE
+
+ IA N+1       N         1
+ RI RN+1      N+1
+ R/ H         1.0                      RN+1  
+ R* H2        H                        H
+ R* 1/H2      RN+1                     RN+1
+ R* KAPPA/H2  1/H2                     KAPPA
+ RM -KAPPA/H2 KAPPA/H2  -1.0
+ RM 2/H2      1/H2      2.0
+ RA 1+2/H2    2/H2      1.0
+ RM -1-2/H2   1+2/H2    -1.0
+ R* P*-1-2/H2 1+2/H2                   P
+
+
+VARIABLES
+
+ DO I         1                        N
+ X  X(I)
+ ND
+
+GROUPS
+
+*ZN G(0)      'SCALE'                  OBJSCALE
+ XN G(0)      X(1)      1.0
+
+ DO I         1                        N-1
+ IA I+1       I         1
+*ZN G(I)      'SCALE'                  OBJSCALE
+ XN G(I)      X(I)      1.0            X(I+1)    -1.0
+ ND
+
+*ZN G(N)      'SCALE'                  OBJSCALE
+ XN G(N)      X(N)       1.0
+
+ DO I         1                        N
+*ZN L(I)      'SCALE'                  OBJSCALE
+ ZN L(I)      X(I)                     P*-1-2/H2
+ ND
+
+ DO I         1                        N
+*ZN C(I)      'SCALE'                  OBJSCALE
+ ZN C(I)
+ ND
+
+BOUNDS
+
+ FR FLETCBV3  'DEFAULT'
+
+START POINT
+
+*V  FLETCBV3  'DEFAULT' 0.0
+
+ DO I         1                        N
+ RI RI        I  
+ R* IH        RI                       H
+ Z  FLETCBV3  X(I)                     IH
+ ND
+
+ELEMENT TYPE
+
+ EV COS       V
+ EP COS       P
+
+ELEMENT USES
+
+ T  'DEFAULT' COS
+
+ DO I         1                        N    
+ ZV C(I)      V                        X(I)
+ ZP C(I)      P                        P
+ ND
+
+GROUP TYPE
+
+ GV HALFL2    GVAR
+ GP HALFL2    P
+
+GROUP USES
+
+ DO I         0                        N
+ XT G(I)      HALFL2
+ ZP G(I)      P                        P
+ ND
+
+ DO I         1                        N
+ ZE C(I)      C(I)                     -KAPPA/H2
+ ND
+
+OBJECT BOUND
+
+*   Solution
+
+*LO SOLTN                ??
+
+ENDATA
+
+***********************
+* SET UP THE FUNCTION *
+* AND RANGE ROUTINES  *
+***********************
+
+ELEMENTS      FLETCBV3 
+
+TEMPORARIES
+
+ M  COS
+ M  SIN
+
+INDIVIDUALS
+
+ T  COS   
+ F                      P * COS( V )
+ G  V                   - P * SIN( V )
+ H  V         V         - P * COS( V )
+
+ENDATA
+
+*********************
+* SET UP THE GROUPS *
+* ROUTINE           *
+*********************
+
+GROUPS        FLETCBV3 
+
+INDIVIDUALS
+
+ T  HALFL2
+
+ F                      5.0D-1 * P * GVAR * GVAR
+ G                      P * GVAR
+ H                      P
+
+ENDATA
