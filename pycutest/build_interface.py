@@ -130,7 +130,8 @@ def decode_and_compile_problem(problemName, destination=None, sifParams=None, si
     * *sifParams* -- parameters passed to sifdecode using the ``-param`` command line option
       given in the form of a dictionary with parameter name as key. Values
       are converted to strings using :func:`str` and every parameter contributes
-      ``-param key=str(value)`` to the sifdecode's command line options.
+      ``key=str(value)`` to the comma separated list that is passed to sifdecode's
+      ``-param`` command line option (this works for both old and new sifdecode).
     * *sifOptions* -- additional options passed to sifdecode given in the form of a list of strings.
     * *quiet* -- supress output (default ``True``)
 
@@ -156,12 +157,15 @@ def decode_and_compile_problem(problemName, destination=None, sifParams=None, si
 
     # Handle params
     if sifParams is not None:
+        args += ['-param']
+        parlist = [] # comma separated params list
         for (key, value) in sifParams.items():
             if type(key) is not str:
                 if fromDir is not None:
                     os.chdir(fromDir) # Go back to original work directory
                 raise Exception("sifParams keys must be strings")
-            args+=['-param', key+"="+str(value)]
+            parlist += [key+"="+str(value)]
+        args += [",".join(parlist)]
 
     # Handle options
     if sifOptions is not None:
@@ -170,7 +174,7 @@ def decode_and_compile_problem(problemName, destination=None, sifParams=None, si
                 if fromDir is not None:
                     os.chdir(fromDir) # Go back to original work directory
                 raise Exception("sifOptions must consist of strings")
-            args+=[str(opt)]
+            args += [str(opt)]
 
     # Call sifdecode
     spawnOK=True
