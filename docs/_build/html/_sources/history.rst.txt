@@ -2,6 +2,10 @@ Version History
 ===============
 This section lists the different versions of PyCUTEst and the updates between them.
 
+Version 1.8.2 (28 Apr 2026)
+---------------------------
+* Correctly parse multiple SIF parameters with the Meson sifdecoder
+
 Version 1.8.1 (17 Apr 2026)
 ---------------------------
 * Fix memory leaks in C interface due to incorrect use of Py_BuildValue
